@@ -7,13 +7,13 @@ import net.sf.cglib.proxy.NoOp;
 
 public class EntityCglib {
 	public void pre() {
-		System.out.println("real pre ");
+		System.out.println(" pre ");
 	}
 
 	public void testPublic() {
 		pre();
 		testprivate();
-		System.out.println("real testPublic.");
+		System.out.println(" testPublic.");
 	}
 
 	private void testprivate() {

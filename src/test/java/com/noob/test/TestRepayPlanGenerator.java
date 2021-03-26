@@ -57,12 +57,12 @@ public class TestRepayPlanGenerator {
 		LoanParam dto = new LoanParam();
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		dto.setStartDate(df.parse("2019-12-17"));
-	//	dto.setEndDate(df.parse("2020-12-17"));
-		dto.setTotalPeriod(360);
-		dto.setAmount(new BigDecimal("4000000"));
+		dto.setEndDate(df.parse("2020-12-17"));
+		dto.setTotalPeriod(12);
+		dto.setAmount(new BigDecimal("100000"));
 		dto.setPeriodMinDay(10);
 		dto.setRepaymentDay(17);
-		dto.setYearRate(new BigDecimal("4.9"));
+		dto.setYearRate(new BigDecimal("2.76"));
 		dto.setLoanNo("testLoan123456");
 		dto.setGraceDays(2);
 
@@ -75,10 +75,10 @@ public class TestRepayPlanGenerator {
 
 	public static void main(String[] args) throws Exception {
 		try {
-		//	oneTimeRepaymentPlanGeneratorTest();
-			//	interestFirstRepaymentPlanGeneratorTest();
+			oneTimeRepaymentPlanGeneratorTest();
+				interestFirstRepaymentPlanGeneratorTest();
 			averageCapitalPlusInterestRepayPlanGeneratorTest();
-			//	averageCapitalAndInterestRepayPlanGeneratorTest();
+				averageCapitalAndInterestRepayPlanGeneratorTest();
 			averageCapitalRepayPlanGeneratorTest();
 
 		} catch (Exception e) {

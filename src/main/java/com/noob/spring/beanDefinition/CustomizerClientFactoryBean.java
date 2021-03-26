@@ -7,6 +7,8 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.factory.FactoryBean;
 
+import com.noob.request.component.ITestTransactionOnInterfaceService;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,9 +33,9 @@ public class CustomizerClientFactoryBean<T> implements FactoryBean<T> {
 						new CustomizerClientProxy(clas));
 	}
 
-	T createProxy(Class<T> clas) {
+	public  static <T>  T  createProxy(Class<T> clas) {
 		ProxyFactoryBean factory = new ProxyFactoryBean();
-		factory.setProxyTargetClass(true);
+		factory.setProxyTargetClass(false); //  这里设置使用Cglib代理, 但还需要符合其他条件. 【（指定proxyTargetClass == true ||  没有指定代理接口）&&  targetClass 非接口类型 &&  targetClass 非JDK代理类 】时，执行Cglib代理；其他情况下都是用JDK代理。
 		factory.addAdvice(new MethodInterceptor() {
 			@Override
 			public Object invoke(MethodInvocation invocation) throws Throwable {
@@ -53,6 +55,9 @@ public class CustomizerClientFactoryBean<T> implements FactoryBean<T> {
 	public boolean isSingleton() {
 		return true;
 	}
-
+  public static void main(String[] args) {
+	  ITestTransactionOnInterfaceService a = CustomizerClientFactoryBean.createProxy(ITestTransactionOnInterfaceService.class);
+	 System.out.println(a);
+}
 
 }

@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.net.URI;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -16,11 +18,13 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.noob.request.component.ITestTransactionOnInterfaceService;
 import com.noob.request.controller.ValidateGroupController.GroupTestDTO;
 
 // 测试API各种访问方式的Mock
 public class ControllerTest extends BaseTest {
-	
+	@Resource
+	ITestTransactionOnInterfaceService testTransactionOnInterfaceService;
 	public void test() {
 		testMultipartFile();
 		test1();
@@ -33,6 +37,7 @@ public class ControllerTest extends BaseTest {
 	
 	@Test
 	public void testGroup() {
+		testTransactionOnInterfaceService.testTransactionOnInterface();
 		GroupTestDTO test = new GroupTestDTO("address", "name", "code", "phone");
 		try {
 			System.out.println(mockMvc

@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportAware;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import com.noob.spring.beanDefinition.CustomizerClientImporter.BeanDefinitionRegistrarForImport;
@@ -91,7 +92,7 @@ public class CustomizerClientImporter implements BeanFactoryAware, ImportBeanDef
 		@Override
 		public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata,
 				BeanDefinitionRegistry registry) {
-			System.out.println(importingClassMetadata.getClassName()); // com.noob.spring.beanDefinition.CustomizerClientScannerConfigurer2
+			System.out.println(importingClassMetadata.getClassName()); // com.noob.spring.beanDefinition.CustomizerClientImporter
 
 			List<String> packages = null;
 			try {
@@ -120,7 +121,17 @@ public class CustomizerClientImporter implements BeanFactoryAware, ImportBeanDef
 	}
 
 	@Import(TestNestConfiguration2.class)
-	@Configuration
+	@Component
+	/**
+	 * @Component无法被创建为ConfigurationClassEnhancer.newEnhancer的代理对象
+	 *                                                             <p>
+	 *                                                             在ConfigurationClassParser#ImportStack#getImportingClassFor(String
+	 *                                                             importedClass)入参“bean.getClass().getSuperclass()”是Object
+	 *                                                             所以就无法获取到AnnotationMetadata,
+	 *                                                             也就不执行ImportAware.setImportMetadata
+	 *
+	 */
+
 	public static class TestNestConfiguration implements ImportAware {
 		public TestNestConfiguration() {
 			System.out.println("TestNestConfiguration");
@@ -128,11 +139,11 @@ public class CustomizerClientImporter implements BeanFactoryAware, ImportBeanDef
 
 		@Override
 		public void setImportMetadata(AnnotationMetadata importMetadata) {
-			System.out.println(importMetadata.getClassName()); // com.noob.spring.beanDefinition.CustomizerClientScannerConfigurer2
+			System.out.println(importMetadata.getClassName()); // com.noob.spring.beanDefinition.CustomizerClientImporter
 		}
 	}
 
-	@Configuration
+	@Configuration // 保证ImportAware.setImportMetadata可以正常执行
 	public static class TestNestConfiguration2 implements ImportAware {
 		public TestNestConfiguration2() {
 			System.out.println("TestNestConfiguration2");
@@ -140,7 +151,7 @@ public class CustomizerClientImporter implements BeanFactoryAware, ImportBeanDef
 
 		@Override
 		public void setImportMetadata(AnnotationMetadata importMetadata) {
-			System.out.println(importMetadata.getClassName()); // com.noob.spring.beanDefinition.CustomizerClientScannerConfigurer2$TestNestConfiguration
+			System.out.println(importMetadata.getClassName()); // com.noob.spring.beanDefinition.CustomizerClientImporter$TestNestConfiguration
 		}
 	}
 }

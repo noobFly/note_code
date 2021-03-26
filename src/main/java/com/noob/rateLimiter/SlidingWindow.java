@@ -28,7 +28,7 @@ public class SlidingWindow {
 	public SlidingWindow(int timeSlice, int windowSize) {
 		this.timeSlice = timeSlice;
 		this.windowSize = windowSize;
-		this.timeSliceTotalSize = windowSize * 3 + 1; // 这里最好设置较大些。在reset单个timeSlices[index]时，可以降低误差
+		this.timeSliceTotalSize = windowSize * 100 + 1; // 这里最好设置较大些。在reset单个timeSlices[index]时，可以降低误差
 		initTimeSlices();
 	}
 
@@ -69,8 +69,8 @@ public class SlidingWindow {
 		SlidingCounter oldSlidingCounter = timeSlices[index].get();
 		// 更新时间片上的新周期信息
 		if (oldSlidingCounter.getIndex() != index || oldSlidingCounter.getOffsetTime() != time) {
-			// compareAndSet比较的是内存地址，和值无关。 为防止并发修改且offsetTime、index 需要原子性统一更新，所以就不能直接在原对象上变更。
-			boolean reset = timeSlices[index].compareAndSet(oldSlidingCounter, newSlidingCounter);
+			// compareAndSet为防止并发修改且offsetTime、index 需要原子性统一更新，所以就不能直接在原对象上变更。
+			boolean reset = timeSlices[index].compareAndSet(oldSlidingCounter, newSlidingCounter);// 这里可能是更新不上的，所以整个过程需要重写为for循环处理，并设置好超时时间或重试次数来break线程。
 			log.info("变动计数器 idnex:{}, offset:{}, 结果:{}", index, time, reset);
 
 		}

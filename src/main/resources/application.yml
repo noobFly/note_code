@@ -11,6 +11,8 @@ spring.servlet.multipart.max-request-size: 200MB
 
 spring.cloud.bus.trace.enabled: true
 
+test.value: testVal
+
 # 开启监控接口
 management:
   endpoints:
@@ -18,3 +20,23 @@ management:
       exposure:
         include: "*"
         #include: refresh,health,info #打开部分
+        
+spring.datasource:
+#    poolName: SpringBootHikariCP
+    url: jdbc:mysql://${dburl:rdsmp1l3waaw0jhvw9nehpublic.mysql.rds.aliyuncs.com:3306/trusts}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+    username: ${dbuser:yctest}
+    password: ${dbpwd:erongdu}
+    driver-class-name: com.mysql.cj.jdbc.Driver        
+    
+    #WeBase 区块链    
+webase: 
+   transactionUrl: http://100.98.1.107:5002/trans/handleWithSign
+   groupId:  1
+   userAdderss: 0x6149e71ffabb0fd80d659aaa1d852e967c2820a4
+   contractAddressMap:
+              TrustAssetContract: 
+                       contractAddress: '0x89e40c3419922856b93723eba945e79473af21f6' #不加引号会当作16进制处理
+                       contractName: AssetContract
+                       contractAbi: "[{\"constant\":false,\"inputs\":[{\"name\":\"assetId\",\"type\":\"string\"},{\"name\":\"assetJson\",\"type\":\"string\"}],\"name\":\"storeAsset\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"assetId\",\"type\":\"string\"}],\"name\":\"queryAsset\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"newAdmin\",\"type\":\"address\"}],\"name\":\"addAdmin\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"assetId\",\"type\":\"string\"}],\"name\":\"queryAssetHisotry\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}]"
+                       useCns: false
+    
