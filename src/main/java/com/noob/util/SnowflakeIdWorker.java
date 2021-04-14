@@ -56,7 +56,12 @@ public class SnowflakeIdWorker {
 
     /** 上次生成ID的时间截 */
     private long lastTimestamp = -1L;
-
+    
+    public static SnowflakeIdWorker snowflakeIdWorker = new SnowflakeIdWorker();
+    
+    private SnowflakeIdWorker(){
+    }
+    
     //==============================Constructors=====================================
     /**
      * 构造函数

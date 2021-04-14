@@ -158,6 +158,17 @@
 			<version>0.1.54</version>
 		</dependency>		
 		
+         <dependency>
+             <groupId>org.apache.shardingsphere</groupId>
+             <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
+             <version>4.0.1</version>
+         </dependency>
+         <!-- for spring namespace -->
+         <dependency>
+             <groupId>org.apache.shardingsphere</groupId>
+             <artifactId>sharding-jdbc-spring-namespace</artifactId>
+             <version>4.0.1</version>
+         </dependency>
 	</dependencies>
 
 </project>

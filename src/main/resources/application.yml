@@ -26,7 +26,60 @@ spring.datasource:
     url: jdbc:mysql://${dburl:rdsmp1l3waaw0jhvw9nehpublic.mysql.rds.aliyuncs.com:3306/trusts}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
     username: ${dbuser:yctest}
     password: ${dbpwd:erongdu}
-    driver-class-name: com.mysql.cj.jdbc.Driver        
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    
+    
+spring.shardingsphere:
+    enabled: true
+    props.sql.show: true
+    datasource:
+        names: ds0
+        ds0:
+            type: cn.utrust.fintech.cbms.domain.config.CbmsHikariDataSource
+            driver-class-name: com.mysql.cj.jdbc.Driver
+            jdbc-url: jdbc:mysql://${cbms.dburl}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&failOverReadOnly=false
+            username: ${cbms.dbuser}
+            password: ${cbms.dbpwd}
+            data-source-properties: #下面子属性只能为小驼峰格式，同使用数据源中的配置属性
+              maximumPoolSize: ${datasource.maximumPoolSize}
+              minimumIdle: ${datasource.minimumIdle}
+              maxLifetime: 300000
+              connectionTimeout: 30000
+              idleTimeout: 30000
+              connectionTestQuery: SELECT 1
+    sharding.tables:
+        channel_invoke_log:
+            actual-data-nodes: ds0.channel_invoke_log_0$->{0..9},ds0.channel_invoke_log_$->{10..31}
+            table-strategy.standard.sharding-column: flow_no
+            table-strategy.standard.precise-algorithm-class-name: cn.utrust.fintech.cbms.algorithm.sharding.MurmurConsistentHashShardingAlgorithm
+        customer:
+            actual-data-nodes: ds0.customer_0$->{0..9},ds0.customer_$->{10..31}
+            table-strategy.standard.sharding-column: certificate_no
+            table-strategy.standard.precise-algorithm-class-name: cn.utrust.fintech.cbms.algorithm.sharding.MurmurConsistentHashShardingAlgorithm
+        bank_account:
+            actual-data-nodes: ds0.bank_account_0$->{0..9},ds0.bank_account_$->{10..31}
+            table-strategy.standard.sharding-column: certificate_no
+            table-strategy.standard.precise-algorithm-class-name: cn.utrust.fintech.cbms.algorithm.sharding.MurmurConsistentHashShardingAlgorithm
+        trade_log:
+            actual-data-nodes: ds0.trade_log_0$->{0..9},ds0.trade_log_$->{10..31}
+            table-strategy.standard.sharding-column: trade_no
+            table-strategy.standard.precise-algorithm-class-name: cn.utrust.fintech.cbms.algorithm.sharding.MurmurConsistentHashShardingAlgorithm
+        apply_limit:
+            actual-data-nodes: ds0.apply_limit_0$->{0..9},ds0.apply_limit_$->{10..31}
+            table-strategy.standard.sharding-column: contract_no
+            table-strategy.standard.precise-algorithm-class-name: cn.utrust.fintech.cbms.algorithm.sharding.MurmurConsistentHashFeatureCodeShardingAlgorithm
+        limit_use:
+            actual-data-nodes: ds0.limit_use_0$->{0..9},ds0.limit_use_$->{10..31}
+            table-strategy.complex.sharding-columns: loan_no,contract_no
+            table-strategy.complex.algorithm-class-name: cn.utrust.fintech.cbms.algorithm.sharding.MurmurConsistentHashFeatureCodeComplexShardingAlgorithm
+        settle_repayment:
+            actual-data-nodes: ds0.settle_repayment_0$->{0..9},ds0.settle_repayment_$->{10..31}
+            table-strategy.standard.sharding-column: loan_no
+            table-strategy.standard.precise-algorithm-class-name: cn.utrust.fintech.cbms.algorithm.sharding.MurmurConsistentHashFeatureCodeShardingAlgorithm
+    sharding.bindingTables: 
+        - limit_use, repayment_plan, loan, settle_detail
+        - customer, bank_account, repayment_deduct,settle_repayment    
+    
     
     #WeBase 区块链    
 webase: 

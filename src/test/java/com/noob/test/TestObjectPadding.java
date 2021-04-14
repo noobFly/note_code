@@ -3,10 +3,10 @@ package com.noob.test;
 public class TestObjectPadding {
 
 	public static void main(String[] args) throws InterruptedException {
-		testPointer(new Pointer());
+		 testPointer(new Pointer());
 	}
 
-	private static void testPointer(Pointer pointer) throws InterruptedException{
+	private static String testPointer(Pointer pointer) throws InterruptedException{
 		long start  = System.currentTimeMillis();
 		Thread t1 = new Thread(() -> {
 			for(int i=0;i<1000000000;i++){
@@ -25,6 +25,7 @@ public class TestObjectPadding {
 		t2.join();
 		System.out.println("cost ["+(System.currentTimeMillis()-start)+"] ms");
 		System.out.println(pointer);
+		return "success"; // 汇编 在  return 之前多了个  pop
 	}
 
  // -XX:-RestrictContended 与 @sun.misc.Contended 合用;  类前加上代表整个类的每个变量都会在单独的cache line中。 属性前加上时需要加上组标签，相同标签的分配在同一cache line中
