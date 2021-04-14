@@ -30,6 +30,26 @@ public class RandomLoadBalance {
 	static double[] weightDouble = new double[] { 0.06, 2.94, 97 };
 	static int[] weightInt = new int[] { 1, 1, 3 };
 
+	
+	public static void main(String[] args) {
+		TreeMap<Integer, Integer> map = new TreeMap<Integer, Integer>();
+		map.put(1, 1);
+		map.put(3, 3);
+		map.put(5, 5);
+		map.put(9, 9);
+		map.put(7, 7);
+		System.out.println(map.ceilingKey(4)); // 5
+		System.out.println(map.ceilingKey(5)); // 5
+		System.out.println(map.ceilingKey(10)); // null
+		System.out.println(map.tailMap(1, false).firstKey()); // 3
+		System.out.println(map.tailMap(1, true).firstKey()); // 1
+		System.out.println(map.tailMap(10, false).firstKey()); // 超过范围:  java.util.NoSuchElementException tailMap返回空
+		System.out.println(map.tailMap(10, true).firstKey()); //  超过范围 : java.util.NoSuchElementException tailMap返回空
+
+	} 
+
+	
+	
 	public static void sortByTreeMap() {
 
 		int choose1 = 0, choose2 = 0, choose3 = 0;
@@ -49,7 +69,7 @@ public class RandomLoadBalance {
 			 * <p>
 			 * 但Math.random() [0, 1) 是 左开右闭， 所以不应该返回相等的key。
 			 **/
-			Integer index = map.get(map.tailMap(random, false).firstKey()); // 不包含匹配相等的key
+			Integer index =  map.tailMap(random, false).firstEntry().getValue(); // 不包含匹配相等的key
 			if (1 == index) {
 				choose1++;
 			} else if (2 == index) {

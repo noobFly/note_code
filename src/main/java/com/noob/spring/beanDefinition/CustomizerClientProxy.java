@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanFactory;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -18,6 +19,7 @@ public class CustomizerClientProxy implements InvocationHandler {
 	private Object instance;
 	private Class<?> targetClass;
 	private String targetClassName;
+	private BeanFactory beanFactory;
 	private static ObjectMapper om = new ObjectMapper();
 	private static Logger logger = LoggerFactory.getLogger(CustomizerClientProxy.class);
 	private Map<String, Method> methodCache = new ConcurrentHashMap<String, Method>();
@@ -26,7 +28,8 @@ public class CustomizerClientProxy implements InvocationHandler {
 		om.setSerializationInclusion(Include.NON_NULL);
 	}
 
-	public CustomizerClientProxy(Class<?> targetClass) {
+	public CustomizerClientProxy(Class<?> targetClass, BeanFactory beanFactory) {
+		this.beanFactory = beanFactory;
 		CustomizerClient annotation = targetClass.getAnnotation(CustomizerClient.class);
 		if (annotation == null) {
 			throw new RuntimeException(
@@ -61,7 +64,6 @@ public class CustomizerClientProxy implements InvocationHandler {
 	}
 
 	private Object getBean(Class<?> webServiceInterface) {
-		// TODO 从容器中获取指定类型的对象实例
-		return null;
+		return beanFactory.getBean(webServiceInterface);
 	}
 }

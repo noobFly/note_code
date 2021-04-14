@@ -1,6 +1,6 @@
 package com.noob.test;
 
-public class TestPadding {
+public class TestObjectPadding {
 
 	public static void main(String[] args) throws InterruptedException {
 		testPointer(new Pointer());

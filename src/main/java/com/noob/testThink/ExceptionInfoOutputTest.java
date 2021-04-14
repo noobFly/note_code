@@ -1,4 +1,4 @@
-package com.noob.test;
+package com.noob.testThink;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -6,9 +6,9 @@ import java.util.concurrent.Future;
 
 import lombok.extern.slf4j.Slf4j;
 
+//这些个线程里抛出的异常默认只会输出到控制台。若要输出到日志文件需要手动指明!!
 @Slf4j
-// 这些个线程里抛出的异常默认只会输出到控制台。若要输出到日志文件需要手动指明
-public class ExceptionThread implements Runnable {
+public class ExceptionInfoOutputTest implements Runnable {
 
 	@Override
 	public void run() {
@@ -20,9 +20,9 @@ public class ExceptionThread implements Runnable {
 		try {
 			ExecutorService exec = Executors.newFixedThreadPool(1);
 
-			exec.execute(new ExceptionThread());
+			exec.execute(new ExceptionInfoOutputTest());
 			log.info("该干嘛干嘛去");
-			exec.execute(new ExceptionThread());
+			exec.execute(new ExceptionInfoOutputTest());
 			log.info("该干嘛干嘛去");
 
 			Future<String> future = exec.submit(() -> {

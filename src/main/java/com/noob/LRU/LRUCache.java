@@ -55,7 +55,7 @@ public class LRUCache<K, V> extends LinkedHashMap<K, V> {
 	 */
 	@Override
 	protected boolean removeEldestEntry(java.util.Map.Entry<K, V> eldest) {
-		return size() > maxCapacity ; //因为是先put成功再判定是否需要删除，为避免超出容量则需设置为 size() >=  maxCapacity , 但又无形中导致部分状态下达不到maxCapacity （具体情况具体分析）
+		return size() > maxCapacity ; //因为是先put成功再判定是否需要删除，为避免超出容量则需设置为 size() >=  maxCapacity
 	}
 
 	private <T> T lock(Supplier<T> op) {

@@ -18,17 +18,25 @@ import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import com.noob.spring.beanDefinition.CustomizerClientImporter.BeanDefinitionRegistrarForImport;
-import com.noob.spring.beanDefinition.CustomizerClientImporter.TestNestConfiguration;
+import com.noob.spring.beanDefinition.CustomizerClientImportBeanDefinitionRegistrar.BeanDefinitionRegistrarForImport;
+import com.noob.spring.beanDefinition.CustomizerClientImportBeanDefinitionRegistrar.TestNestConfiguration;
 
 import lombok.extern.slf4j.Slf4j;
 
-// 验证 ImportBeanDefinitionRegistrar 单独使用 @Configuration 或者 @Component 并不会执行ImportBeanDefinitionRegistrar.registerBeanDefinitions . 一定需要@Import 方式
+/**
+ * 验证 ImportBeanDefinitionRegistrar 单独使用 @Configuration 或者 @Component 并不会执行ImportBeanDefinitionRegistrar.registerBeanDefinitions .
+ * <p>
+ * 这些方式一定需要@Import方式引入.才能被ConfigurationClassPostProcessor的解析过程里，被ConfigurationClassParser.getImports收集到并在接下来的过程里被处理。
+ * <p>
+ * ImportAware一定要使用@Configuration才能在ConfigurationClassPostProcessor.postProcessBeanFactory阶段被创建为ConfigurationClassEnhancer的代理对象.
+ * 这样在ImportAwareBeanPostProcessor.postProcessBeforeInitialization过程里ConfigurationClassParser#ImportStack#getImportingClassFor中正确拿到AnnotationMetadata来执行方法ImportAware.setImportMetadata(AnnotationMetadata importMetadata)
+ */
+
 @Configuration
 @Import(value = { BeanDefinitionRegistrarForImport.class, TestNestConfiguration.class })
 @AutoConfigurationPackage
 @Slf4j
-public class CustomizerClientImporter implements BeanFactoryAware, ImportBeanDefinitionRegistrar {
+public class CustomizerClientImportBeanDefinitionRegistrar implements BeanFactoryAware, ImportBeanDefinitionRegistrar {
 
 	private BeanFactory beanFactory;
 
@@ -115,6 +123,7 @@ public class CustomizerClientImporter implements BeanFactoryAware, ImportBeanDef
 		// 在ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry执行过程中，会提前创建ImportBeanDefinitionRegistrar对象，并执行BeanFactoryAware
 		@Override
 		public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+			System.out.println("setBeanFactory");
 			this.beanFactory = beanFactory;
 
 		}
@@ -123,12 +132,13 @@ public class CustomizerClientImporter implements BeanFactoryAware, ImportBeanDef
 	@Import(TestNestConfiguration2.class)
 	@Component
 	/**
-	 * @Component无法被创建为ConfigurationClassEnhancer.newEnhancer的代理对象
-	 *                                                             <p>
-	 *                                                             在ConfigurationClassParser#ImportStack#getImportingClassFor(String
-	 *                                                             importedClass)入参“bean.getClass().getSuperclass()”是Object
-	 *                                                             所以就无法获取到AnnotationMetadata,
-	 *                                                             也就不执行ImportAware.setImportMetadata
+	 * 在ConfigurationClassPostProcessor.postProcessBeanFactory阶段，只有ConfigurationClassUtils.isFullConfigurationClass才能被创建为ConfigurationClassEnhancer.newEnhancer的代理对象
+	 * 而 @Component 不行。
+	 * <p>
+	 * 在ImportAwareBeanPostProcessor.postProcessBeforeInitialization过程过程里：
+	 * <p>
+	 * ConfigurationClassParser#ImportStack#getImportingClassFor(String importedClass)入参“bean.getClass().getSuperclass()”是Object，
+	 * 所以就无法获取到AnnotationMetadata, 也就不执行ImportAware.setImportMetadata
 	 *
 	 */
 
