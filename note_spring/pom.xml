@@ -1,0 +1,71 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.noob</groupId>
+    <artifactId>note_code</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>note_spring</artifactId>
+  
+  <dependencies>
+     <dependency>
+		 <groupId>com.noob</groupId>
+    <artifactId>note_common</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+	</dependency>
+  
+ 
+	
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+			<version>2.1.5.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<version>2.1.5.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<version>2.1.5.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-context</artifactId>
+			<version>2.1.5.RELEASE</version>
+		</dependency>
+		
+	 <dependency>
+		 <groupId>org.springframework.boot</groupId>
+		  <artifactId>spring-boot-starter-jdbc</artifactId>
+		  <version>2.1.5.RELEASE</version>
+	</dependency>
+	<dependency>
+		<groupId>mysql</groupId>
+		 <artifactId>mysql-connector-java</artifactId>
+		 <version>8.0.16</version>
+	</dependency>
+	
+	
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>3.1</version>
+		</dependency>
+		
+		<!-- <dependency>
+			http://localhost:8080/actuator/health
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+			<version>2.1.5.RELEASE</version>
+		</dependency> -->
+<!-- 
+ 		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-bus-amqp</artifactId>
+			<version>2.1.1.RELEASE</version>
+		</dependency>  -->
+  </dependencies>
+</project>
