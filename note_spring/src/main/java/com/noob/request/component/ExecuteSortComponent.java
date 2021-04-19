@@ -34,10 +34,11 @@ public class ExecuteSortComponent implements BeanFactoryAware, ApplicationContex
 	public ExecuteSortComponent(BService b) {
 		System.out.println("这里是Constructor");
 	}
-
-	@PostConstruct
-	public void init() {
-		System.out.println("这里是@PostConstruct");
+	
+	@Resource
+	public void setServiceResource(BService service) {
+		this.service = service;
+		System.out.println("这里是@Resource");
 	}
 
 	@Value("${test.value}")
@@ -59,11 +60,6 @@ public class ExecuteSortComponent implements BeanFactoryAware, ApplicationContex
 		System.out.println("setAfterAutowired这里是@Value");
 	}
 
-	@Resource
-	public void setServiceResource(BService service) {
-		this.service = service;
-		System.out.println("这里是@Resource");
-	}
 
 	@Override
 	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
@@ -71,15 +67,21 @@ public class ExecuteSortComponent implements BeanFactoryAware, ApplicationContex
 	}
 
 	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		System.out.println("这里是ApplicationContextAware");
+	}
+
+	@PostConstruct
+	public void init() {
+		System.out.println("这里是@PostConstruct");
+	}
+	
+	@Override
 	public void afterPropertiesSet() throws Exception {
 		System.out.println("这里是InitializingBean接口");
 
 	}
 
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		System.out.println("这里是ApplicationContextAware");
-	}
 
 	public void initMethod() {
 		System.out.println("这里是initMethod");

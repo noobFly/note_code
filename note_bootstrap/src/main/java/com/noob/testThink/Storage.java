@@ -6,7 +6,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Storage {
-
+    public int  test =10;
 	private int capacity = 10;
 	private Queue<Object> queue = new LinkedList<Object>();
 	final ReentrantLock lock = new ReentrantLock();
@@ -18,7 +18,11 @@ public class Storage {
 	private final Condition notFull = lock.newCondition();
 
 	private Object obj = new Object();
-
+    
+	 static void testStatic() {
+		System.out.println("我是parent testStatic");
+	}
+	
 	public void produce2() {
 		synchronized (obj) {
 			try {

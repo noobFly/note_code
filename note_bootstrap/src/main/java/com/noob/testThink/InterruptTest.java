@@ -4,7 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class InterruptTest {
-	public static void main(String[] args) {
+	
+	//  notifyAll 一定是在退出了 synchronized 代码块才生效
+	public static void main2(String[] args) {
 		Object obj = new Object();
 		Thread thread1 = new Thread(() -> {
 			synchronized (obj) {
@@ -41,7 +43,7 @@ public class InterruptTest {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					log.info("3-after notifyAll");
+					log.info("3-after notifyAll after sleep");
 					/*
 					 * obj.wait(); log.info("3-after wait");
 					 */
@@ -50,12 +52,14 @@ public class InterruptTest {
 					e.printStackTrace();
 				}
 			}
+			log.info("3-out synchronized");
+
 			try {
 				Thread.sleep(2000);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			log.info("3-out synchronized");
+			log.info("3-out synchronized after sleep");
 
 		});
 
@@ -71,17 +75,17 @@ public class InterruptTest {
 
 	}
 
-	public static void main2(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws InterruptedException {
 		Object obj = new Object();
 		Thread thread1 = new Thread(() -> {
 			synchronized (obj) {
 				try {
-					Thread.sleep(200000); // 在sleep、wait、join 阻塞时会被中断提前终结
+					Thread.sleep(20000); // 在sleep、wait、join 阻塞时会被中断提前终结
 					log.info("1-before wait");
 					obj.wait();
 					log.info("1-after wait");
 				} catch (Exception e) {
-					log.info("1-catch {}. interrupt状态: {}", e.toString(), Thread.currentThread().isInterrupted());
+					log.info("1-catch {}. interrupt状态: {}", e.toString(), Thread.currentThread().isInterrupted()); // 捕获到InterruptedException后该线程中断标记就被清除了！
 				}
 			}
 		});
@@ -97,7 +101,7 @@ public class InterruptTest {
 		});
 
 		thread1.start();
-		thread1.join(); // 一定要在start()启动之后， 不然没效果
+		// thread1.join(); // 一定要在start()启动之后， 不然没效果。 join本质上是wait/notify
 
 
 		try {
@@ -109,6 +113,7 @@ public class InterruptTest {
 
 		log.info("线程1初始interrupt状态:{}", thread1.isInterrupted());
 		thread1.interrupt();
+		log.info("线程1 after interrupt状态:{}", thread1.isInterrupted());
 
 	}
 }
