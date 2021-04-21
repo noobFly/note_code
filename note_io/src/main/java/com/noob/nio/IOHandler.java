@@ -101,8 +101,7 @@ public class IOHandler {
 																	// localhost/127.0.0.1:8080
 				if (sc.finishConnect()) {
 					// 将SocketChannel注册到多路复用器上，更新SekectedKeys 中的 key 的 interest set为SelectionKey.OP_READ，监听网络读操作，然后发送请求消息给服务端。
-					sc.register(selector, SelectionKey.OP_WRITE); // localAddress: /127.0.0.1:51083; remoteAddress:
-																	// localhost/127.0.0.1:8080
+					sc.register(selector, SelectionKey.OP_WRITE); // localAddress: /127.0.0.1:51083; remoteAddress:  localhost/127.0.0.1:8080
 				} else {
 					log.info(String.format("客户端%s连接失败!", sc.getLocalAddress()));
 					System.exit(1);// 连接失败，进程退出
