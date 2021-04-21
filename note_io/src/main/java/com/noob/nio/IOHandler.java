@@ -19,8 +19,7 @@ import lombok.extern.slf4j.Slf4j;
  * 客户端与服务端的信息处理合并在一起。
  * <p>
  * 主要是表述：无论是BIO还是NIO例子中，站在Socket(ServerSocket->ServerSocket.accept())、
- * SocketChannel
- * (ServerSocketChannel->ServerSocketChannel.accept())各自的视角，自己的输出是对方的输入
+ * SocketChannel(ServerSocketChannel->ServerSocketChannel.accept())各自的视角，自己的输出是对方的输入
  * ，自己的输入是对方的输出.
  * 自己的localAddress是对面的RemoteAddress,自己的RemoteAddress是对面的localAddress.
  */
@@ -41,16 +40,20 @@ public class IOHandler {
 	}
 
 	/**
-	 * 在while循环体中循环遍历selector，它的休眠时间为1s，
-	 * 无论是否有读写等事件发生，selector每隔1s都被唤醒一次，selector也提供了一个无参的select方法。
-	 * 当有处于就绪状态的Channel时，selector将返回就绪状态的Channel的SelectionKey集合，
-	 * 通过对就绪状态的Channel集合进行迭代，可以进行网络的异步读写操作。
+	 * 在while循环体中循环遍历selector，无论是否有读写等事件发生，selector每隔1s都被唤醒一次，selector也提供了一个无参的select方法。
+	 * <p>
+	 * 当有处于就绪状态的Channel时，selector将返回就绪状态的Channel的SelectionKey集合，通过对就绪状态的Channel集合进行迭代，可以进行网络的异步读写操作。
+	 * <p>
+	 * 一个 Channel同一时刻仅仅可以被注册到一个 Selector 一次，如果将 Channel 注册到Selector 多次，那么其实就是相当于更新 SelectionKey 的 interest set. eg. channel.register(selector,
+	 * SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+	 * <p>
+	 * 只能给ServerSocketChannel注册SelectionKey.OP_ACCEPT事件，会等到有客户端连接才触发。 给SocketChannel注册| SelectionKey.OP_WRITE事件立马会触发； 而OP_CONNECT也是只有在与服务端连接时才触发， SelectionKey.OP_READ需要监听到有输入事件才发生。
+	  有点像: 只能决定自己什么时候写，无法决定什么时间
 	 */
 	public void exectue() {
 		while (!stop) {
 			try {
-
-				int count = selector.select(1000);
+				int count = selector.select(1000); // 轮询到发生的注册事件
 				if (count > 0) {
 					Set<SelectionKey> selectedKeys = selector.selectedKeys();
 					Iterator<SelectionKey> iterator = selectedKeys.iterator();
@@ -97,11 +100,11 @@ public class IOHandler {
 				 * 如果返回值为true，说明客户端连接成功；如果返回值为false或者直接抛出IOException，说明连接失败。
 				 * 在本例程中，返回值为true，说明连接成功。
 				 */
-				SocketChannel sc = (SocketChannel) key.channel();// localAddress: null; remoteAddress:
-																	// localhost/127.0.0.1:8080
+				SocketChannel sc = (SocketChannel) key.channel();// localAddress: null; remoteAddress: localhost/127.0.0.1:8080
 				if (sc.finishConnect()) {
 					// 将SocketChannel注册到多路复用器上，更新SekectedKeys 中的 key 的 interest set为SelectionKey.OP_READ，监听网络读操作，然后发送请求消息给服务端。
-					sc.register(selector, SelectionKey.OP_WRITE); // localAddress: /127.0.0.1:51083; remoteAddress:  localhost/127.0.0.1:8080
+					SelectionKey sk = sc.register(selector, SelectionKey.OP_WRITE); // localAddress: /127.0.0.1:51083; remoteAddress:  localhost/127.0.0.1:8080
+					System.out.println(sk);
 				} else {
 					log.info(String.format("客户端%s连接失败!", sc.getLocalAddress()));
 					System.exit(1);// 连接失败，进程退出
@@ -121,7 +124,9 @@ public class IOHandler {
 												// available or an I/O error occurs.
 
 				sc.configureBlocking(false);// localAddress: /0.0.0.0:8080 ; remoteAddress: /127.0.0.1:51066
-				sc.register(selector, SelectionKey.OP_READ);
+				SelectionKey sk = sc.register(selector, SelectionKey.OP_READ); 
+
+				System.out.println(sk);
 			}
 
 			if (key.isReadable()) {
@@ -179,7 +184,8 @@ public class IOHandler {
 
 			log.info(String.format("接收到客户端%s的信息： %s", sc.getRemoteAddress(), readInMsg));
 
-			sc.register(selector, SelectionKey.OP_WRITE);
+			SelectionKey sk = sc.register(selector, SelectionKey.OP_WRITE);
+			System.out.println(sk);
 
 		} else if (readBytes < 0) {
 			// 对端链路关闭
@@ -225,7 +231,8 @@ public class IOHandler {
 		if (writeBuffer.hasRemaining()) {
 			sc.register(selector, SelectionKey.OP_WRITE); // writeBuffer 可以是一个全局共享内存达到持续写入的效果
 		} else {
-			sc.register(selector, SelectionKey.OP_READ);
+			SelectionKey sk = sc.register(selector, SelectionKey.OP_READ);
+			System.out.println(sk);
 		}
 
 	}

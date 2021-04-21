@@ -25,8 +25,7 @@ public class NioClient {
     }
 
     /**
-     * 首先对SocketChannel的connect()操作进行判断，如果连接成功，
-     * 则将SocketChannel注册到多路复用器Selector上，注册SelectionKey.OP_READ;
+     * 首先对SocketChannel的connect()操作进行判断，如果连接成功，  则将SocketChannel注册到多路复用器Selector上，注册SelectionKey.OP_WRITE， 因为是客户端只能决定自己什么时候写; 
      * <p>
      * 如果没有直接连接成功，则说明服务端没有返回TCP握手应答消息，
      * 但这并不代表连接失败，需要将SocketChannel注册到多路复用器Selector上SelectionKey.OP_CONNECT，
