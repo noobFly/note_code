@@ -16,5 +16,8 @@ public class LoadBalanceSpi {
 			LoadBalance ser = iterator.next();
 			System.out.println(ser.getClass());
 		}
+		System.out.println(Thread.currentThread().getContextClassLoader().getClass().getCanonicalName()); // sun.misc.Launcher.AppClassLoader
+
+
 	}
 }

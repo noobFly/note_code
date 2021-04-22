@@ -19,8 +19,7 @@ import lombok.extern.slf4j.Slf4j;
  * 客户端与服务端的信息处理合并在一起。
  * <p>
  * 主要是表述：无论是BIO还是NIO例子中，站在Socket(ServerSocket->ServerSocket.accept())、
- * SocketChannel(ServerSocketChannel->ServerSocketChannel.accept())各自的视角，自己的输出是对方的输入
- * ，自己的输入是对方的输出.
+ * SocketChannel(ServerSocketChannel->ServerSocketChannel.accept())各自的视角，自己的输出是对方的输入 ，自己的输入是对方的输出.
  * 自己的localAddress是对面的RemoteAddress,自己的RemoteAddress是对面的localAddress.
  */
 @Slf4j
@@ -47,8 +46,8 @@ public class IOHandler {
 	 * 一个 Channel同一时刻仅仅可以被注册到一个 Selector 一次，如果将 Channel 注册到Selector 多次，那么其实就是相当于更新 SelectionKey 的 interest set. eg. channel.register(selector,
 	 * SelectionKey.OP_READ | SelectionKey.OP_WRITE);
 	 * <p>
-	 * 只能给ServerSocketChannel注册SelectionKey.OP_ACCEPT事件，会等到有客户端连接才触发。 给SocketChannel注册| SelectionKey.OP_WRITE事件立马会触发； 而OP_CONNECT也是只有在与服务端连接时才触发， SelectionKey.OP_READ需要监听到有输入事件才发生。
-	  有点像: 只能决定自己什么时候写，无法决定什么时间
+	 * 只能给ServerSocketChannel注册SelectionKey.OP_ACCEPT事件，会等到有客户端连接才触发。 给SocketChannel注册 SelectionKey.OP_WRITE事件立马会触发； 而OP_CONNECT也是只有在与服务端连接时才触发， SelectionKey.OP_READ需要监听到有输入事件才发生。
+	  有点像: 只能决定自己什么时候写，无法决定什么时间读
 	 */
 	public void exectue() {
 		while (!stop) {
@@ -146,7 +145,7 @@ public class IOHandler {
 
 	/**
 	 * 首先创建一个ByteBuffer，由于事先无法得知客户端发送的码流大小，
-	 * 作为例子，开辟一个1M的缓冲区。然后调用SocketChannel的read方法读取请求码流。
+	 * 作为例子，开辟一个1M的缓冲区。调用SocketChannel的read方法读取请求码流。  实际情况需要考虑TCP的拆包粘包问题
 	 * <p>
 	 * 注意，由于已经将SocketChannel设置为异步非阻塞模式，因此它的read是非阻塞的。 使用返回值进行判断，看读取到的字节数
 	 */
@@ -154,7 +153,7 @@ public class IOHandler {
 		SocketChannel sc = (SocketChannel) key.channel();
 
 		ByteBuffer readBuffer = ByteBuffer.allocate(1024);
-		int readBytes = sc.read(readBuffer);
+		int readBytesLength = sc.read(readBuffer);
 		/**
 		 * 返回值有以下三种可能的结果
 		 * <p>
@@ -164,7 +163,7 @@ public class IOHandler {
 		 * <p>
 		 * 返回值为-1：链路已经关闭，需要关闭SocketChannel，释放资源。
 		 */
-		if (readBytes > 0) {
+		if (readBytesLength > 0) {
 			/**
 			 * 当读取到码流以后进行解码，首先对readBuffer进行flip操作，
 			 * 它的作用是将缓冲区当前的limit设置为position，position设置为0，用于后续对缓冲区的读取操作。 然后根据缓冲区可读的字节个数创建字节数组
@@ -187,7 +186,7 @@ public class IOHandler {
 			SelectionKey sk = sc.register(selector, SelectionKey.OP_WRITE);
 			System.out.println(sk);
 
-		} else if (readBytes < 0) {
+		} else if (readBytesLength < 0) {
 			// 对端链路关闭
 			key.cancel();
 			sc.close();
@@ -220,7 +219,10 @@ public class IOHandler {
 			time++;
 			sendMsg = String.format("客户端的慰问%s", time);
 		}
-
+		
+		for (int i = 0; i < 1; i++) {
+			sendMsg += sendMsg; // 通过 StringBuilder 来处理 两字符串相加
+		}
 		byte[] bytes = sendMsg.getBytes();
 		ByteBuffer writeBuffer = ByteBuffer.allocate(bytes.length);
 		writeBuffer.put(bytes);
@@ -229,7 +231,7 @@ public class IOHandler {
 		log.info(String.format("发出信息->>>>%s", sendMsg));
 
 		if (writeBuffer.hasRemaining()) {
-			sc.register(selector, SelectionKey.OP_WRITE); // writeBuffer 可以是一个全局共享内存达到持续写入的效果
+			sc.register(selector, SelectionKey.OP_WRITE); // writeBuffer 可以是一个全局共享内存达到异步持续写入的效果。
 		} else {
 			SelectionKey sk = sc.register(selector, SelectionKey.OP_READ);
 			System.out.println(sk);
