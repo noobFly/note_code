@@ -30,7 +30,7 @@ public class NioServer {
 
 		selector = Selector.open();
 		// ServerSocketChannel只能对SelectionKey.OP_ACCEPT有效 见：ServerSocketChannel.validOps()
-		SelectionKey sk = serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT); // 将ServerSocketChannel注册到Reactor线程的多路复用器Selector上，监听ACCEPT事件。  
+		SelectionKey sk = serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT); // 将ServerSocketChannel注册到Reactor线程的多路复用器Selector上。一定要监听ACCEPT,不然socketChannel的连接事件都进不来。
 		new IOHandler(selector, true).exectue();
 	}
 

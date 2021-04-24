@@ -43,7 +43,7 @@ public class IOHandler {
 	 * <p>
 	 * 当有处于就绪状态的Channel时，selector将返回就绪状态的Channel的SelectionKey集合，通过对就绪状态的Channel集合进行迭代，可以进行网络的异步读写操作。
 	 * <p>
-	 * 一个 Channel同一时刻仅仅可以被注册到一个 Selector 一次，如果将 Channel 注册到Selector 多次，那么其实就是相当于更新 SelectionKey 的 interest set. eg. channel.register(selector,
+	 * 一个 Channel仅仅可以被注册到一个 Selector 一次，如果将 Channel 注册到Selector 多次，那么其实就是相当于更新 SelectionKey 的 interest set. eg. channel.register(selector,
 	 * SelectionKey.OP_READ | SelectionKey.OP_WRITE);
 	 * <p>
 	 * 只能给ServerSocketChannel注册SelectionKey.OP_ACCEPT事件，会等到有客户端连接才触发。 给SocketChannel注册 SelectionKey.OP_WRITE事件立马会触发； 而OP_CONNECT也是只有在与服务端连接时才触发， SelectionKey.OP_READ需要监听到有输入事件才发生。
