@@ -35,7 +35,7 @@ public class HttpServer {
 							pipeline.addLast(new HttpServerHandler());
 						}
 					});
-			ChannelFuture f = b.bind(8080).sync(); // 每绑定1个端口， 就会创建1个NioServerSocketChannel去监听端口事件， 同时也会从master上分配1个线程去处理。
+			ChannelFuture f = b.bind(8080).sync(); // 每绑定1个端口， 就会创建1个NioServerSocketChannel去监听端口事件， 同时也会从master上分配1个NioEventLoop去处理。
 			ChannelFuture f2 = b.bind(8082).sync();// 同一个端口只能被绑定一次，但可以绑定多个端口。
 
 			f.channel().closeFuture().sync();
