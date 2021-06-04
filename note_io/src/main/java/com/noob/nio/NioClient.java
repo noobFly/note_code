@@ -16,6 +16,7 @@ import java.nio.channels.SocketChannel;
 public class NioClient {
     public static void main(String[] args) throws IOException {
         SocketChannel socketChannel = SocketChannel.open();
+        System.out.println(socketChannel.hashCode());
         socketChannel.configureBlocking(false);//创建SocketChannel之后，需要将其设置为异步非阻塞模式
         Selector selector = Selector.open();
         doConnect(socketChannel, selector);

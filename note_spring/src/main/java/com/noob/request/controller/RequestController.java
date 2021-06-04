@@ -117,11 +117,12 @@ public class RequestController {
 	}
 
 	@RequestMapping("/test3/{info}")
-	public void test3(@PathVariable String info, HttpServletRequest request) {
+	private String test3(@PathVariable String info, HttpServletRequest request) {
 
 		log.info("requestMethod: {}", request.getMethod());
 		log.info("contentType: {}", request.getContentType());
 		log.info(info);
+		return info;
 	}
 
 }

@@ -3,6 +3,7 @@ package com.noob.netty;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -34,7 +35,9 @@ public class HttpServer {
 							pipeline.addLast("httpAggregator", new HttpObjectAggregator(512 * 1024)); // http 消息聚合器512*1024为接收的最大contentlength . http消息在传输的过程中可能是一片片的消息片端，就需要HttpObjectAggregator来把它们聚合起来。
 							pipeline.addLast(new HttpServerHandler());
 						}
-					});
+					})
+					.childOption(ChannelOption.TCP_NODELAY, true)
+                    .childOption(ChannelOption.SO_KEEPALIVE, true);
 			ChannelFuture f = b.bind(8080).sync(); // 每绑定1个端口， 就会创建1个NioServerSocketChannel去监听端口事件， 同时也会从master上分配1个NioEventLoop去处理。
 			ChannelFuture f2 = b.bind(8082).sync();// 同一个端口只能被绑定一次，但可以绑定多个端口。
 

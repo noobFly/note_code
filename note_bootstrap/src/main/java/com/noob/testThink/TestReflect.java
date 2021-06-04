@@ -43,30 +43,34 @@ public class TestReflect {
 		Storage c = new StorageChild();
 		System.out.println(c.getClass()); // class com.noob.testThink.TestReflect$StorageChild 多态 -> 动态绑定，
 											// 运行时知道实例的实际类型，会扫描匹配的方法或属性签名。
-		System.out.println(c.test); // 父类的值 10 !
+		
+		
+		System.out.println(c.test); // 父类的值 100 !
+		System.out.println(c.capacity); // 父类的值 10 !
 		c.testStatic(); // 父类的静态方法被执行！ 我是parent testStatic
+		c.testPublic(); //  子类重写方法被执行！ " 我是child testPublic"
+
 
 		StorageChild d = new StorageChild();
-		d.testStatic();//
+		d.testStatic(); 
 		System.out.println(d.getClass().getName()); // 实际类型 com.noob.testThink.TestReflect$StorageChild
 		System.out.println(c.getClass().equals(d.getClass())); // true class是使用默认的Object.equals, 其实就是判定 ==
-		Method[] methods = d.getClass().getDeclaredMethods(); // 实际类型是子类， 返回的是子类的方法 [public static void
+		Method[] methods = c.getClass().getDeclaredMethods(); // 实际类型是子类， 返回的是子类的方法 [public static void
 																// com.noob.testThink.TestReflect$StorageChild.childMethod()]
 		for (Method method : methods) {
 			method.setAccessible(true);
-			method.invoke(c); // 可以正确执行， 虽然是 “父类引用指向子类实例”， 但依然可以通过反射跳过编译检查。
-			method.invoke(d); //  yu正确执行。 Method只与实际的class有关， 和具体的实例无关。
+			Object obj = method.invoke(c); // 子类的方法可以正确执行， 虽然是 “父类引用指向子类实例”， 但依然可以通过反射跳过编译检查。
+			method.invoke(d); //  正确执行。 Method只与实际的class有关， 和具体的实例对象无关。
 			try {
 				method.invoke(null); // 顺利执行的是子类静态方法，与invoke里面是什么类型的实例对象无关, 传null都行！！！
 			} catch (Exception e) {
-				e.printStackTrace(); // 非静态Method内部绑定了来源Class类型， 执行会校验obj是否是该类型的实例。 异常：//
+				e.printStackTrace(); // 非静态Method内部绑定了来源Class类型， 执行会校验obj是否是该类型的实例。 异常：
 										// java.lang.IllegalArgumentException: object is not an instance of declaring  class
 			}
 		}
 
 		Field[] field = d.getClass().getFields(); // 父、子定义的field都有， 子类定义排在首位
-		Field[] field2 = d.getClass().getDeclaredFields(); // 子类定义 [public int
-															// com.noob.testThink.TestReflect$StorageChild.test]
+		Field[] field2 = d.getClass().getDeclaredFields(); // 子类定义 [public int  com.noob.testThink.TestReflect$StorageChild.test]
 
 		System.out.println(field);
 	}
@@ -115,7 +119,11 @@ public class TestReflect {
 	 */
 	public static class StorageChild extends Storage {
 		public int test = 1;
+	    public static int capacity = 1;
 
+		public void testPublic() {
+			System.out.println("我是child testPublic");
+		}
 		// 父类与子类名称相同时， 修饰词static需要相同 权限子类需要 >= 父类 !! 这里private的话编译报错
 		protected static void testStatic() throws RuntimeException {
 			System.out.println("我是child  testStatic");

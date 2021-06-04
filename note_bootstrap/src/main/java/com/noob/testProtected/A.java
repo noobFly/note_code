@@ -2,6 +2,10 @@ package com.noob.testProtected;
 
 public class A {
 	protected String A_filed;
+	
+	public A() {
+		
+	}
 
 	protected A(String filed) {
 		A_filed = filed;

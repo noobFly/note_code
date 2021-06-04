@@ -9,12 +9,13 @@ import com.noob.sort.AbstractSort;
  */
 public class MergeSort extends AbstractSort {
 
+	// 二分数组直到只剩单个元素
     @Override
     public int[] sort(int[] param) {
         int length = param.length;
         if (length > 1) {
             int split = length / 2;
-            int[] low = splitArray(param, 0, split - 1);
+            int[] low = splitArray(param, 0, split - 1); 
             int high[] = splitArray(param, split, param.length - 1);
             //切割数组后排序
             param = sort_core(sort(low), sort(high));

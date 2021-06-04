@@ -7,7 +7,7 @@ import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.TimeUnit;
 
 public class ForkJoinPoolTest {
-	static int max = 1000000000;
+	static int max = Integer.MAX_VALUE >> 2;
 
 	public static void main(String[] args) throws Exception {
 		testHasResultTask();

@@ -12,8 +12,8 @@ import com.google.common.util.concurrent.RateLimiter.SleepingStopwatch;
 public class RateLimiterTest {
 	public static void main(String args[]) throws Exception {
 
-		// testSmoothBursty();
-		 testSmoothWarmingUp();
+	//  testSmoothBursty();
+		testSmoothWarmingUp();
 
 	}
 

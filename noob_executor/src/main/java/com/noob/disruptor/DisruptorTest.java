@@ -7,7 +7,9 @@ import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 
 public class DisruptorTest {
-
+  public static void main(String[] args) {
+	  execute();
+  }
 	public static void execute() {
 
 		Disruptor<DataEvent> disruptor = new Disruptor<DataEvent>(new DataEventFactory(), CompareTest.SIZE,

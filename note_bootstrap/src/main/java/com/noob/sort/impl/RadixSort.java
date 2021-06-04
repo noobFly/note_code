@@ -37,7 +37,7 @@ public class RadixSort extends AbstractSort {
 			count[i] = 0;
 		}
 
-		// 指定位的数值与桶的编号索引一一对应。统计对应的数值下有多少个
+		// 指定位的数值与桶的编号index一一对应。统计对应的数值下有多少个
 		for (int i = 0; i <= cap; i++) {
 			count[getDigit(param[i], position)]++;
 		}

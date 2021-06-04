@@ -50,6 +50,8 @@ public class HeartBeatServer {
 					});
 
 			ChannelFuture future = bootstrap.bind(8090).sync();
+			ChannelFuture future2 = bootstrap.bind(80920).sync();
+
 			future.channel().closeFuture().sync();
 		} catch (Exception e) {
 			e.printStackTrace();

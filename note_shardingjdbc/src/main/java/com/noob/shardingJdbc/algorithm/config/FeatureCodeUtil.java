@@ -50,4 +50,10 @@ public abstract class FeatureCodeUtil {
 		return DECIMAL_FORMAT
 				.format(Math.abs(murmur.hashString(columnValue, Charsets.UTF_8).asInt()) % MAX_FETURE_CODE);
 	}
+	
+	public static void main(String[] args) {
+		System.out.println(Math.abs(murmur.hashString("20198987626", Charsets.UTF_8).asInt()));
+		System.out.println(computeFetureCode("20198987626"));
+
+	}
 }

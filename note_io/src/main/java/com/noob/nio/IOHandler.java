@@ -101,7 +101,7 @@ public class IOHandler {
 				 */
 				SocketChannel sc = (SocketChannel) key.channel();// localAddress: null; remoteAddress: localhost/127.0.0.1:8080
 				if (sc.finishConnect()) {
-					// 将SocketChannel注册到多路复用器上，更新SekectedKeys 中的 key 的 interest set为SelectionKey.OP_READ，监听网络读操作，然后发送请求消息给服务端。
+					//更新SocketChannel 的 SekectedKeys 中的 key 的 interest set为SelectionKey.OP_READ，监听网络读操作，然后发送请求消息给服务端。
 					SelectionKey sk = sc.register(selector, SelectionKey.OP_WRITE); // localAddress: /127.0.0.1:51083; remoteAddress:  localhost/127.0.0.1:8080
 					System.out.println(sk);
 				} else {

@@ -42,7 +42,7 @@ public class BioServer {
 		log.info("服务器启动, 服务地址: " + serverSocket.getLocalSocketAddress());
 
 		while (true) {
-			Socket clientSocket = serverSocket.accept(); // 等待客户端连接--阻塞!!!
+			Socket clientSocket = serverSocket.accept(); // 等待客户端连接--阻塞!!!  在第三次握手之后 或则 第三次握手将数据和ack一起返回
 			// requestHandlerAsync(clientSocket);
 			requestHandler(clientSocket); // 可选多线程处理
 		}

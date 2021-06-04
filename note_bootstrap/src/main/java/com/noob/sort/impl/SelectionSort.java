@@ -25,7 +25,7 @@ public class SelectionSort extends AbstractSort {
      * @return
      */
     private int getMinIndex(int[] param, int start) {
-        int min_index = start;
+        int min_index = start;	
         for (int j = start + 1; j < param.length; j++) {
             if (param[j] < param[min_index]) {
                 min_index = j;

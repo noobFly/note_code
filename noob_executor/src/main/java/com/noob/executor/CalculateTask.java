@@ -1,6 +1,6 @@
 package com.noob.executor;
 import java.util.concurrent.RecursiveTask;
-
+// If any task encounters an exception, the other may be cancelled. 
 public class CalculateTask extends RecursiveTask<Integer> {
 
     private static final long serialVersionUID = 1L;

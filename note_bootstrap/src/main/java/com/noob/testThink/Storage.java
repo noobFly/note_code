@@ -6,8 +6,8 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Storage {
-    public int  test =10;
-	private int capacity = 10;
+    protected int  test =10;
+    public static int capacity = 10;
 	private Queue<Object> queue = new LinkedList<Object>();
 	final ReentrantLock lock = new ReentrantLock();
 
@@ -18,7 +18,14 @@ public class Storage {
 	private final Condition notFull = lock.newCondition();
 
 	private Object obj = new Object();
-    
+	
+	public Storage() {
+		test = 100;
+	}
+
+	public void testPublic() {
+		System.out.println("我是parent testPublic");
+	}
 	 static void testStatic() {
 		System.out.println("我是parent testStatic");
 	}
@@ -93,7 +100,7 @@ public class Storage {
 		}
 	}
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws Exception {
 		Storage storage = new Storage();
 		new Thread(() -> {
 			while (true) {

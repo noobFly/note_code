@@ -1,5 +1,7 @@
 package com.noob.testProtected.other;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.noob.testProtected.A;
 
 /**
@@ -11,19 +13,27 @@ import com.noob.testProtected.A;
  * @param args
  */
 public class C extends A {
+
 	protected C() {
 		super("C"); // 可以在构造器中访问父类protected的构造函数
 		A.static_method();
+		
+		A_method();
+	}
+	
+	void local() {
+		A_method();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		C b = new C();
 		b.A_method();
 		b.A_filed = "1";
 
-		// A a = new A("a"); //编译报错 ！！  无法直接在子类成员方法里实例化父类protected的构造函数
-		// a.A_filed = "2";
-		// a.A_method();
+		 A a = new A(); 
+		 //  A a = new A(""); 编译报错 ！！  无法直接在子类成员方法里实例化父类protected的构造函数
+		 // a.A_filed = "2";
+		 // a.A_method();
 
 	}
 }
