@@ -1,0 +1,8 @@
+1、网关的配置文件里一定要配置好zuul.routes， 会按照path来匹配service-id ， service-id 要大写！
+2、按类型吸纳后执行pre -> route -> post 过滤器， 相同类型按fiterOrder从小到大顺序执行。
+3、在ZuulServlet.service的处理逻辑里， 异常了要执行 pre和route异常了都要执行 “error” -> "post" 类型的过滤器
+4、不要在pre类型过滤器里对requestURI进行处理，处理了也会被最后执行的PreDecorationFilter覆盖回来。
+5、 RibbonRoutingFilter -> filterOrder = 10 : shouldFilter条件是： 一定不能指定routeHost,且一定要指定下游服务的serverId.
+6、 SimpleHostRoutingFilter -> filterOrder = 100  shouldFilter条件是： 一定要指定routeHost! 
+7、 在post类型过滤器里对responseDataStream解析成String后设置回ResponseBody, 并设置响应的ContentType
+8、在post过滤器的最后设置ctx.setSendZuulResponse(false), 可以避免再被后续的postFilter处理，代表结束！ 因为在shouldFilter()里都会判定：ctx.sendZuulResponse()

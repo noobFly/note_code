@@ -1,0 +1,36 @@
+server:
+  port: 2000
+
+spring.application.name: eureka_server
+
+eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 10 #每10S给其他服务发次请求，监测心跳
+    lease-expiration-duration-in-seconds: 30 #如果其他服务没心跳，30秒后剔除该服务
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    healthcheck.enabled: true
+    serviceUrl:
+        defaultZone:  http://localhost:2100/eureka/,http://localhost:2000/eureka/ #高可用 互相注册
+  server:
+    enable-self-preservation: false #关闭自我保护，快速移除失效实例
+    eviction-interval-timer-in-ms: 10000 #失效实例检测间隔
+
+ #开启@FeignClient的fallback   
+feign:
+    hystrix:
+        enabled: true
+#设置feign客户端超时时间(OpenFeign默认支持ribbon)
+ribbon:
+#指的是建立连接所用的时间，适用于网络状况正常的情况下,两端连接所用的时间
+  ReadTimeout: 15000
+#指的是建立连接后从服务器读取到可用资源所用的时间
+  ConnectTimeout: 15000    
+#阿波罗注册中心配置
+app.id: cbms_api-gateway
+apollo.meta: http://172.18.112.48:7080/
+apollo.bootstrap.enabled: true
+apollo.cluster: test

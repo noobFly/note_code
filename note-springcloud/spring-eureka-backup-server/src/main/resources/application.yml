@@ -1,0 +1,20 @@
+server:
+  port: 2100
+spring:
+  application:
+    name: datalake
+eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 10 #每10S给其他服务发次请求，监测心跳
+    lease-expiration-duration-in-seconds: 30 #如果其他服务没心跳，30秒后剔除该服务
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    healthcheck.enabled: true
+    serviceUrl:
+        defaultZone:  http://localhost:2100/eureka/,http://localhost:2000/eureka/
+  server:
+    enable-self-preservation: false #关闭自我保护，快速移除失效实例
+    eviction-interval-timer-in-ms: 10000 #失效实例检测间隔

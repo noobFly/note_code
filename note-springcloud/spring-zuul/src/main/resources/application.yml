@@ -1,0 +1,78 @@
+spring:
+  application:
+    name: api-gateway
+  profiles:
+    active: dev
+
+server:
+  port: 5555
+  tomcat: 
+    uri-encoding: UTF-8
+    threads:
+      max: 200
+      min-spare: 10
+    remoteip.protocol-header: X-Forwarded-Proto
+    max-connections: 2000
+
+logging: 
+    level.org.apache.commons: INFO    
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:2100/eureka/,http://localhost:2000/eureka/
+    healthcheck:
+      enabled: true
+  instance:
+    prefer-ip-address: true    
+      
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 64000   # 需要 >= (ribbon.ReadTimeout + ribbon.ConnectTimeout) * (ribbon.MaxAutoRetries + 1) * (ribbon.MaxAutoRetriesNextServer + 1)
+          strategy: THREAD   #隔离策略
+      circuitBreaker:
+        requestVolumeThreshold: 1000
+    cbms:
+      execution:
+        isolation:
+          strategy: THREAD #如果不指定，不知道为什么不会用default的配置
+    demo:
+      execution:
+        isolation:
+          strategy: THREAD 
+  threadpool:  #执行线程池的大小，当隔离策略为THREAD时有效
+    default: 
+      coreSize: 500    #可以等于tomcat线程池大小
+      maximumSize: 500
+      maxQueueSize: 200   #coreSize * maxQueueSize 最大等待请求数
+      queueSizeRejectionThreshold: 200  #大于queueSizeRejectionThreshold时（但是没有达到maxQueueSize值），则开始拒绝后续的请求进入队列
+            
+zuul:
+  ignoredServices: '*' #禁止直接通过注册的服务访问
+  host:
+    connect-timeout-millis: 15000
+    socket-timeout-millis: 15000
+    max-total-connections: 200 # 代理最大连接数，默认值为200    
+    max-per-route-connections: 50 # 每个路由的最大连接数，默认值为20
+  routes:  # org.springframework.cloud.netflix.zuul.filters.ZuulProperties
+    cbms:  
+      path: /api/**    # 访问http://localhost:5555/api
+      service-id: EUREKA_SERVER
+      stripPrefix: false
+      retryable: false  #关闭自动重试 
+    
+ribbon:
+  ReadTimeout: 15000
+  ConnectTimeout: 1000
+  MaxAutoRetries: 1  #当值为0时，hystrix的isolation策略强制为SEMAPHORE
+  MaxAutoRetriesNextServer: 1   
+  
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'  

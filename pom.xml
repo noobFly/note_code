@@ -15,6 +15,8 @@
         <module>note_shardingjdbc</module>
         <module>note_bootstrap</module>
         <module>note_io</module>
+		<module>note-springcloud</module>
+		
     </modules>
 	
 	</project>
