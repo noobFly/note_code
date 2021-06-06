@@ -2,11 +2,11 @@ server:
   port: 2100
 spring:
   application:
-    name: datalake
+    name: datalake   #显示为大写的“DATALAKE”，并当作Service-KEY . 如果不指定在控制台显示的是“UNKNOWN”
 eureka:
   instance:
     hostname: localhost
-    prefer-ip-address: true
+    prefer-ip-address: false
     lease-renewal-interval-in-seconds: 10 #每10S给其他服务发次请求，监测心跳
     lease-expiration-duration-in-seconds: 30 #如果其他服务没心跳，30秒后剔除该服务
   client:

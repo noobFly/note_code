@@ -31,10 +31,10 @@ public class PostZuulFilter extends BaseZuulFilter {
 		InputStream responseDataStream = ctx.getResponseDataStream();
 		try {
 			String msg = readAsString(responseDataStream, null);
-			System.out.println("PostZuulFilter run  response: " + msg);
+			log.info("PostZuulFilter run  response: " + msg);
 			ctx.getResponse().setCharacterEncoding("UTF-8");
 		//	ctx.getResponse().setContentType("application/json;charset=UTF-8");
-			ctx.setResponseBody(msg);
+			ctx.setResponseBody(msg); // 需要自己从stream里解析数据设置到resposeBody
 			ctx.setResponseStatusCode(200);
 			ctx.setSendZuulResponse(false); // 不会被后面的过滤器再处理了
 		} catch (IOException e) {

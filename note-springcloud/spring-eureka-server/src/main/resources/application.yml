@@ -6,7 +6,8 @@ spring.application.name: eureka_server
 eureka:
   instance:
     hostname: localhost
-    prefer-ip-address: true
+    prefer-ip-address: false #Eureka默认使用 hostname 进行服务注册: eg."DESKTOP-G3BHFUS:eureka_server:2000"， 以IP地址注册到服务中心，相互注册使用IP地址
+    instance-id:  186.198.7.24:2300   #指定向注册中心注册的服务ip地址。 ip地址也可以是"http://域名地址" http://eureka.com . eureka后台在status处会显示这个，但访问还是取的真实IP
     lease-renewal-interval-in-seconds: 10 #每10S给其他服务发次请求，监测心跳
     lease-expiration-duration-in-seconds: 30 #如果其他服务没心跳，30秒后剔除该服务
   client:
@@ -34,3 +35,9 @@ app.id: cbms_api-gateway
 apollo.meta: http://172.18.112.48:7080/
 apollo.bootstrap.enabled: true
 apollo.cluster: test
+
+
+
+    # 默认显示的是： 主机名：应用名：应用端口
+    # ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${server.port}},
+    #http://localhost:2100/eureka/apps 能看到具体的ip地址
