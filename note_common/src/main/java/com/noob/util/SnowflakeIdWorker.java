@@ -48,7 +48,7 @@ public class SnowflakeIdWorker {
     /** 工作机器ID(0~31) */
     private long workerId;
 
-    /** 数据中心ID(0~31) */
+    /** 机房数据中心ID(0~31) */
     private long datacenterId;
 
     /** 毫秒内序列(0~4095) */
@@ -91,6 +91,7 @@ public class SnowflakeIdWorker {
         if (timestamp < lastTimestamp) {
             throw new RuntimeException(
                     String.format("Clock moved backwards.  Refusing to generate id for %d milliseconds", lastTimestamp - timestamp));
+            // 可以等待到时间回到lastTimestamp
         }
 
         //如果是同一时间生成的，则进行毫秒内序列
