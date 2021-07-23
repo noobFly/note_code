@@ -6,3 +6,4 @@
 6、 SimpleHostRoutingFilter -> filterOrder = 100  shouldFilter条件是： 一定要指定routeHost! 
 7、 在post类型过滤器里对responseDataStream解析成String后设置回ResponseBody, 并设置响应的ContentType
 8、在post过滤器的最后设置ctx.setSendZuulResponse(false), 可以避免再被后续的postFilter处理，代表结束！ 因为在shouldFilter()里都会判定：ctx.sendZuulResponse()
+9、PreDecorationFilter： pre类型的过滤器，filterOrder= 5，   会根据配置的ZuulProperties的routes属性来按requestURI匹配找到SERVICE_ID_KEY

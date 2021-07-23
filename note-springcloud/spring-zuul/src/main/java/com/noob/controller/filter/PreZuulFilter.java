@@ -29,6 +29,7 @@ public class PreZuulFilter extends BaseZuulFilter {
 		String requestURI = ctx.getRequest().getRequestURI();
 		ctx.put(FilterConstants.REQUEST_URI_KEY, requestURI.substring(5));// 因为测试时没有给业务server设置context-name,简单处理一下.
 		// 但是这里会被之后执行的PreDecorationFilter处理回原来的url,所以要放到route类型的filter里去！！
+		//同时PreDecorationFilter也会根据配置的ZuulProperties的routes属性来按requestURI匹配找到SERVICE_ID_KEY
 		return null;
 	}
 

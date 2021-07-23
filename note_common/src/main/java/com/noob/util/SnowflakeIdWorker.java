@@ -1,5 +1,7 @@
 package com.noob.util;
 
+import java.security.SecureRandom;
+
 /**
  * Twitter_Snowflake<br>
  * SnowFlake的结构如下(每部分用-分开):<br>
@@ -105,7 +107,9 @@ public class SnowflakeIdWorker {
         }
         //时间戳改变，毫秒内序列重置
         else {
-            sequence = 0L;
+        	// 如果和上次生成时间不同,重置sequence，就是下一毫秒开始，sequence计数重新从0开始累加,
+            // 为了保证尾数随机性更大一些,最后一位设置一个随机数
+            sequence = new SecureRandom().nextInt(10);
         }
 
         //上次生成ID的时间截

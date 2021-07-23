@@ -99,6 +99,7 @@ public abstract class ConsistentHashSelector {
 		}
 
 		// 按每组4个来构建虚拟服务Node. 因为 Md5是一个16字节长度的数组，将16字节的数组每四个字节一组，分别对应一个虚拟节点  dubbo使用
+		// 按每组4个来构建虚拟服务Node. 因为 Md5是一个16字节长度的数组，取其中的四个字节一组，分别对应一个虚拟节点  dubbo使用
 		@Override
 		public long hash(byte[] digest, int offset) {
 			return (((long) (digest[3 + offset * 4] & 0xFF) << 24) | ((long) (digest[2 + offset * 4] & 0xFF) << 16)

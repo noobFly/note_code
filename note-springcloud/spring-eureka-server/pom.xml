@@ -43,5 +43,24 @@
 			<artifactId>spring-boot-properties-migrator</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		      <dependency>
+        <groupId>com.netflix.hystrix</groupId>
+        <artifactId>hystrix-javanica</artifactId>
+        <version>1.5.18</version>
+        <exclusions>
+          <exclusion>
+            <artifactId>jsr305</artifactId>
+            <groupId>com.google.code.findbugs</groupId>
+          </exclusion>
+          <exclusion>
+            <artifactId>annotations</artifactId>
+            <groupId>com.google.code.findbugs</groupId>
+          </exclusion>
+          <exclusion>
+            <artifactId>aspectjrt</artifactId>
+            <groupId>org.aspectj</groupId>
+          </exclusion>
+        </exclusions>
+      </dependency>
 	</dependencies>
 </project>
