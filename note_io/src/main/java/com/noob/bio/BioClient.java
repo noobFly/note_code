@@ -32,7 +32,9 @@ public class BioClient {
 	public static void main(String[] args) throws Exception {
 		try {
 			// 创建客户端Socket，指定连接服务器地址和端口
-			socket = new Socket("localhost", 8080);
+			socket = new Socket("localhost", 8090);
+			socket.setTcpNoDelay(true);
+
 			log.info("客户端启动:" + socket.getLocalSocketAddress());// 每一个客户端分配一个端口号
 
 			// 获取输入流，并读取服务器端的响应
@@ -85,16 +87,20 @@ public class BioClient {
 
 			AtomicInteger time = new AtomicInteger(1);
 			service.scheduleWithFixedDelay(() -> {
-				String msg = "客户端" + socket.getLocalSocketAddress() + "的慰问" + time.intValue() + "\n";
-				/*
-				 * if (time.intValue() > 1) { msg = "【test】"; // 验证read()不会主动清空原有数据
-				 * ,而readLine()会定位nextLine的起始索引 }
-				 */
-				log.info("发出信息 ->>>>" + msg);
-				outputPrint.write(msg);
-				// outputPrint.println();
-				outputPrint.flush(); // 这里才能正式推，很关键！
-				time.addAndGet(1);
+				if(!socket.isClosed()) { // 客户端不主动关闭会一直发送，但服务端已经关闭了将不再接收处理了。
+					String msg = "客户端" + socket.getLocalSocketAddress() + "的慰问" + time.intValue() + "\n";
+					/*
+					 * if (time.intValue() > 1) { msg = "【test】"; // 验证read()不会主动清空原有数据
+					 * ,而readLine()会定位nextLine的起始索引 }
+					 */
+					log.info("发出信息 ->>>>" + msg);
+					outputPrint.write(msg);
+					// outputPrint.println();
+					outputPrint.flush(); // 这里才能正式推，很关键！
+					time.addAndGet(1);
+				} else {
+					System.out.println("sokcet 被关闭了！");
+				}
 			}, 0, 2, TimeUnit.SECONDS);
 
 		});

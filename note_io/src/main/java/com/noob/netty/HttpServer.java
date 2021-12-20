@@ -1,5 +1,7 @@
 package com.noob.netty;
 
+import java.util.concurrent.ThreadFactory;
+
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -11,6 +13,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
+import io.netty.util.AttributeKey;
 
 /**
  * 响应式编程是一种异步编程范式， 范例通常以面向对象的语言表示，作为Observer设计模式（观察者模式）的扩展。
@@ -22,8 +25,26 @@ import io.netty.handler.codec.http.HttpServerCodec;
 public class HttpServer {
 
 	public static void main(String[] args) throws InterruptedException {
-		EventLoopGroup bossGroup = new NioEventLoopGroup(1); // 实际上是一个线程组，可以通过构造方法设置线程数量，默认为CPU核心数*2。boss用于服务器接收新的TCP连接，boss线程接收到新的连接后将连接注册到worker线程。worker线程用于处理IO操作，例如read、write。
-		EventLoopGroup workerGroup = new NioEventLoopGroup(); // 一个 NioEventLoop 维护了一个 Selector（使用的是 Java 原生的 Selector： SelectorProvider.provider().openSelector()）
+		EventLoopGroup bossGroup = new NioEventLoopGroup(1, new ThreadFactory() {
+
+			@Override
+			public Thread newThread(Runnable r) {
+				Thread thread = new Thread(r);
+				thread.setName("main_boss");
+				return thread;
+			}
+		}); // 实际上是一个线程组，可以通过构造方法设置线程数量，默认为CPU核心数*2。
+		// boss用于服务器接收新的TCP连接，boss线程接收到新的连接后将连接注册到worker线程。worker线程用于处理IO操作，例如read、write。
+		EventLoopGroup workerGroup = new NioEventLoopGroup(16, new ThreadFactory() {
+
+			@Override
+			public Thread newThread(Runnable r) {
+				Thread thread = new Thread(r);
+				thread.setName("worker");
+				return thread;
+			}
+		}); // 一个 NioEventLoop 维护了一个 Selector（使用的是 Java 原生的 Selector：
+			// SelectorProvider.provider().openSelector()）
 		try {
 			ServerBootstrap b = new ServerBootstrap();
 			b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
@@ -32,13 +53,16 @@ public class HttpServer {
 						public void initChannel(SocketChannel ch) throws Exception {
 							ChannelPipeline pipeline = ch.pipeline();
 							pipeline.addLast(new HttpServerCodec()); // http 编解码
-							pipeline.addLast("httpAggregator", new HttpObjectAggregator(512 * 1024)); // http 消息聚合器512*1024为接收的最大contentlength . http消息在传输的过程中可能是一片片的消息片端，就需要HttpObjectAggregator来把它们聚合起来。
+							pipeline.addLast("httpAggregator", new HttpObjectAggregator(512 * 1024)); // http消息聚合器512*1024为接收的最大contentlength .
+																										// http消息在传输的过程中可能是一片片的消息片端，就需要HttpObjectAggregator来把它们聚合起来。
 							pipeline.addLast(new HttpServerHandler());
 						}
-					})
-					.childOption(ChannelOption.TCP_NODELAY, true)
-                    .childOption(ChannelOption.SO_KEEPALIVE, true);
-			ChannelFuture f = b.bind(8080).sync(); // 每绑定1个端口， 就会创建1个NioServerSocketChannel去监听端口事件， 同时也会从master上分配1个NioEventLoop去处理。
+					}).option(ChannelOption.TCP_NODELAY, true)
+					.attr(AttributeKey.newInstance("parent_attr"), "noobFly_p")
+					.childAttr(AttributeKey.newInstance("child_attr"), "noobFly_c")
+					.childOption(ChannelOption.TCP_NODELAY, true).childOption(ChannelOption.SO_KEEPALIVE, true);
+			ChannelFuture f = b.bind(8080).sync(); // 每绑定1个端口， 就会创建1个NioServerSocketChannel去监听端口事件，
+													// 同时也会从master上分配1个NioEventLoop去处理。
 			ChannelFuture f2 = b.bind(8082).sync();// 同一个端口只能被绑定一次，但可以绑定多个端口。
 
 			f.channel().closeFuture().sync();

@@ -43,15 +43,25 @@ public class RequestHandler implements Runnable {
     public void run() {
         log.info(String.format("客户端连接: %s", clientSocketAddress));
 
-        try {
-            //handleWithoutLineBreak();
-           // handleWithLineBreak1();
-            // handleWithLineBreak2();
-            keepOut();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-
-        }
+        try { 
+        	
+        	while(true) {
+    	 
+              handleWithoutLineBreak();
+             // handleWithLineBreak1();
+              // handleWithLineBreak2();
+              keepOut();
+          }
+      }  catch (Exception e) {
+          e.printStackTrace();
+          try {
+        	    clientSocket.shutdownInput();
+        	    clientSocket.shutdownOutput();
+				clientSocket.close(); // 只是关闭服务端这边的socket输入和输出， 客户端也需要自己主动关闭。
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+       }
     }
 
 	private void keepOut() throws Exception {

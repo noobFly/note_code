@@ -1,5 +1,6 @@
 package com.noob.netty.heart;
 
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 import io.netty.bootstrap.ServerBootstrap;
@@ -33,8 +34,25 @@ public class HeartBeatServer {
 	public static void main(String[] args) throws Exception {
 		ServerBootstrap bootstrap = new ServerBootstrap();
 
-		EventLoopGroup boss = new NioEventLoopGroup();
-		EventLoopGroup worker = new NioEventLoopGroup();
+		EventLoopGroup boss = new NioEventLoopGroup(1, new ThreadFactory() {
+
+			@Override
+			public Thread newThread(Runnable r) {
+				Thread thread = new Thread(r);
+				thread.setName("main_boss");
+				return thread;
+			}
+		}); // 实际上是一个线程组，可以通过构造方法设置线程数量，默认为CPU核心数*2。
+		// boss用于服务器接收新的TCP连接，boss线程接收到新的连接后将连接注册到worker线程。worker线程用于处理IO操作，例如read、write。
+		EventLoopGroup worker = new NioEventLoopGroup(16, new ThreadFactory() {
+
+			@Override
+			public Thread newThread(Runnable r) {
+				Thread thread = new Thread(r);
+				thread.setName("worker");
+				return thread;
+			}
+		}); 
 		try {
 			bootstrap.group(boss, worker).handler(new LoggingHandler(LogLevel.INFO))
 					.channel(NioServerSocketChannel.class).childHandler(new ChannelInitializer<SocketChannel>() {
@@ -50,7 +68,7 @@ public class HeartBeatServer {
 					});
 
 			ChannelFuture future = bootstrap.bind(8090).sync();
-			ChannelFuture future2 = bootstrap.bind(80920).sync();
+			ChannelFuture future2 = bootstrap.bind(8080).sync();
 
 			future.channel().closeFuture().sync();
 		} catch (Exception e) {
