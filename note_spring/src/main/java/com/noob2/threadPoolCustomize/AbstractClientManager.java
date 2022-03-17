@@ -1,4 +1,4 @@
-package com.noob2.threadPoolSelf;
+package com.noob2.threadPoolCustomize;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.netflix.zuul.context.RequestContext;
 
-import cn.utrust.fintech.openfeign.proxy.ReturnWrapper;
 //TODO 暂时还没测试通过ErrorController
 @RestController
 public class ErrorHandlerController implements ErrorController {
@@ -36,7 +35,7 @@ public class ErrorHandlerController implements ErrorController {
 			return handleOpenApiException();
 		}
 
-		return new ReturnWrapper<String>(503, "无法访问");
+		return 504;
 	}
 
 	private Object handleOpenApiException() {

@@ -33,10 +33,6 @@
 			<artifactId>flink-java</artifactId>
 			<version>1.7.2</version>
 		</dependency>
-		
-		
-		
-
 
 	<dependency>
 		 <groupId>org.redisson</groupId>

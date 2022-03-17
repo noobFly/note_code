@@ -18,5 +18,23 @@
 		<module>note-springcloud</module>
 		
     </modules>
-	
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                    <compilerArguments>
+                        <extdirs>libs</extdirs>
+                        <!--  rt包没有打到项目中去 -->
+                        <verbose />
+                        <bootclasspath>D:/Program Files/Java/jre1.8/lib/rt.jar;D:/Program Files/Java/jre1.8/lib/jce.jar;D:/Program Files/Java/jre1.8/lib/jsse.jar</bootclasspath>
+                    </compilerArguments>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 	</project>

@@ -16,6 +16,7 @@ import com.noob.request.component.ExecuteSortComponent;
 
 import lombok.Data;
 
+// 用来验证yml配置的Map 和 0x开头的字符不加''会被当做16进制！
 @Data
 @ConfigurationProperties(prefix = "webase")
 @Configuration

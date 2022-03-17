@@ -2,6 +2,22 @@
 logging.level.org.springframework: DEBUG
 
 
+server:
+    shutdown: graceful #优雅停机
+    port: 8080
+    tomcat:
+      uri-encoding: UTF-8
+      threads:
+        max: 100
+        min-spare: 10
+      remoteip.protocol-header: X-Forwarded-Proto
+    servlet:
+      encoding:
+        charset: UTF-8
+        force: true
+        enabled: true
+      context-path: /noob
+
 #文件写入磁盘的阈值
 spring.servlet.multipart.file-size-threshold: 0
 # 最大文件大小
@@ -22,12 +38,17 @@ management:
         #include: refresh,health,info #打开部分
         
 spring.datasource:
-#    poolName: SpringBootHikariCP
     url: jdbc:mysql://${dburl:rdsmp1l3waaw0jhvw9nehpublic.mysql.rds.aliyuncs.com:3306/trusts}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
     username: ${dbuser:yctest}
     password: ${dbpwd:erongdu}
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    
+    driverClassName: com.mysql.cj.jdbc.Driver
+    poolName: SpringBootHikariCP
+    maximumPoolSize: 5
+    minimumIdle: 3
+    connectionTimeout: 30000
+    idleTimeout: 30000
+    pool-prepared-statements: true
+    max-open-prepared-statements: 250
     
 spring.shardingsphere:
     enabled: true
@@ -35,7 +56,7 @@ spring.shardingsphere:
     datasource:
         names: ds0
         ds0:
-            type: cn.utrust.fintech.cbms.domain.config.CbmsHikariDataSource
+            type: com.noob.shardingJdbc.dataSoure.CustomizeHikariDataSource
             driver-class-name: com.mysql.cj.jdbc.Driver
             jdbc-url: jdbc:mysql://${cbms.dburl}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&failOverReadOnly=false
             username: ${cbms.dbuser}
@@ -102,7 +123,7 @@ xxl:
 webase: 
    transactionUrl: http://100.98.1.107:5002/trans/handleWithSign
    groupId:  1
-   userAdderss: 0x6149e71ffabb0fd80d659aaa1d852e967c2820a4
+   userAdderss: '0x6149e71ffabb0fd80d659aaa1d852e967c2820a4' #不加引号会当作16进制处理
    contractAddressMap:
               TrustAssetContract: 
                        contractAddress: '0x89e40c3419922856b93723eba945e79473af21f6' #不加引号会当作16进制处理

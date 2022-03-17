@@ -1,9 +1,7 @@
 
-package com.noob2.threadPoolSelf;
+package com.noob2.threadPoolCustomize;
 
 import java.util.Map;
-
-import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

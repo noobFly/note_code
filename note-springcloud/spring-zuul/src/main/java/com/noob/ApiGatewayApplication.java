@@ -14,7 +14,8 @@ public class ApiGatewayApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ApiGatewayApplication.class, args);
 	}
-
+	// servicePattern指定微服务的正则
+	// routePattern指定路由正则
 	@Bean
 	public PatternServiceRouteMapper serviceRouteMapper() {
 		return new PatternServiceRouteMapper("(?<name>^.+)-(?<version>v.+$)", "${version}/${name}");

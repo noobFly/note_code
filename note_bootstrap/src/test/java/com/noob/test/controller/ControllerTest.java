@@ -19,7 +19,6 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.noob.request.component.ITestTransactionOnInterfaceService;
-import com.noob.request.controller.ValidateGroupController.GroupTestDTO;
 
 // 测试API各种访问方式的Mock
 public class ControllerTest extends BaseTest {
