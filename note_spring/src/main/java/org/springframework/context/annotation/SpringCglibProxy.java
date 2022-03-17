@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
  * implement org.springframework.beans.factory.config.BeanFactoryPostProcessor
  * <p>
  * ConfigurationClassPostProcessor.postProcessBeanFactory方法 ->
- * onfigurationClassPostProcessor.enhanceConfigurationClasses
+ * ConfigurationClassPostProcessor.enhanceConfigurationClasses
  * 中选择的是org.springframework.context.annotation.ConfigurationClassEnhancer来创建cglib代理（这个类很重要）
  * <p>
  * 定义的callback是org.springframework.context.annotation.ConfigurationClassEnhancer.BeanMethodInterceptor。

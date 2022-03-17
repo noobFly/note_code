@@ -1,5 +1,5 @@
 
-package com.noob2.threadPoolCustomize;
+package com.noob.threadPoolCustomize;
 
 import java.util.Map;
 
