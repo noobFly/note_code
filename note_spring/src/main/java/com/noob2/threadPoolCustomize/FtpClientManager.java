@@ -1,4 +1,4 @@
-package com.noob.threadPoolCustomize;
+package com.noob2.threadPoolCustomize;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.stereotype.Component;

@@ -254,7 +254,7 @@ public class IDCardValidateUtil {
      public static void main(String[] args) {
 		System.out.println(isIdCardValidate("110101198800193511"));
 		System.out.println(isIdCardValidate("11010119750602072X"));
-		System.out.println(isIdCardValidate(CreateIDCardNo.getRandomID()));
+		System.out.println(isIdCardValidate(IDCardNoCreator.getRandomID()));
 
 	}
 

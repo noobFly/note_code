@@ -24,7 +24,7 @@ import java.util.Random;
  * 
  * 
  */
-public class CreateIDCardNo {
+public class IDCardNoCreator {
 
 	// 18位身份证号码各位的含义:
 	// 1-2位省、自治区、直辖市代码；
@@ -37,7 +37,7 @@ public class CreateIDCardNo {
 	// 计算的结果是0-10，如果某人的尾号是0－9，都不会出现X，但如果尾号是10，那么就得用X来代替，
 	// 因为如果用10做尾号，那么此人的身份证就变成了19位。X是罗马数字的10，用X来代替10
 	public static void main(String[] args) {
-		System.out.println(CreateIDCardNo.getRandomID());
+		System.out.println(IDCardNoCreator.getRandomID());
 	}
 
 	/**
