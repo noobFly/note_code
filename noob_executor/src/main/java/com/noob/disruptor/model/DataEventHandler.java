@@ -1,8 +1,9 @@
-package com.noob.disruptor;
+package com.noob.disruptor.model;
 
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.lmax.disruptor.EventHandler;
+import com.noob.disruptor.CompareTest;
 
 /**
  * 对指定事件的处理过程

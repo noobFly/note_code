@@ -1,6 +1,7 @@
-package com.noob.disruptor;
+package com.noob.disruptor.model;
 
 import com.lmax.disruptor.RingBuffer;
+import com.noob.disruptor.CompareTest;
 
 public class DataProducer {
 	private final RingBuffer<DataEvent> ringBuffer;

@@ -1,20 +1,18 @@
-package com.noob.common.config;
+package com.noob;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
-
+import com.noob.request.component.BService;
+import com.noob.request.component.ExecuteSortComponent;
+import com.noob.util.JacksonUtil;
+import lombok.Data;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.alibaba.fastjson.JSON;
-import com.noob.request.component.BService;
-import com.noob.request.component.ExecuteSortComponent;
-
-import lombok.Data;
+import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 // 用来验证yml配置的Map 和 0x开头的字符不加''会被当做16进制！
 @Data
@@ -52,8 +50,8 @@ public class WeBaseConfig {
 
 		private List<Object> contractAbiObj;
 
-		public void init() {
-			contractAbiObj = JSON.parseArray(contractAbi, Object.class);
+		public void init() throws IOException {
+			contractAbiObj = (List<Object>)JacksonUtil.jsonToCollection(contractAbi, List.class, Object.class);
 		}
 	}
 
@@ -61,7 +59,11 @@ public class WeBaseConfig {
 	public void init() {
 		if (MapUtils.isNotEmpty(contractAddressMap)) {
 			contractAddressMap.forEach((contractName, info) -> {
-				info.init();
+				try {
+					info.init();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			});
 		}
 	}

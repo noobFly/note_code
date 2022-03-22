@@ -1,0 +1,19 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.noob.zookeeper</groupId>
+		<artifactId>zookeeper</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>zookeeper-guid</artifactId>
+	<description>生成序列号</description>
+
+	<dependencies>
+		<dependency>
+			<artifactId>zookeeper-connect</artifactId>
+			<groupId>com.noob.zookeeper</groupId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>

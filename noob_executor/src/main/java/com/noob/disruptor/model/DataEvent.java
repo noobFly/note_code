@@ -1,4 +1,4 @@
-package com.noob.disruptor;
+package com.noob.disruptor.model;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
+import com.noob.disruptor.model.*;
 
 public class DisruptorTest {
   public static void main(String[] args) {

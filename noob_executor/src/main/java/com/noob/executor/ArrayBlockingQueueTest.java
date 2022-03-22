@@ -1,4 +1,6 @@
-package com.noob.disruptor;
+package com.noob.executor;
+
+import com.noob.disruptor.CompareTest;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;

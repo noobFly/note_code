@@ -1,8 +1,9 @@
-package com.noob.disruptor;
+package com.noob.disruptor.model;
 
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.lmax.disruptor.WorkHandler;
+import com.noob.disruptor.CompareTest;
 
 public class DataWorkHandler implements WorkHandler<DataEvent> {
 	public AtomicLong count = new AtomicLong(0);

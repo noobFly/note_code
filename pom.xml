@@ -16,7 +16,8 @@
         <module>note_bootstrap</module>
         <module>note_io</module>
 		<module>note-springcloud</module>
-		
+        <module>zookeeper</module>
+
     </modules>
     <build>
         <plugins>

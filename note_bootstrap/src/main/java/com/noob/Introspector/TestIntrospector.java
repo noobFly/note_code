@@ -1,13 +1,13 @@
 package com.noob.Introspector;
 
+import com.noob.util.JacksonUtil;
+
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 import java.util.function.Supplier;
-
-import com.alibaba.fastjson.JSON;
 
 /**
  * 内省
@@ -60,7 +60,7 @@ public class TestIntrospector {
 		} catch (IntrospectionException e) {
 			e.printStackTrace();
 		}
-		System.out.println(JSON.toJSONString(university));
+		System.out.println(JacksonUtil.toJson(university));
 	}
 
 
