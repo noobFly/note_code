@@ -11,8 +11,6 @@ import lombok.NoArgsConstructor;
  *
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Sharding {
 	/**
 	 * 分片编号，即为分片后缀
@@ -23,6 +21,11 @@ public class Sharding {
 	
 	public Sharding(String shadingCode) {
 		this.shadingCode = shadingCode;
+	}
+
+	public Sharding(String shadingCode, String logicTableName) {
+		this.shadingCode = shadingCode;
+		this.logicTableName = logicTableName;
 	}
 	
 	public String getPhysicalTableName() {

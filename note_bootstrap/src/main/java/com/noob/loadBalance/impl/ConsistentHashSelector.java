@@ -6,7 +6,7 @@ import java.util.TreeMap;
 
 import com.google.common.base.Strings;
 import com.google.common.hash.Hashing;
-import com.noob.util.MD5;
+import com.noob.util.security.MD5;
 
 import lombok.Getter;
 

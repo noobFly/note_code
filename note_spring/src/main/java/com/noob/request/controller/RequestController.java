@@ -1,26 +1,21 @@
 package com.noob.request.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.noob.util.ExceptionUtil;
-import com.noob.util.GZIPUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration;
+import com.noob.util.File.GZIPUtils;
+import com.noob.util.JacksonUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.util.WebUtils;
 
-import com.alibaba.fastjson.JSON;
-
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 验证请求入参出参注解的解析
@@ -43,7 +38,6 @@ public class RequestController {
      * # 最大文件大小 spring.servlet.multipart.max-file-size: 200MB
      * <p>
      * # 最大请求大小 spring.servlet.multipart.max-request-size: 215MB
-     * {@link MultipartAutoConfiguration}
      *
      * @param multipartFile
      */
@@ -93,7 +87,7 @@ public class RequestController {
         System.out.println(templateCode);
         byte[] data = new byte[1024]; // 从DB里获取文件数据
         response.setContentLength(data.length);
-        response.setContentType("application/msword");
+        response.setContentType("application/msword");//word文档
         response.getOutputStream().write(data);
 
     }
@@ -121,7 +115,7 @@ public class RequestController {
         log.info("requestMethod: {}", request.getMethod());
         log.info("contentType: {}", request.getContentType());
 
-        log.info(JSON.toJSONString(map));
+        log.info(JacksonUtil.toJson(map));
         log.info(param1);
 
     }
@@ -138,8 +132,8 @@ public class RequestController {
     public void test2(@RequestBody List<String> list, @RequestParam List<String> list2, HttpServletRequest request) {
         log.info("requestMethod: {}", request.getMethod());
         log.info("contentType: {}", request.getContentType());
-        log.info(JSON.toJSONString(list));
-        log.info(JSON.toJSONString(list2));
+        log.info(JacksonUtil.toJson(list));
+        log.info(JacksonUtil.toJson(list2));
 
     }
 

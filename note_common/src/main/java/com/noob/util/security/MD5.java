@@ -1,4 +1,4 @@
-package com.noob.util;
+package com.noob.util.security;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;

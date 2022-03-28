@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.noob.repayPlan.RepayPlanGenerator.RateBaseTypeEnum;
 import com.noob.util.TimeUtil;
 
@@ -46,12 +46,13 @@ public class LoanParam {
 	/**
 	 * 起息日 YYYY-MM-DD
 	 */
-	@JSONField(format = "yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	protected Date startDate;
 	/**
 	 * 截息日 YYYY-MM-DD （周期性还款非必传，内部计算。一次性还款付息必填）
 	 */
-	@JSONField(format = "yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	// 	@JsonFormat(shape = JsonFormat.Shape.NUMBER, timezone = "GMT+8")
 	protected Date endDate;
 
 	/**

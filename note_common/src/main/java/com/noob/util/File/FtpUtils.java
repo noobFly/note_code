@@ -1,4 +1,4 @@
-package com.noob.util;
+package com.noob.util.File;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

@@ -6,7 +6,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import com.alibaba.fastjson.JSON;
 import com.noob.repayPlan.LoanParam;
 import com.noob.repayPlan.RepayPlan;
 import com.noob.repayPlan.RepayPlanGenerator.RateBaseTypeEnum;

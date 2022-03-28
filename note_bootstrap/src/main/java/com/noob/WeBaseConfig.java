@@ -55,6 +55,13 @@ public class WeBaseConfig {
 		}
 	}
 
+
+	public static void  main(String[] args) throws IOException {
+		String msg = "[{\"constant\":false,\"inputs\":[{\"name\":\"assetId\",\"type\":\"string\"},{\"name\":\"assetJson\",\"type\":\"string\"}],\"name\":\"storeAsset\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"assetId\",\"type\":\"string\"}],\"name\":\"queryAsset\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"newAdmin\",\"type\":\"address\"}],\"name\":\"addAdmin\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"assetId\",\"type\":\"string\"}],\"name\":\"queryAssetHisotry\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}]";
+		List<Object>  contractAbiObj =  (List<Object>)JacksonUtil.jsonToCollection(msg, List.class, Object.class);
+		System.out.print("");
+	}
+
 	@PostConstruct
 	public void init() {
 		if (MapUtils.isNotEmpty(contractAddressMap)) {

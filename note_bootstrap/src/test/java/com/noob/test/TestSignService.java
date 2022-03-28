@@ -1,9 +1,9 @@
 package com.noob.test;
 
-import com.alibaba.fastjson.JSON;
 import com.noob.sign.SignService;
 import com.noob.sign.domain.ApplyLimit;
 import com.noob.sign.impl.SignServiceImpl;
+import com.noob.util.JacksonUtil;
 
 public class TestSignService {
 	public static void main(String[] args) throws Exception {
@@ -15,6 +15,6 @@ public class TestSignService {
 		domain.setFlowNo("flowNo123456788");
 		domain.setLoanType("XXL-001");
 		String templateParameters = "templateInput.flowNo,applyLimit.loanType,channel,customer.customerName,customer.certificateNo";
-		System.out.println(JSON.toJSONString(service.sign(domain, templateParameters)));
+		System.out.println(JacksonUtil.toJson(service.sign(domain, templateParameters)));
 	}
 }

@@ -1,4 +1,4 @@
-package com.noob.util;
+package com.noob.util.File;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.StringUtils;

@@ -6,7 +6,7 @@ import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
 
 import com.jcraft.jsch.ChannelSftp;
-import com.noob.util.SftpUtils;
+import com.noob.util.File.SftpUtils;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -6,7 +6,7 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
 
-import com.noob.util.FtpUtils;
+import com.noob.util.File.FtpUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
