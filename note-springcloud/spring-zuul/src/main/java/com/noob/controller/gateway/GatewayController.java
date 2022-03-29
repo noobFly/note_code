@@ -1,6 +1,7 @@
 package com.noob.controller.gateway;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.google.common.base.Strings;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,8 +20,8 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -43,7 +44,7 @@ import java.util.*;
 
 // 通过网络转发达到网关路由的效果
 @Slf4j
-@Controller
+@RestController
 public class GatewayController {
 
 
@@ -96,7 +97,7 @@ public class GatewayController {
         } else {
             throw new RuntimeException("没有匹配的代理");
         }
-    }getIpAddr
+    }
 
     //TODO 根据访问url来查找地址配置、HttpHeader请求头的配置。
     private ProxyPassInfo getProxyPassInfoByUrl(String requestUri) {
