@@ -3,6 +3,8 @@ spring:
     name: api-gateway
   profiles:
     active: dev
+  cloud.sentinel.transport.port: 9090 # 会在应用对应的机器上启动一个 Http Server，该 Server 会与 Sentinel 控制台做交互。比如 Sentinel 控制台添加了一个限流规则，会把规则数据 push 给这个 Http Server 接收，Http Server 再将规则注册到 Sentinel 中。
+  cloud.sentinel.transport.dashboard: 139.139.37.184:8080
 
 server:
   port: 5555

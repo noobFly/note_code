@@ -24,6 +24,8 @@ spring:
     multipart.file-size-threshold: 0 #文件写入磁盘的阈值
     multipart.max-file-size: 100MB # 最大文件大小
     multipart.max-request-size: 200MB
+  lifecycle:
+    timeout-per-shutdown-phase: 20s #默认30s 在规定时间内如果线程无法执行完毕则会被强制停机 配合优雅停机使用 一定不要使用kill -9 (不会触发ShutdownHook)，使用kill -2 来关闭容器
 
 spring.cloud.bus.trace.enabled: true
 
