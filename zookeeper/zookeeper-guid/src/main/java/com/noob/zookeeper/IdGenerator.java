@@ -4,7 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import com.noob.util.NoCreator;
+import com.noob.util.NumberCreator;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.ZooKeeper;
@@ -57,7 +57,7 @@ public class IdGenerator {
     }
 
     private String localGenerator() {
-        return NoCreator.generateNumber("", "yyMMddHHmmssSSS");
+        return NumberCreator.generateNumber("", "yyMMddHHmmssSSS");
     }
 
     private String zkGenerator() {

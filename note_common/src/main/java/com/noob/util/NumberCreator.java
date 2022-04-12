@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.Random;
 
 
-public class NoCreator {
+public class NumberCreator {
 
 
     /**
@@ -76,7 +76,7 @@ public class NoCreator {
      * <p>
      * 表示在同一地址码所标识的区域范围内，对同年、同月、同日出生的人编定的顺序号，顺序码的奇数分配给男性，偶数分配给女性。
      */
-    public static String getRandomID() {
+    public static String getRandomCertId() {
         String id = "420222199204179999";
         // 随机生成省、自治区、直辖市代码 1-2
         String provinces[] = {"11", "12", "13", "14", "15", "21", "22", "23", "31", "32", "33", "34", "35", "36", "37",
@@ -153,6 +153,6 @@ public class NoCreator {
     // 计算的结果是0-10，如果某人的尾号是0－9，都不会出现X，但如果尾号是10，那么就得用X来代替，
     // 因为如果用10做尾号，那么此人的身份证就变成了19位。X是罗马数字的10，用X来代替10
     public static void main(String[] args) {
-        System.out.println(NoCreator.getRandomID());
+        System.out.println(NumberCreator.getRandomCertId());
     }
 }

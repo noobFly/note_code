@@ -14,6 +14,10 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.util.stream.Collectors;
 
+/**
+ * 把过滤器的bean注入到FilterRegistrationBean中，并设置一些属性，过滤的url，执行的顺序（order的数值越小，优先级越高）。
+ * 这样就不用在该过滤器上添加注解@WebFilter(urlPatterns={})或@Configuration @Component等
+ */
 @Slf4j
 @Component
 public class GatewayLogFilter implements Filter {
@@ -81,14 +85,27 @@ public class GatewayLogFilter implements Filter {
         // 文件流等形式的响应数据不保存
         if (StringUtils.isNotBlank(contentType) && StringUtils.containsAny(contentType, "application/json", "application/xml")) {
             byte[] byteData = proxyResponse.getContent();
-            String charset = StringUtils.defaultString(proxyResponse.getCharacterEncoding(), "UTF-8");
+            String charset =getCharsetFromContentType(contentType);
 
             return new String(byteData, Charset.forName(charset));
         }
 
         return null;
     }
-
+    private String getCharsetFromContentType(String contentType) {
+        String charset = null;
+        if(StringUtils.isNotBlank(contentType) && contentType.indexOf(";") >= 0) {
+            String[] splits = contentType.split(";");
+            String charsetSpan = splits[1];
+            if(charsetSpan != null && charsetSpan.startsWith("charset=")) {
+                charset = charsetSpan.substring("charset=".length());
+            }
+        }
+        if(StringUtils.isBlank(charset)) {
+            charset = "UTF-8";
+        }
+        return charset;
+    }
 
     private static class CurrentHttpServletRequestWrapper extends HttpServletRequestWrapper {
         private byte[] body;       // 报文体

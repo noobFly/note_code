@@ -30,28 +30,28 @@ public class MD5withRSAUtils {
     /**
      * 加密算法RSA
      */
-    public static final String  KEY_ALGORITHM       = "RSA";
+    public static final String KEY_ALGORITHM = "RSA";
 
     /**
      * 签名算法
      */
-    public static final String  SIGNATURE_ALGORITHM = "MD5withRSA";
+    public static final String SIGNATURE_ALGORITHM = "MD5withRSA";
 
     /**
      * 获取公钥的key
      */
-    public static final String PUBLIC_KEY          = "RSAPublicKey";
+    public static final String PUBLIC_KEY = "RSAPublicKey";
 
     /**
      * 获取私钥的key
      */
-    public static final String PRIVATE_KEY         = "RSAPrivateKey";
+    public static final String PRIVATE_KEY = "RSAPrivateKey";
 
     /**
      * <p>
      * 生成密钥对(公钥和私钥)
      * </p>
-     * 
+     *
      * @return
      * @throws Exception
      */
@@ -74,7 +74,7 @@ public class MD5withRSAUtils {
      * <p>
      * BASE64编码
      * </p>
-     * 
+     *
      * @return String[0] : private_key , String[1] : public_key
      * @throws Exception
      */
@@ -90,12 +90,9 @@ public class MD5withRSAUtils {
      * <p>
      * 用私钥对信息生成数字签名
      * </p>
-     * 
-     * @param data
-     *            已加密数据
-     * @param privateKey
-     *            私钥(BASE64编码)
-     * 
+     *
+     * @param data       已加密数据
+     * @param privateKey 私钥(BASE64编码)
      * @return
      * @throws Exception
      */
@@ -114,17 +111,12 @@ public class MD5withRSAUtils {
      * <p>
      * 校验数字签名
      * </p>
-     * 
-     * @param data
-     *            已加密数据
-     * @param publicKey
-     *            公钥(BASE64编码)
-     * @param sign
-     *            数字签名
-     * 
+     *
+     * @param data      已加密数据
+     * @param publicKey 公钥(BASE64编码)
+     * @param sign      数字签名
      * @return
      * @throws Exception
-     * 
      */
     public static boolean verify(byte[] data, String publicKey, String sign) throws Exception {
         byte[] keyBytes = base64Decode(publicKey);
@@ -141,11 +133,9 @@ public class MD5withRSAUtils {
      * <P>
      * 私钥解密
      * </p>
-     * 
-     * @param encryptedData
-     *            已加密数据
-     * @param privateKey
-     *            私钥(BASE64编码)
+     *
+     * @param encryptedData 已加密数据
+     * @param privateKey    私钥(BASE64编码)
      * @return
      * @throws Exception
      */
@@ -185,11 +175,9 @@ public class MD5withRSAUtils {
      * <P>
      * 私钥解密
      * </p>
-     * 
-     * @param base64EncryptedData
-     *            已加密数据，使用base64编码
-     * @param privateKey
-     *            私钥(BASE64编码)
+     *
+     * @param base64EncryptedData 已加密数据，使用base64编码
+     * @param privateKey          私钥(BASE64编码)
      * @return
      * @throws Exception
      */
@@ -202,11 +190,9 @@ public class MD5withRSAUtils {
      * <p>
      * 公钥解密
      * </p>
-     * 
-     * @param encryptedData
-     *            已加密数据
-     * @param publicKey
-     *            公钥(BASE64编码)
+     *
+     * @param encryptedData 已加密数据
+     * @param publicKey     公钥(BASE64编码)
      * @return
      * @throws Exception
      */
@@ -246,11 +232,9 @@ public class MD5withRSAUtils {
      * <p>
      * 公钥解密
      * </p>
-     * 
-     * @param base64EncryptedData
-     *            已加密数据，使用base64编码
-     * @param publicKey
-     *            公钥(BASE64编码)
+     *
+     * @param base64EncryptedData 已加密数据，使用base64编码
+     * @param publicKey           公钥(BASE64编码)
      * @return
      * @throws Exception
      */
@@ -263,11 +247,9 @@ public class MD5withRSAUtils {
      * <p>
      * 公钥加密
      * </p>
-     * 
-     * @param data
-     *            源数据
-     * @param publicKey
-     *            公钥(BASE64编码)
+     *
+     * @param data      源数据
+     * @param publicKey 公钥(BASE64编码)
      * @return
      * @throws Exception
      */
@@ -308,11 +290,9 @@ public class MD5withRSAUtils {
      * <p>
      * 公钥加密
      * </p>
-     * 
-     * @param data
-     *            源数据
-     * @param publicKey
-     *            公钥(BASE64编码)
+     *
+     * @param data      源数据
+     * @param publicKey 公钥(BASE64编码)
      * @return 加密数据(BASE64编码)
      * @throws Exception
      */
@@ -325,11 +305,9 @@ public class MD5withRSAUtils {
      * <p>
      * 私钥加密
      * </p>
-     * 
-     * @param data
-     *            源数据
-     * @param privateKey
-     *            私钥(BASE64编码)
+     *
+     * @param data       源数据
+     * @param privateKey 私钥(BASE64编码)
      * @return
      * @throws Exception
      */
@@ -369,11 +347,9 @@ public class MD5withRSAUtils {
      * <p>
      * 私钥加密
      * </p>
-     * 
-     * @param data
-     *            源数据
-     * @param privateKey
-     *            私钥(BASE64编码)
+     *
+     * @param data       源数据
+     * @param privateKey 私钥(BASE64编码)
      * @return 加密数据(BASE64编码)
      * @throws Exception
      */
@@ -386,9 +362,8 @@ public class MD5withRSAUtils {
      * <p>
      * 获取私钥
      * </p>
-     * 
-     * @param keyMap
-     *            密钥对
+     *
+     * @param keyMap 密钥对
      * @return
      * @throws Exception
      */
@@ -401,9 +376,8 @@ public class MD5withRSAUtils {
      * <p>
      * 获取公钥
      * </p>
-     * 
-     * @param keyMap
-     *            密钥对
+     *
+     * @param keyMap 密钥对
      * @return
      * @throws Exception
      */
@@ -422,20 +396,49 @@ public class MD5withRSAUtils {
 
     /**
      * 解密来自JS的加密信息，与security.js加密对应
+     *
      * @param encrypttext
      * @param privateKey
      * @return
      * @throws Exception
      */
     public static String decryptStringFromJs(String encrypttext, String privateKey) throws Exception {
-        if(StringUtils.isEmpty(encrypttext)) {
+        if (StringUtils.isEmpty(encrypttext)) {
             return "";
         }
-        
+
         byte[] encryptData = Hex.decodeHex(encrypttext.toCharArray());
-        
+
         byte[] decryptData = decryptByPrivateKey(encryptData, privateKey);
-        
+
         return StringUtils.reverse(new String(decryptData));
     }
+
+    public static void main(String[] args) throws Exception {
+        //getKey();
+
+        String privateKey = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAJc/QDBb7iqCVrdIcFQPaVk+DxysaCo97WH7MKah7WYHv31J4G+GgFiO4D68nRjRe4z78d87nXwtCsp2BF/s9A06QwGkC7X26avcUmnM+ohULGM1lpUfGkjFOOSrpCqw+RQNwSogUimGzREGfakcRW7C9hi7z0Uf2AHw7f8DSFJlAgMBAAECgYBsqc/HLrUtK1l78vppGm145YJb+m4YM0fShnLMtTfnfxePvz0VQ1AA0B3CVSaVByQ6BWUgGieqaH4BOcso1Af+PzwcDaJxxjwkGW/982nzo+/a7w/2Cux//7CeOm7zp1l0YNsNrXvOVwOSiLDr+Bo6Vt2Ff8C6PjIGTIToIeLOPQJBAOMoVzufE9WCYh++b5XyJ0wpiDpDPXuuGeiULonriMkMeFdWOXpi4d+3cpwHZZfx9oOv0R/vA5+8w0lueMtM2hMCQQCqc3i+Fi2A7+EdfduQhTvC7R57dDKJfZ6u4ekWNzGi3l7LhY/fXkbWjh73Xp1fqHPi3lKgzlzgQgTAwz0AA7CnAkEAgoTzWnaU1uELsGGji+yPV9ulQpTQBviKOnCqLOUAu0RHASex7vhSAFFPsQcvAJcupYuoBUk4M9gp/U9UaLvHsQJAMkgwFTsrnz6kVPPcwoxbLcyPUnHbuq2BEyv3e6M6lEYvBrDW2VjRYte4ENcra52g2gslquRVh55SEp9FrmxoPwJAVQxTj10WEs4Y3jHFcQvnq4pHt+EBjx3kRRO94xkGUioj22WxEb0N67cnt+OXc39NWhLkCCIMUjcqztt2JkcF7w==";
+
+        String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCXP0AwW+4qgla3SHBUD2lZPg8crGgqPe1h+zCmoe1mB799SeBvhoBYjuA+vJ0Y0XuM+/HfO518LQrKdgRf7PQNOkMBpAu19umr3FJpzPqIVCxjNZaVHxpIxTjkq6QqsPkUDcEqIFIphs0RBn2pHEVuwvYYu89FH9gB8O3/A0hSZQIDAQAB";
+
+        byte[] data = "T2687934173621741{\"mobile\":\"15036248519\",\"password\":\"123564\"}1639099349985".getBytes();
+        byte[] data2 = "T2687934173621741{\"password\":\"123564\",\"mobile\":\"15036248519\"}1639099349985".getBytes();
+        byte[] data3 = "T2687934173621741{\"mobile\":\"15036248519\",\"password\":\"123564\",\"no\":\"\"}1639099349985".getBytes();
+
+// 用公钥加密
+
+        String signData = MD5withRSAUtils.sign(data, privateKey);
+
+        System.err.println("签名: " + signData);
+        boolean result = false;
+        try {
+            result = MD5withRSAUtils.verify(data3, publicKey, signData); // 字符串有任何变动都会校验失败！ 所以最好是String传递；
+                                                                          // 如果非要是对象，一定要去除掉null的属性，并按属性名称排序后加解签名! 因为版本更替时，字段可能调用方和服务方会不一致！
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(result);
+
+    }
+
 }

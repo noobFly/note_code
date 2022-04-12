@@ -59,4 +59,8 @@ public class KaptchaMathTextCreator extends DefaultTextCreator {
 		return suChinese.toString();
 	}
 
+	public static void main(String arg[]) {
+		System.out.print(new KaptchaMathTextCreator().getText()); // 6-5=?@1
+	}
+
 }

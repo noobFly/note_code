@@ -46,7 +46,7 @@ public class DataBaseConfig {
 		Map<Object, Object> targetDataSources = new HashMap<>();
 		targetDataSources.put(DataSourceChoose.DataSourceType.MASTER.name(), masterDataSource);
 		setDataSource(targetDataSources, DataSourceChoose.DataSourceType.SLAVE.name(), "slaveDataSource");
-		return new DynamicDataSource(masterDataSource, targetDataSources);
+		return new DynamicDataSource(masterDataSource, targetDataSources); //指定default服务器
 	}
 
 	/**

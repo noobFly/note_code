@@ -6,7 +6,6 @@ import com.google.common.collect.Maps;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
@@ -49,7 +48,15 @@ public class CaptchaUtil {
         Map<String, Object> result = new HashMap<>();
         result.put("uuid", uuid);
         result.put("img", Base64.encodeBase64String(os.toByteArray()));
+        result.put("capStr", capStr); // 展示字符
+        result.put("code", code); // 校验码
         return result;
+    }
+
+    public static void main(String arg[]) {
+        System.out.println(new CaptchaUtil().getCode("char"));
+        System.out.println(new CaptchaUtil().getCode("math"));
+
     }
 
 }
