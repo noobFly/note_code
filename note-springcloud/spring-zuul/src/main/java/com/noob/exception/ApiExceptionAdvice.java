@@ -15,10 +15,10 @@ public class ApiExceptionAdvice {
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiExceptionAdvice.class);
 
 
-    @ExceptionHandler(RuntimeException.class)
+    @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public String handleBindExceptionException(RuntimeException ex) {
+    public String handleBindExceptionException(Exception ex) {
         return "RuntimeException_fire";
     }
 
