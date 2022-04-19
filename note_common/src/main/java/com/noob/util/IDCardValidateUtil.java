@@ -220,7 +220,7 @@ public class IDCardValidateUtil {
     }
 
     /**
-     * 获取年龄
+     * 获取出生年
      *
      * @param idCard
      * @return 身份证号码错误时返回: -1
@@ -250,7 +250,25 @@ public class IDCardValidateUtil {
         }
         return null;
     }
-    
+
+    /**
+     * 根据身份编号获取性别
+     *
+     * @param idCard 身份编号
+     * @return 性别(M-男，F-女，N-未知)
+     */
+    public static int getGenderByIdCard(String idCard) {
+        int sGender = 0;
+
+        String sCardNum = idCard.substring(16, 17);
+        if (Integer.parseInt(sCardNum) % 2 != 0) {
+            sGender = 1;//男
+        } else {
+            sGender = 1;//女
+        }
+        return sGender;
+    }
+
      public static void main(String[] args) {
 		System.out.println(isIdCardValidate("110101198800193511"));
 		System.out.println(isIdCardValidate("11010119750602072X"));

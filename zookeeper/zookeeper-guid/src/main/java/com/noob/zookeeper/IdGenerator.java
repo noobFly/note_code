@@ -13,7 +13,7 @@ import com.noob.zookeeper.client.ZkConnectFactory;
 
 import lombok.extern.slf4j.Slf4j;
 
-/**
+/**这种方式不建议使用！zookeeper服务端是java内存, 当节点过多，内存管理越来越庞大，性能会急剧下降
  * Created by noob on 2017/4/6.
  */
 @Slf4j

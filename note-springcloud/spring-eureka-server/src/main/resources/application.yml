@@ -24,12 +24,8 @@ feign:
 ribbon:
   ReadTimeout: 15000
   ConnectTimeout: 15000  
-    
-#阿波罗注册中心配置
-app.id: cbms_api-gateway
-apollo.meta: http://172.18.112.48:7080/
-apollo.bootstrap.enabled: true
-apollo.cluster: test
+
+smsEnv: dev
 
 hystrix:
   command.default.execution.isolation.thread.timeoutInMilliseconds: 15000
