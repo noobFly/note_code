@@ -1,6 +1,8 @@
 package com.noob.servlet;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
@@ -12,11 +14,31 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * 重写获取流的方式 . 这种wrap方式会占用额外内存, 在destroy时主动设置缓存的字节数组为空 TODO
+ * 重写获取流的方式 .
+ * TODO 这种wrap方式会占用额外内存, 在destroy时主动设置缓存的字节数组为空
  */
+@Slf4j
 public class CustomHttpServletRequestWrapper extends HttpServletRequestWrapper {
-    private byte[] body;       // 报文体
+    private byte[] body;        // 真实的业务数据
     private String charsetName; // 编码字符集
+
+
+    public CustomHttpServletRequestWrapper(HttpServletRequest request, String requestBody) {
+        super(request);
+        this.charsetName = request.getCharacterEncoding();
+        if (StringUtils.isNotBlank(requestBody)) {
+            try {
+                body = requestBody.getBytes(getCharsetName());
+            } catch (Exception e) {
+                log.error("", e);
+            }
+        }
+    }
+
+
+    public String getCharsetName() {
+        return charsetName == null ? "UTF-8" : charsetName;
+    }
 
     public CustomHttpServletRequestWrapper(HttpServletRequest request) {
         super(request);
@@ -32,16 +54,16 @@ public class CustomHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
     @Override
     public BufferedReader getReader() throws IOException {
-        return new BufferedReader(new InputStreamReader(getInputStream(), charsetName));
+        return new BufferedReader(new InputStreamReader(getInputStream(), getCharsetName()));
     }
 
     @Override
-    public ServletInputStream getInputStream() throws IOException {
+    public ServletInputStream getInputStream() {
         final ByteArrayInputStream bais = new ByteArrayInputStream(body);
         return new ServletInputStream() {
 
             @Override
-            public int read() throws IOException {
+            public int read() {
                 return bais.read();
             }
 

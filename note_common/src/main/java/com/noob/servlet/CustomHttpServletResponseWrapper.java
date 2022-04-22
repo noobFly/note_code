@@ -10,12 +10,10 @@ import java.io.PrintWriter;
 
 public class CustomHttpServletResponseWrapper extends HttpServletResponseWrapper {
     private PrintWriter printWriter;
-    private HttpServletResponse servletResponse;
     private byte[] byteData = new byte[0];
 
     public CustomHttpServletResponseWrapper(HttpServletResponse response) {
         super(response);
-        this.servletResponse = response;
     }
 
     private static byte[] byteMerger(byte[] bt1, byte[] bt2) {
@@ -34,8 +32,8 @@ public class CustomHttpServletResponseWrapper extends HttpServletResponseWrapper
                 return;
             }
 
-            servletResponse.getOutputStream().write(resultData);
-            servletResponse.getOutputStream().flush();
+            getResponse().getOutputStream().write(resultData);
+            getResponse().getOutputStream().flush();
             this.reset();
 
             if (byteData.length == 0) {
@@ -56,7 +54,7 @@ public class CustomHttpServletResponseWrapper extends HttpServletResponseWrapper
      * 重写父类的 getWriter() 方法，将响应数据缓存在 PrintWriter 中
      */
     @Override
-    public PrintWriter getWriter() throws IOException {
+    public PrintWriter getWriter() {
         return printWriter == null ? printWriter = new PrintWriter(outputStream) : printWriter;
     }
 

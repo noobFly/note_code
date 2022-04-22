@@ -77,4 +77,16 @@ management:
   endpoints:
     web:
       exposure:
-        include: '*'  
+        include: '*'
+
+
+developer:
+  systemId: T2687934173621740 #应用服务编号
+  centerHost: http://dev.com/devcenter   #测试环境开发者中心
+openApiInterceptor.urlPatterns:
+                               - /loan/*,
+                               - /openapi/* #需要拦截的匹配URL，多个匹配用英文逗号隔开
+openApiInterceptor.excludeUrlPatterns:
+                               - /dataCollect/file/**
+                               - /creditReport/file/**
+
