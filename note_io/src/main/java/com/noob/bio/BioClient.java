@@ -1,9 +1,6 @@
 package com.noob.bio;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.concurrent.Executors;
@@ -32,14 +29,16 @@ public class BioClient {
 	public static void main(String[] args) throws Exception {
 		try {
 			// 创建客户端Socket，指定连接服务器地址和端口
-			socket = new Socket("localhost", 8090);
+			socket = new Socket("localhost", 8080);
 			socket.setTcpNoDelay(true);
+			socket.setSoTimeout(2000);
 
 			log.info("客户端启动:" + socket.getLocalSocketAddress());// 每一个客户端分配一个端口号
 
 			// 获取输入流，并读取服务器端的响应
 			inputStream = socket.getInputStream();
-			inputScanner = acceptResponse(inputStream);
+			//	inputScanner = acceptResponse(inputStream);
+			readBlock(inputStream);
 
 			outputStream = socket.getOutputStream();// 字节输出
 			outputPrint = new PrintWriter(outputStream);// 将输出流包装成打印流
@@ -57,6 +56,7 @@ public class BioClient {
 
 	/**
 	 * 接收消息
+	 * 不受SoSoTimeout影响
 	 */
 	private static Scanner acceptResponse(InputStream inputStream) {
 		Scanner inputScanner = new Scanner(inputStream);
@@ -76,6 +76,22 @@ public class BioClient {
 	}
 
 	/**
+	 * 接收消息
+	 * read操作受SoSoTimeout影响
+	 */
+	private static void readBlock(InputStream inputStream) throws IOException {
+		BufferedInputStream br = new BufferedInputStream(inputStream);
+		byte[] buffer = new byte[1024];
+		int turns = 1;
+		while (br.read(buffer) != -1) { //阻塞直到有数据到来!  可自定义读取缓存的begin和end: read(b, 11, 50); 并不会清空原有的数据!
+			System.out.print(new String(buffer));
+			turns++;
+		}
+	}
+
+
+
+	/**
 	 * 一直发
 	 * 
 	 * @return
@@ -87,7 +103,7 @@ public class BioClient {
 
 			AtomicInteger time = new AtomicInteger(1);
 			service.scheduleWithFixedDelay(() -> {
-				if(!socket.isClosed()) { // 客户端不主动关闭会一直发送，但服务端已经关闭了将不再接收处理了。
+				if(!socket.isClosed()) { // 客户端不主动关闭会一直发送，但服务端已经关闭了对端，它将不再被服务端接收处理。
 					String msg = "客户端" + socket.getLocalSocketAddress() + "的慰问" + time.intValue() + "\n";
 					/*
 					 * if (time.intValue() > 1) { msg = "【test】"; // 验证read()不会主动清空原有数据
@@ -101,7 +117,7 @@ public class BioClient {
 				} else {
 					System.out.println("sokcet 被关闭了！");
 				}
-			}, 0, 2, TimeUnit.SECONDS);
+			}, 0, 3, TimeUnit.SECONDS);
 
 		});
 		outputThread.start();

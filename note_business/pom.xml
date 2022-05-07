@@ -11,10 +11,16 @@
 
 	<dependencies>
 	   <dependency>
-		<groupId>com.noob</groupId>
-		<artifactId>note_common</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+			<groupId>com.noob</groupId>
+			<artifactId>note_common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 	   </dependency>
+		<dependency>
+			<groupId>com.deepoove</groupId>
+			<artifactId>poi-tl</artifactId>
+			<version>1.7.2</version>
+		</dependency>
+
 	</dependencies>
 
 </project>

@@ -43,7 +43,21 @@ public class BioServer {
 
 		while (true) {
 			Socket clientSocket = serverSocket.accept(); // 等待客户端连接--阻塞!!!  在第三次握手之后 或则 第三次握手将数据和ack一起返回
-			clientSocket.setSoTimeout(2000); // 与此 Socket 关联的 InputStream 上调用 read() 将只阻塞此时间长度，  如果超过超时值，将引发 java.net.SocketTimeoutException ,socket依然有效
+			clientSocket.setSoTimeout(3000); // 与此 Socket 关联的 SocketInputStream#read() 将阻塞至该事件，  如果超过超时值，该Socket将引发 java.net.SocketTimeoutException
+
+			/**
+			 * java.net.SocketTimeoutException: Read timed out
+			 * 	at java.net.SocketInputStream.socketRead0(Native Method)
+			 * 	at java.net.SocketInputStream.socketRead(SocketInputStream.java:116)
+			 * 	at java.net.SocketInputStream.read(SocketInputStream.java:171)
+			 * 	at java.net.SocketInputStream.read(SocketInputStream.java:141)
+			 * 	at java.io.BufferedInputStream.fill(BufferedInputStream.java:246)
+			 * 	at java.io.BufferedInputStream.read1(BufferedInputStream.java:286)
+			 * 	at java.io.BufferedInputStream.read(BufferedInputStream.java:345)
+			 * 	at java.io.FilterInputStream.read(FilterInputStream.java:107)
+			 */
+
+
 			clientSocket.setTcpNoDelay(true);
 			clientSocket.setKeepAlive(true);
 			
