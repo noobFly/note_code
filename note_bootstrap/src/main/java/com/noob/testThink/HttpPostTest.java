@@ -1,4 +1,4 @@
-package com;
+package com.noob.testThink;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class HttpPostUtil {
+public class HttpPostTest {
 
 
     public void init() {
@@ -74,7 +74,7 @@ public class HttpPostUtil {
     }
 
     public static void main(String[] args) {
-        new HttpPostUtil().init();
+        new HttpPostTest().init();
     }
 
 }

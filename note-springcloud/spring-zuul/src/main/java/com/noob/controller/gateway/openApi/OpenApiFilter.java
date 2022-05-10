@@ -35,6 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 入参： @link: RequestParamKey
  * 将 appId + data + timestamp拼接成一个字符串(utf-8编码)；对该字符串进行MD5withRSA签名算法运算，加密因子采用应用的私钥，得到即为本次通讯的签名值；
  * 在拦截器里解析出这些key属性值，并按相同规则拼接后以公钥验签！
+ *  为什么还需要对数据进行加签名： 隔离并校验渠道的真实性！
  *
  * </p>
  */
