@@ -65,6 +65,7 @@ public class DataBaseConfig {
 	}
 
 	/**
+	 * DruidDataSoure 启动监控视图 https://mp.weixin.qq.com/s/VYk5_kcWPLNCyEpTkx4YuQ
 	 * 去除监控页面底部的广告
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })

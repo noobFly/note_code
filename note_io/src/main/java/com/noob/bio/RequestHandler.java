@@ -18,10 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RequestHandler implements Runnable {
 
-    private Socket        clientSocket;       //客户端socket
+    private Socket clientSocket;       //客户端socket
 
-    private InputStream   inputStream;        // 输入请求
-    private OutputStream  outputStream;       // 输出响应
+    private InputStream inputStream;        // 输入请求
+    private OutputStream outputStream;       // 输出响应
     private SocketAddress clientSocketAddress;
 
     public RequestHandler(Socket clientSocket) throws IOException {
@@ -42,38 +42,38 @@ public class RequestHandler implements Runnable {
      */
     public void run() {
         log.info(String.format("客户端连接: %s", clientSocketAddress));
+        while (true)
+            try {
 
-        try { 
-        	
-        	while(true) {
-    	 
-              handleWithoutLineBreak();
-             // handleWithLineBreak1();
-              // handleWithLineBreak2();
-              keepOut();
-          }
-      }  catch (Exception e) {
-          e.printStackTrace();
-          try {
-        	    clientSocket.shutdownInput();
-        	    clientSocket.shutdownOutput();
-				clientSocket.close(); // 只是关闭服务端这边的socket输入和输出， 客户端也需要自己主动关闭。
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-       }
+                while (true) {
+
+                    handleWithoutLineBreak();
+                    // handleWithLineBreak1();
+                    // handleWithLineBreak2();
+                    keepOut();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                try {
+                    clientSocket.shutdownInput();
+                    clientSocket.shutdownOutput();
+                    clientSocket.close(); // 只是关闭服务端这边的socket输入和输出， 客户端也需要自己主动关闭。
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
     }
 
-	private void keepOut() throws Exception {
-		while (true) {
-			String msg = "飞机 大炮 坦克 \n";
-			outputStream.write(msg.getBytes());
-			outputStream.flush();
-			Thread.sleep(100);
-		}
-	}
+    private void keepOut() throws Exception {
+        while (true) {
+            String msg = "飞机 大炮 坦克 \n";
+            outputStream.write(msg.getBytes());
+            outputStream.flush();
+            Thread.sleep(100);
+        }
+    }
 
-	/**
+    /**
      * 读入时，不要求客户端传入换行。
      * <p>
      * 客户端异常退出时，服务端read()抛出异常： java.net.SocketException: Connection reset

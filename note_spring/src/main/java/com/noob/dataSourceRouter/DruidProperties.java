@@ -1,11 +1,14 @@
 package com.noob.dataSourceRouter;
 
-import com.alibaba.druid.pool.DruidDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
+import com.alibaba.druid.pool.DruidDataSource;
+
 /**
  * druid 配置属性
+ *
+ * @author admin
  */
 @Configuration
 public class DruidProperties {
@@ -42,6 +45,9 @@ public class DruidProperties {
 	@Value("${spring.datasource.druid.testOnReturn}")
 	private boolean testOnReturn;
 
+	@Value("${spring.datasource.druid.publicKey}")
+	private String publicKey;
+
 	public DruidDataSource dataSource(DruidDataSource datasource) {
 		/** 配置初始化大小、最小、最大 */
 		datasource.setInitialSize(initialSize);
@@ -73,7 +79,9 @@ public class DruidProperties {
 		datasource.setTestOnReturn(testOnReturn);
 		//oracle通过jdbc可获得表或字段的说明，仅在oracle数据库连接时有效
 		datasource.addConnectionProperty("oracle.jdbc.remarks", "true");
-		
+		// 数据库密码使用加密
+		datasource.addConnectionProperty("config.decrypt", "true");
+		datasource.addConnectionProperty("config.decrypt.key", publicKey);
 		return datasource;
 	}
 }

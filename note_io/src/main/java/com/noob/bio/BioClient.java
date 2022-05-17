@@ -31,14 +31,14 @@ public class BioClient {
 			// 创建客户端Socket，指定连接服务器地址和端口
 			socket = new Socket("localhost", 8080);
 			socket.setTcpNoDelay(true);
-			socket.setSoTimeout(2000);
+			//socket.setSoTimeout(2000);
 
 			log.info("客户端启动:" + socket.getLocalSocketAddress());// 每一个客户端分配一个端口号
 
 			// 获取输入流，并读取服务器端的响应
 			inputStream = socket.getInputStream();
-			//	inputScanner = acceptResponse(inputStream);
-			readBlock(inputStream);
+		    inputScanner = acceptResponse(inputStream);
+			//	readBlock(inputStream);
 
 			outputStream = socket.getOutputStream();// 字节输出
 			outputPrint = new PrintWriter(outputStream);// 将输出流包装成打印流
@@ -121,7 +121,7 @@ public class BioClient {
 
 		});
 		outputThread.start();
-		return 100000000;
+		return 1000000;
 	}
 
 	/**

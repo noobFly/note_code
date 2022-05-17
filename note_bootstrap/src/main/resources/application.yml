@@ -19,14 +19,6 @@ server:
         enabled: true
       context-path: /noob
 
-spring:
-  servlet:
-    multipart.file-size-threshold: 0 #文件写入磁盘的阈值
-    multipart.max-file-size: 100MB # 最大文件大小
-    multipart.max-request-size: 200MB
-  lifecycle:
-    timeout-per-shutdown-phase: 20s #默认30s 在规定时间内如果线程无法执行完毕则会被强制停机 配合优雅停机使用 一定不要使用kill -9 (不会触发ShutdownHook)，使用kill -2 来关闭容器
-
 spring.cloud.bus.trace.enabled: true
 
 spring.profiles.active: dev
@@ -41,19 +33,26 @@ management:
         include: "*"
         #include: refresh,health,info #打开部分
 
-
- # 数据源配置
+spring:
+  servlet:
+    multipart.file-size-threshold: 0 #文件写入磁盘的阈值
+    multipart.max-file-size: 100MB # 最大文件大小
+    multipart.max-request-size: 200MB
+  lifecycle:
+    timeout-per-shutdown-phase: 20s #默认30s 在规定时间内如果线程无法执行完毕则会被强制停机 配合优雅停机使用 一定不要使用kill -9 (不会触发ShutdownHook)，使用kill -2 来关闭容器
+ # 数据源配置 com.noob.dataSourceRouter.DruidProperties \ org.springframework.boot.autoconfigure.jdbc.DataSourcePropertie\ com.alibaba.druid.spring.boot.autoconfigure.properties.DruidStatProperties
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     #mysql driver
     driverClassName: com.mysql.cj.jdbc.Driver
     druid:
+      publicKey: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBANYB1tSGKuT2wbMwE4CLOwPIMAg0gYj+oaemsMHcA8uS2sZU8MozSWWVPT93A6/YuH8/ltTrJfnKeOcCAwEAAQ==
       # 主库数据源
       master:
         #mysql url
-        url: jdbc:mysql://100.98.0.6:63306/tmsc_test?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&tinyInt1isBit=true
-        username: tmsc_test
-        password: tmsc_test@2022
+        url: jdbc:mysql://127.0.0.1:63306/noob_test?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&tinyInt1isBit=true
+        username: noob_test
+        password: 1DF1e7CEyDUKFXXJ9aNNnlcoIB+BdAzlu73wA7pOe2NZ+q9/EIZ/sX/Th+DG87Hqw==
       # 从库数据源
       slave:
         # 从数据源开关/默认关闭
@@ -67,7 +66,7 @@ management:
       minIdle: 10
       # 最大连接池数量
       maxActive: 20
-      # 配置获取连接等待超时的时间
+      # 配置获取连接等待超时的时间(单位：毫秒)
       maxWait: 60000
       # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
       timeBetweenEvictionRunsMillis: 60000
@@ -75,11 +74,16 @@ management:
       minEvictableIdleTimeMillis: 300000
       # 配置一个连接在池中最大生存的时间，单位是毫秒
       maxEvictableIdleTimeMillis: 900000
-      # 配置检测连接是否有效
+      # 用来测试连接是否可用的SQL语句,默认值每种数据库都不相同,这是mysql
       validationQuery: SELECT 1 # FROM DUAL
+       # 应用向连接池申请连接，并且testOnBorrow为false时，连接池将会判断连接是否处于空闲状态，如果是，则验证这条连接是否可用
       testWhileIdle: true
+      # 默认是false. 如果为true，应用向连接池申请连接时，连接池会判断这条连接是否是可用的
       testOnBorrow: false
+      # 如果为true（默认false），当应用使用完连接，连接池回收连接的时候会判断该连接是否还可用
       testOnReturn: false
+      # Spring 监控，利用aop 对指定接口的执行时间，jdbc数进行记录
+      aop-patterns: "com.noob.template.dao.*"
       webStatFilter:
         enabled: true
       statViewServlet:
@@ -87,10 +91,11 @@ management:
         # 设置白名单，不填则允许所有访问
         allow:
         url-pattern: /druid/*
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*" # 排除一些不必要的url
         # 控制台管理用户名和密码
         login-username: admin
         login-password: 123456
-      filter:
+      filter:       ########### 启用内置过滤器（第一个 stat必须，否则监控不到SQL）##########
         stat:
           enabled: true
           # 慢SQL记录
@@ -100,6 +105,22 @@ management:
         wall:
           config:
             multi-statement-allow: true
+        # 日志监控，使用slf4j 进行日志输出
+        slf4j:
+          enabled: true
+          statement-log-error-enabled: true
+          statement-create-after-log-enabled: false
+          statement-close-after-log-enabled: false
+          result-set-open-after-log-enabled: false
+          result-set-close-after-log-enabled: false
+      stat-view-servlet:
+        enabled: true                   # 启用StatViewServlet
+        url-pattern: /druid/*           # 访问内置监控页面的路径，内置监控页面的首页是/druid/index.html
+        reset-enable: false              # 不允许清空统计数据,重新计算
+        login-username: root            # 配置监控页面访问密码
+        login-password: 123
+        allow: 127.0.0.1           # 允许访问的地址，如果allow没有配置或者为空，则允许所有访问
+        deny:                                        # 拒绝访问的地址，deny优先于allow
   # redis 配置
   redis:
     # 地址
