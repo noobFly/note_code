@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import org.hibernate.validator.spi.group.DefaultGroupSequenceProvider;
 
 import java.util.List;
-
+// 依据某个属性的值不同，校验不同的成员变量
 public class CustomSequenceProvider implements DefaultGroupSequenceProvider<CustomGroupForm> {
 
     @Override

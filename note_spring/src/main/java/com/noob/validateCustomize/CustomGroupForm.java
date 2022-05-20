@@ -10,7 +10,7 @@ import javax.validation.constraints.Pattern;
 @GroupSequenceProvider(value = CustomSequenceProvider.class)
 public class CustomGroupForm {
 
-    @Pattern(regexp = "[A|B]", message = "类型不必须为 A|B")
+    @Pattern(regexp = "[A|B]", message = "类型必须为 A|B")
     private String type;
     @NotBlankM
     @NotEmpty(message = "参数A不能为空", groups = {WhenTypeIsA.class})
