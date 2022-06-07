@@ -5,7 +5,8 @@ import java.util.Date;
 import java.util.List;
 /**
  * 验证: 当某个线程OOM 或者是StackOverflowError 后，另外的线程依然能够工作!
- * 发生OOM的线程一般情况下会死亡，也就是会被终结掉，该线程持有的对象占用的heap都会被gc了，释放内存。因为发生OOM之前要进行gc，就算其他线程能够正常工作，也会因为频繁gc产生较大的影响。
+ * 发生OOM的线程一般情况下会死亡，也就是会被终结掉，该线程持有的对象占用的heap都会被gc了，释放内存。
+ * 因为发生OOM之前要进行gc，就算其他线程能够正常工作，也会因为频繁gc产生较大的影响。
  */
 public class TestOOMThread {
  public static void test() {

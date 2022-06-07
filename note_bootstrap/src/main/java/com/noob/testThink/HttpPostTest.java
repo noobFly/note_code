@@ -15,6 +15,9 @@ import org.apache.http.protocol.HTTP;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -26,20 +29,21 @@ public class HttpPostTest {
 
         PoolingHttpClientConnectionManager poolingConnectionManager = new PoolingHttpClientConnectionManager(2, TimeUnit.MINUTES);
         int availableProcessors = Runtime.getRuntime().availableProcessors();
-        poolingConnectionManager.setMaxTotal(1); // 连接池最大连接数
-        poolingConnectionManager.setDefaultMaxPerRoute(2 ); // 每个访问服务端主机的并发
+        poolingConnectionManager.setMaxTotal(2); // 连接池最大连接数
+        poolingConnectionManager.setDefaultMaxPerRoute(1); // 每个访问服务端主机的并发
         CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(poolingConnectionManager).disableAutomaticRetries()
                 .setDefaultRequestConfig(RequestConfig.custom().setConnectionRequestTimeout(10000)
                         .setConnectTimeout(10000).setSocketTimeout(30000).build()).build();
         test(httpClient);
+
     }
 
     public static void test(CloseableHttpClient httpClient) {
-        HttpResponse response = null;
         for (int i = 0; i < 100; i++) {
-            try { // httpClient 和 HttpResponse  都要关闭
+            HttpResponse response = null;
+            try {
                 // Post请求
-                HttpPost httppost = new HttpPost(i % 2 == 0 ? "http://www.baidu.com" : "http://www.360.com");
+                HttpPost httppost = new HttpPost(i % 2 == 0 ? "http://www.baidu.com/find/test?password=34" : "http://www.360.com");
 
                 //设置post
                 httppost.getParams().setParameter("http.protocol.content-charset", HTTP.UTF_8);
@@ -75,7 +79,12 @@ public class HttpPostTest {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+
+        URLConnection A = new URL("http://www.baidu.com/find/test?password=34").openConnection();
+        A.connect();
+        A.setDoOutput(true);
+        A.getOutputStream().write(12);
         new HttpPostTest().init();
     }
 

@@ -31,6 +31,7 @@ public class BioClient {
 			// 创建客户端Socket，指定连接服务器地址和端口
 			socket = new Socket("localhost", 8080);
 			socket.setTcpNoDelay(true);
+			socket.setKeepAlive(true);
 			//socket.setSoTimeout(2000);
 
 			log.info("客户端启动:" + socket.getLocalSocketAddress());// 每一个客户端分配一个端口号

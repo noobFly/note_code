@@ -9,7 +9,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 滑动窗口
+ * 滑动窗口-- 不严谨的代码demo
  * <p>
  *
  */
@@ -80,7 +80,7 @@ public class SlidingWindow {
 		}
 
 		// 阈值判断 sum是从0开始
-		if (sum < threshold) { // 这个判定是非原子性的
+		if (sum < threshold) { // 这个判定+increment 是非原子性, 并发下会出问题。
 			// 未超过阈值才+1
 			timeSlices[index].updateAndGet(t -> {
 				t.getValue().incrementAndGet();

@@ -6,12 +6,12 @@
 	<artifactId>note_code</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	
+
     <modules>
         <module>note_common</module>
         <module>note_spring</module>
         <module>note_business</module>
-        <module>noob_executor</module>
+        <module>noob_concurrent</module>
         <module>note_shardingjdbc</module>
         <module>note_bootstrap</module>
         <module>note_io</module>
@@ -19,6 +19,9 @@
         <module>zookeeper</module>
 
     </modules>
+
+
+
     <build>
         <plugins>
             <plugin>

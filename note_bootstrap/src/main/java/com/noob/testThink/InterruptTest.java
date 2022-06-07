@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 public class InterruptTest {
 	
 	//  notifyAll 一定是在退出了 synchronized 代码块才生效
-	public static void main2(String[] args) {
+	public static void main(String[] args) {
 		Object obj = new Object();
 		Thread thread1 = new Thread(() -> {
 			synchronized (obj) {
@@ -75,7 +75,7 @@ public class InterruptTest {
 
 	}
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void main2(String[] args) throws InterruptedException {
 		Object obj = new Object();
 		Thread thread1 = new Thread(() -> {
 			synchronized (obj) {

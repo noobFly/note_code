@@ -15,6 +15,12 @@ import net.sf.cglib.proxy.MethodProxy;
  * -XX:MetaspaceSize=3M -XX:MaxMetaspaceSize=10M
  * <p>
  * Compressed class space:  https://www.zhihu.com/question/268392125
+ * <p>OOPS是指“ordinary object pointers“，就是原始指针。Java Runtime可以用这个指针直接访问指针对应的内存，做相应的操作
+ * -XX:+UseCompressedClassPointers（压缩开关）
+ * -XX:CompressedClassSpaceSize（Compressed Class Space 空间大小限制）:
+ * OOPS变成了32bit, class信息中的指针用32bit的Compressed版本。而这些指针指向的空间被称作“Compressed Class Space”
+ * java.lang.OutOfMemoryError: Compressed class space
+ * </p>
  *
  */
 public class MetaSpaceError extends ClassLoader {

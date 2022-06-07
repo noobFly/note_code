@@ -1,4 +1,4 @@
-package com.noo.agent;
+package com.noob.agent;
 
 import java.lang.instrument.Instrumentation;
 
