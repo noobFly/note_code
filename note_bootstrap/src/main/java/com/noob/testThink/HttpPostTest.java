@@ -81,9 +81,9 @@ public class HttpPostTest {
 
     public static void main(String[] args) throws IOException {
 
-        URLConnection A = new URL("http://www.baidu.com/find/test?password=34").openConnection();
+        URLConnection A = new URL("http://www.baidu.com/find/test?password=34").openConnection();        A.setDoOutput(true);
+
         A.connect();
-        A.setDoOutput(true);
         A.getOutputStream().write(12);
         new HttpPostTest().init();
     }
