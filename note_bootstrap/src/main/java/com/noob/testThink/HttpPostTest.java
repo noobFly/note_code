@@ -81,11 +81,36 @@ public class HttpPostTest {
 
     public static void main(String[] args) throws IOException {
 
-        URLConnection A = new URL("http://www.baidu.com/find/test?password=34").openConnection();        A.setDoOutput(true);
-
+        URLConnection A = new URL("http://www.baidu.com/s?ie=utf-8&mod=1&isbd=1&isid=E186BCF2AF816405&ie=utf-8&f=8&rsv_bp=1&rsv_idx=1&tn=baidu&wd=23213&fenlei=256&rsv_pq=ea2f8180000217a0&rsv_t=21e3CiGcKCqY0iRqzz4lKRjbjuKTnHAT1rtBQyl4jo/v6u1F1e3SCudyiqC9&rqlang=en&rsv_enter=0&rsv_dl=tb&rsv_sug3=5&rsv_sug1=2&rsv_sug7=100&rsv_btype=i&prefixsug=2%26lt%3B21%26lt%3B&rsp=4&inputT=3820&rsv_sug4=3821&rsv_sid=36553_36465_36454_36513_36414_36420_36165_36569_36519_26350_36467_36314&_ss=1&clist=&hsug=&f4s=1&csor=5&_cr1=36363").openConnection();        A.setDoOutput(true);
+        A.setReadTimeout(1000000);
         A.connect();
+
         A.getOutputStream().write(12);
-        new HttpPostTest().init();
+        A.getInputStream().read();
+        new Thread( ()->{
+
+
+            try {   URLConnection B = new URL("http://www.baidu.com/s?ie=utf-8&mod=1&isbd=1&isid=E186BCF2AF816405&ie=utf-8&f=8&rsv_bp=1&rsv_idx=1&tn=baidu&wd=23213&fenlei=256&rsv_pq=ea2f8180000217a0&rsv_t=21e3CiGcKCqY0iRqzz4lKRjbjuKTnHAT1rtBQyl4jo/v6u1F1e3SCudyiqC9&rqlang=en&rsv_enter=0&rsv_dl=tb&rsv_sug3=5&rsv_sug1=2&rsv_sug7=100&rsv_btype=i&prefixsug=2%26lt%3B21%26lt%3B&rsp=4&inputT=3820&rsv_sug4=3821&rsv_sid=36553_36465_36454_36513_36414_36420_36165_36569_36519_26350_36467_36314&_ss=1&clist=&hsug=&f4s=1&csor=5&_cr1=36363").openConnection();
+                B.setDoOutput(true);
+                B.connect();
+                B.getOutputStream().write(12);
+                B.getInputStream().read();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } ).start();
+        new Thread( ()->{
+
+
+            try {  URLConnection C = new URL("http://www.baidu.com/s?ie=utf-8&mod=1&isbd=1&isid=E186BCF2AF816405&ie=utf-8&f=8&rsv_bp=1&rsv_idx=1&tn=baidu&wd=23213&fenlei=256&rsv_pq=ea2f8180000217a0&rsv_t=21e3CiGcKCqY0iRqzz4lKRjbjuKTnHAT1rtBQyl4jo/v6u1F1e3SCudyiqC9&rqlang=en&rsv_enter=0&rsv_dl=tb&rsv_sug3=5&rsv_sug1=2&rsv_sug7=100&rsv_btype=i&prefixsug=2%26lt%3B21%26lt%3B&rsp=4&inputT=3820&rsv_sug4=3821&rsv_sid=36553_36465_36454_36513_36414_36420_36165_36569_36519_26350_36467_36314&_ss=1&clist=&hsug=&f4s=1&csor=5&_cr1=36363").openConnection();
+                C.setDoOutput(true);
+                C.connect();
+                C.getOutputStream().write(12);
+               C.getInputStream().read();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } ).start();
     }
 
 }

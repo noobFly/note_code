@@ -1,4 +1,4 @@
-package com.noob.util;
+package com.noob.util.sql;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -66,7 +66,7 @@ public class SqlBuilder {
 		}
 
 	}
-
+  // 常规建表语句生成32语句
 	public static void main(String[] args) throws Exception {
 
 		// 格式化输出
