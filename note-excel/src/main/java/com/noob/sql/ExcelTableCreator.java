@@ -1,10 +1,9 @@
-package com.noob.util.sql;
+package com.noob.sql;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.enums.CellExtraTypeEnum;
 import com.alibaba.excel.util.IoUtils;
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.noob.util.JacksonUtil;
 import com.noob.util.security.MD5;
@@ -35,7 +34,7 @@ public class ExcelTableCreator {
 
     public static int sheetNum = 0; // 指定sheet
     public static int[] headRow = new int[]{4, 5}; // 指定excel里标题行的index
-    public static String path = "C:\\Users\\xiongwenjun\\Desktop\\有息负债明细表模板.xls(1).xlsx"; // 模板文件
+    public static String path = "C:\\Users\\noob\\Desktop\\有息负债明细表模板.xls(1).xlsx"; // 模板文件
 
     public static Map<Integer, String> ENtransferMap = Maps.newHashMap(); // 需要转英文的中文名称
 
@@ -67,6 +66,22 @@ public class ExcelTableCreator {
         EasyExcelListener readListener = new EasyExcelListener(headRow);
         // 默认只读第一个sheet
         EasyExcel.read(file, readListener).extraRead(CellExtraTypeEnum.MERGE).autoTrim(true).sheet(sheetNum).headRowNumber(headRow[headRow.length - 1] + 1).doRead();
+
+        /**
+         * 多个sheet不同的实体类
+         ExcelReader excelReader = EasyExcel.read(new ByteArrayInputStream(file.getBytes())).build();
+         excelReader.read(
+         EasyExcel.readSheet(0).head(CreditGrantedEachBank.class).headRowNumber(5).registerReadListener(creditGrantedEachBankHandler).build(),
+         EasyExcel.readSheet(1).head(FinancialInfo.class).headRowNumber(4).registerReadListener(financialInfoHandler).build(),
+         EasyExcel.readSheet(2).head(ProjectCooperation.class).headRowNumber(4).registerReadListener(projectCooperationHandler).build(),
+         EasyExcel.readSheet(3).head(DepositsFinancialInvestment.class).headRowNumber(4).registerReadListener(depositsFinancialInvestmentHandler).build());
+         // 这里千万别忘记关闭，读的时候会创建临时文件
+         excelReader.finish();
+         */
+
+
+
+
         Table table = new Table();
         table.setSheetName(readListener.getSheetName());
         Map<Integer, String> headMap = readListener.getHeadMap(); // 表头原数

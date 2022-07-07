@@ -24,9 +24,17 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Excel相关处理
+ * Excel相关处理.
+ * <p>
+ *仿@ExcelProperty， 更定制化
+ <dependency>
+ <groupId>com.alibaba</groupId>
+ <artifactId>easyexcel</artifactId>
+ <version>3.0.5</version>
+ </dependency>
  *
- * @author yadmin
+ * </p>
+ *
  */
 public class ExcelUtil<T> {
     private static final Logger log = LoggerFactory.getLogger(ExcelUtil.class);
@@ -117,7 +125,7 @@ public class ExcelUtil<T> {
     }
 
     /**
-     * 对excel表单指定表格索引名转换成list
+     * 从第2行开始取数据,默认第一行是表头.
      *
      * @param sheetName 表格索引名
      * @param is        输入流
@@ -828,7 +836,7 @@ public class ExcelUtil<T> {
     }
 
     /**
-     * 反向解析值字典值 TODO
+     * 反向解析值字典值 TODO 从系统配置的动态数据
      *
      * @param dictLabel 字典标签
      * @param dictType  字典类型
@@ -840,7 +848,7 @@ public class ExcelUtil<T> {
     }
 
     /**
-     * 解析字典值 TODO
+     * 解析字典值 TODO 从系统配置的动态数据
      *
      * @param dictValue 字典值
      * @param dictType  字典类型

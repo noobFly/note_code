@@ -136,9 +136,7 @@ public class IOHandler {
 
 				sc.configureBlocking(false);// localAddress: /0.0.0.0:8080 ; remoteAddress: /127.0.0.1:51066
 				SelectionKey sk = sc.register(selector2, SelectionKey.OP_READ);
-				new Thread(() -> {
-					this.exectue(selector2);
-				}).start();
+				new Thread(() -> this.exectue(selector2)).start();
 
 				System.out.println(sk);
 			}
@@ -191,9 +189,7 @@ public class IOHandler {
 
 			if (isServer) {
 				msgMap.put(sc, readInMsg);
-				acceptMap.compute(sc, (mapKey, oldVal) -> {
-					return oldVal == null ? new Integer(0) : oldVal + 1;
-				});
+				acceptMap.compute(sc, (mapKey, oldVal) ->  oldVal == null ? new Integer(0) : oldVal + 1);
 			}
 
 			log.info(String.format("接收到客户端%s的信息： %s", sc.getRemoteAddress(), readInMsg));

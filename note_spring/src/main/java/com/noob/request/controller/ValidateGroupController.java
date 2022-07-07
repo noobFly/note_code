@@ -2,6 +2,7 @@ package com.noob.request.controller;
 
 import com.noob.request.Interceptor.OpLog;
 import com.noob.request.component.BService;
+import com.noob.validateCustomize.CustomGroupForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -69,6 +70,11 @@ public class ValidateGroupController {
     @RequestMapping("/testGroupExtends")
     public String testGroupExtends(@RequestBody @Validated(GroupTestDTO.MegreAction.class) GroupTestDTO test) {
         return "testGroupExtends";
+    }
+
+    @RequestMapping("/testGroupSequenceProvider")
+    public String testGroupSequenceProvider(@RequestBody @Validated CustomGroupForm test) {
+        return "GroupSequenceProvider";
     }
 
     @OpLog(model = 99)

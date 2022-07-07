@@ -17,6 +17,7 @@
         <module>note_io</module>
 		<module>note-springcloud</module>
         <module>zookeeper</module>
+        <module>note-excel</module>
 
     </modules>
 
