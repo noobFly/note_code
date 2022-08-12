@@ -10,6 +10,11 @@ import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @ControllerAdvice(annotations = RestController.class)
 public class ApiExceptionAdvice {
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiExceptionAdvice.class);
@@ -26,9 +31,20 @@ public class ApiExceptionAdvice {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public String handleMethodArgumentException(MethodArgumentNotValidException ex) {
-        return "MethodArgumentNotValidException";
+        return "MethodArgumentNotValidException"; // 这个是入参@Validate校验失败的抛出异常  在RequestResponseBodyMethodProcessor#resolveArgument
     }
 
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public String handleValidateException(ConstraintViolationException ex) {
+
+        Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
+        String message = constraintViolations != null && !constraintViolations.isEmpty() ?
+                constraintViolations.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(",")) :
+        "数据验证失败"; // 这个是方法层面拦截器MethodValidationInterceptor校验抛出的异常
+        return "ConstraintViolationException: " + message;
+    }
 
     /**
      * 处理参数有误,json不能正确转换为对象异常

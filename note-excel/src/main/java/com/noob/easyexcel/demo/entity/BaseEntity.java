@@ -18,7 +18,7 @@ public abstract class BaseEntity {
      * 创建时间
      */
     @ExcelIgnore // 不在excel里的字段要使用该注解，不然会默认在解析过程里按顺序对应excel的column_index
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd",  timezone = "GMT+8")
     private java.util.Date createTime;
 
     // 为了兼容不同业务的excel读入起始列不同，判定数据为空的依据

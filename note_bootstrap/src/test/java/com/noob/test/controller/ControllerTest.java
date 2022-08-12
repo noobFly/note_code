@@ -36,7 +36,7 @@ public class ControllerTest extends BaseTest {
     @Test
     public void testGroup() {
         testTransactionOnInterfaceService.testTransactionOnInterface();
-        GroupTestDTO test = new GroupTestDTO("address", "name", "code", "phone", null);
+        GroupTestDTO test = new GroupTestDTO("address", "name", "code", "phone", null, null);
         try {
             System.out.println(mockMvc
                     .perform(MockMvcRequestBuilders.get("/validate/testAdvice").param("testParamters", "testParamters")

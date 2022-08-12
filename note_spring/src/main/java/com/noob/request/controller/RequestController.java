@@ -43,7 +43,7 @@ public class RequestController {
      */
     @PostMapping(value = "/testMultipartFile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String testMultipartFile(
-            @RequestParam(value = "file[]", required = true) List<MultipartFile> multipartFile) {
+            @RequestParam(value = "file", required = true) List<MultipartFile> multipartFile) {
         String fileName = multipartFile.get(0).getOriginalFilename();
         String pathname = TMP + fileName;
         try {

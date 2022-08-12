@@ -16,6 +16,7 @@ public class ExcelDTO {
     private double attr3 = 3.3389d;
     @Excel(name = "属性4")
     private int attr4 = 4;
+
     @Excel(name = "属性5", cellType = Excel.ColumnType.STRING)
     private int attr5 = 000005;
     @Excel(name = "属性6", cellType = Excel.ColumnType.NUMERIC)
@@ -28,5 +29,8 @@ public class ExcelDTO {
     private int attr9;
     @Excel(name = "属性13", scale = 2)
     private BigDecimal attr10 = new BigDecimal("0.1298");
-    private int attr17 = 17;
+
+    @Excel(name = "属性17", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date  attr17 = new Date();
+    private int attr18 = 17;
 }

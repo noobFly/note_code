@@ -2,6 +2,8 @@ package com.noob.testThink;
 
 public class TestSynchronized {
 
+
+
     public void test() throws InterruptedException {
         synchronized (TestSynchronized.class) { // 全局唯一的锁 ，锁定的是metaspace区该class对象
 
@@ -16,7 +18,7 @@ public class TestSynchronized {
     }
 
     public void test3() throws InterruptedException {
-        synchronized (this) { // 对象锁
+        synchronized (this) { // 对象锁时，对象不能为空！
             System.out.println("synchronized object");
             Thread.sleep(100000000);
         }

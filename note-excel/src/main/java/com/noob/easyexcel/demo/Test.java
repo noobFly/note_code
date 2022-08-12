@@ -31,7 +31,7 @@ import java.util.function.Consumer;
 
 @Slf4j
 public class Test {
-    public static final String FILE = "bankCooperation.xlsx";
+    public static final String FILE = "bankCooperation.xlsx"; //要用英文名,否则可能无法读取到路径文件 。 最好放到启动jar模块的resources文件下。否则需要用getResourceAsStream方式读
     final String TEMP = "/template/" + FILE;
 
     // 一定要和excel里的sheet名一样！ easyexcel使用了按名称匹配sheet！

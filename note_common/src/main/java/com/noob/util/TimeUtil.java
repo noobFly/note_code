@@ -1,12 +1,20 @@
 package com.noob.util;
 
+import com.google.common.base.Strings;
+
 import java.lang.management.ManagementFactory;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public interface TimeUtil {
+public class TimeUtil extends org.apache.commons.lang3.time.DateUtils {
+    String DATE_PATTERN = "yyyy-MM-dd";
+
+    private static String[] parsePatterns = {"yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyy-MM",
+            "yyyy/MM/dd", "yyyy/MM/dd HH:mm:ss", "yyyy/MM/dd HH:mm", "yyyy/MM", "yyyy.MM.dd", "yyyy.MM.dd HH:mm:ss",
+            "yyyy.MM.dd HH:mm", "yyyy.MM"};
 
     /**
      * 获取服务器启动时间
@@ -86,7 +94,7 @@ public interface TimeUtil {
         cal.set(Calendar.HOUR_OF_DAY, 23);
         cal.set(Calendar.MINUTE, 59);
         cal.set(Calendar.SECOND, 59);
-        cal.set(Calendar.MILLISECOND, 0);
+        cal.set(Calendar.MILLISECOND, 999);
         return cal.getTime();
     }
 
@@ -180,10 +188,69 @@ public interface TimeUtil {
         return month;
     }
 
+    /**
+     * 计算某日期所在季度开始日期
+     * 季度划分：1、2、3， 4、5、6， 7、8、9， 10、11、12
+     */
+    public static Date getSeasonEndDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int month = calendar.get(Calendar.MONTH);
+        calendar.set(Calendar.MONTH, (month + 3) / 3 * 3);
+        calendar.set(Calendar.DATE, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+        return new Date(calendar.getTime().getTime() - 24 * 60 * 60 * 1000);
+    }
+
+    /**
+     * 计算某日期所在季度结束日期
+     * 季度划分：1、2、3， 4、5、6， 7、8、9， 10、11、12
+     */
+    public static Date getSeasonStartDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int month = calendar.get(Calendar.MONTH);
+        calendar.set(Calendar.MONTH, month / 3 * 3);
+        calendar.set(Calendar.DATE, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
+    }
+
+    // 所在季度
+    static int getQuarterOfYear(String month) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(Strings.isNullOrEmpty(month) ? new Date() : parseDate(month));
+        return calendar.get(Calendar.MONTH) / 3 + 1;
+    }
+
+    /**
+     * 日期型字符串转化为日期 格式
+     */
+    public static Date parseDate(Object str) {
+        if (str == null) {
+            return null;
+        }
+        try {
+            return parseDate(str.toString(), parsePatterns);
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+
     public static void main(String args[]) {
-        System.out.println(formatDate(getServerStartDate(), "yyyy-MM-dd :: HH:mm:ss"));
-        System.out.println(getDatePoor(getNowYearFirst(), getDateEnd(getNowYearLast())));
         Date now = new Date();
+        System.out.println(formatDate(getSeasonStartDate(getNowYearFirst()), "yyyy-MM-dd HH:mm:ss:SSS"));
+        System.out.println(formatDate(getSeasonEndDate(getNowYearFirst()), "yyyy-MM-dd HH:mm:ss:SSS"));
+        System.out.println(getQuarterOfYear("2022-04-02"));
+        System.out.println(formatDate(getServerStartDate(), "yyyy-MM-dd HH:mm:ss"));
+        System.out.println(getDatePoor(getNowYearFirst(), getDateEnd(getNowYearLast())));
         System.out.println(formatDate(getDateBegin(now), "yyyy-MM-dd :: HH:mm:ss"));
         System.out.println(formatDate(getDateEnd(now), "yyyy-MM-dd :: HH:mm:ss"));
         System.out.println(getMonthDiff(now, now));
@@ -195,7 +262,5 @@ public interface TimeUtil {
 
     }
 
-    public static void main(Object args[]) {
 
-    }
 }

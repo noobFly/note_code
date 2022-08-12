@@ -46,12 +46,12 @@ public class LoanParam {
 	/**
 	 * 起息日 YYYY-MM-DD
 	 */
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd",  timezone = "GMT+8")
 	protected Date startDate;
 	/**
 	 * 截息日 YYYY-MM-DD （周期性还款非必传，内部计算。一次性还款付息必填）
 	 */
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd",  timezone = "GMT+8")
 	// 	@JsonFormat(shape = JsonFormat.Shape.NUMBER, timezone = "GMT+8")
 	protected Date endDate;
 

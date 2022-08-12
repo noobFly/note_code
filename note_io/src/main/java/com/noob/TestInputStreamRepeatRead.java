@@ -44,14 +44,14 @@ public class TestInputStreamRepeatRead {
 		String msg = "大佬你好";
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(msg.getBytes()); // 初始时pos|mark都为0
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		IOUtils.copy(inputStream, outputStream);// 输出后： pos为12、mark为0
+		IOUtils.copy(inputStream, outputStream);// 输出后： inputStream： pos为12、mark为0 inputStream#read会比较"pos < count" 才能写有效二进制数据到缓冲区内！
 		// inputStream.mark(12);// mark方法是将 mark值设置为pos值。入参无意义。当前测试场景下可不使用
 		System.out.println("第一次：" + outputStream.toString());
 		System.out.println("第二次：" + outputStream.toString());// 自带缓存可多次读取
 
 		ByteArrayOutputStream outputStream2 = new ByteArrayOutputStream();
 		IOUtils.copy(inputStream, outputStream2);
-		System.out.println("第三次：" + outputStream2.toString()); // 虽然inputStream里的buf还有数据，但post已经在数据末尾处了， 没办法再通过OutputStream读出
+		System.out.println("第三次：" + outputStream2.toString()); // 虽然inputStream里的buf还有数据，但pos已经在数据末尾处了， 没办法再将数据写入ByteArrayOutputStream
 
 		ByteArrayOutputStream outputStream3 = new ByteArrayOutputStream();
 		inputStream.reset(); // 字节流中下一个被读取的位置重置到mark所标记的位置 mark默认是0

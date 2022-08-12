@@ -15,6 +15,9 @@ import org.springframework.stereotype.Component;
 
 import lombok.Getter;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 验证执行顺序
  * <p>
@@ -24,13 +27,18 @@ import lombok.Getter;
  *
  *
  */
-//@Component
+@Component
 public class ExecuteSortComponent implements BeanFactoryAware, ApplicationContextAware, InitializingBean {
+
+	@Resource
+	private Map<String, BService> map; // 能从spring容器里拿到该对象按spring-name分组
+	@Resource
+	private List<BService> list; // 能从spring容器里拿到该对象的集合
+
 	@Getter
 	private BService service;
 	@Getter
 	private String value;
-
 	public ExecuteSortComponent(BService b) {
 		System.out.println("这里是Constructor");
 	}

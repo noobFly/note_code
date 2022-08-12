@@ -23,11 +23,11 @@ public class GroupingByDownstreamTest {
 
     public static void main(String[] args) {
         List<Person> list = Lists.newArrayList();
-        for (int index = 0; index < 20; index++) {
+        for (int index = 0; index < 30; index++) {
             Person person = new Person();
-            person.setRealName("RealName" + index % 3);
-            person.setTaskType("TaskType" + index % 4);
-            person.setTime(index % 5);
+            person.setRealName("RealName" + index % 4);
+            person.setTaskType("TaskType" + index % 5);
+            person.setTime(index % 6);
             list.add(person);
         }
         // RealName分组并排序 (用LinkedHashMap来保存Map插入的顺序)
@@ -52,9 +52,9 @@ public class GroupingByDownstreamTest {
 
 
         // RealName分组 -> TaskType分组 -> 按time排序
-        Map<String, Map<String, TreeSet>> collect4 = (Map<String, Map<String, TreeSet>>) list.stream().collect(Collectors.groupingBy(Person::getRealName,
+        Map<String, Map<String, TreeSet<Person>>> collect4 =  list.stream().collect(Collectors.groupingBy(Person::getRealName,
                 Collectors.groupingBy(Person::getTaskType,
-                        Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet(Comparator.comparing(Person::getTime)
+                        Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(Person::getTime)
                         )), Function.identity()))));
         System.out.println(JacksonUtil.toJson(collect4));
 

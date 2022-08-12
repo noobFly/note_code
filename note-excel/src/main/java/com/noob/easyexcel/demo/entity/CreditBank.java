@@ -30,9 +30,9 @@ public class CreditBank extends BaseEntity {
     /**
      * 授信有效期
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd",  timezone = "GMT+8") // springmvc响应时输出的对应格式的日期字符串. 指定时区否则可能有问题
     @ExcelProperty(index = 4)
-    @DateTimeFormat(value = "yyyy-MM-dd")
+    @DateTimeFormat(value = "yyyy-MM-dd") // 指定excel里日期格式
     private java.util.Date creditValidity;
 
 }
