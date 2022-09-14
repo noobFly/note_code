@@ -36,7 +36,7 @@ public class NioClient {
      */
     private static void doConnect(SocketChannel socketChannel, Selector selector) throws IOException {
         // 如果直接连接成功，则注册到多路复用器上，发送请求消息，读应答
-        if (socketChannel.connect(new InetSocketAddress("localhost", 8080))) {
+        if (socketChannel.connect(new InetSocketAddress("localhost", 8080))) { // 同一个socketChannel不能连接多次 SocketChannelImpl#ensureOpenAndUnconnected
             socketChannel.register(selector, SelectionKey.OP_WRITE);
         } else {
             socketChannel.register(selector, SelectionKey.OP_CONNECT);

@@ -18,7 +18,7 @@ import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.timeout.IdleStateHandler;
 
 /**
- * IdleStateHandler：
+ * IdleStateHandler： 内部使用Executor来schedule
  * readerIdleTime读空闲超时时间设定，如果channelRead()方法超过readerIdleTime时间未被调用则会触发超时事件调用userEventTrigger()方法；
  * 
  * writerIdleTime写空闲超时时间设定，如果write()方法超过writerIdleTime时间未被调用则会触发超时事件调用userEventTrigger()方法；
@@ -34,7 +34,7 @@ public class HeartBeatServer {
 	public static void main(String[] args) throws Exception {
 		ServerBootstrap bootstrap = new ServerBootstrap();
 
-		EventLoopGroup boss = new NioEventLoopGroup(1, new ThreadFactory() {
+		EventLoopGroup boss = new NioEventLoopGroup(2, new ThreadFactory() {
 
 			@Override
 			public Thread newThread(Runnable r) {
@@ -62,14 +62,15 @@ public class HeartBeatServer {
 							ChannelPipeline pipeline = ch.pipeline();
 							pipeline.addLast("decoder", new StringDecoder());
 							pipeline.addLast("encoder", new StringEncoder());
-							pipeline.addLast(new IdleStateHandler(10, 10, 15, TimeUnit.SECONDS)); // 心跳检测处理器
+							pipeline.addLast(new IdleStateHandler(10, 10, 15, TimeUnit.SECONDS)); // 心跳检测处理器  内部使用Executor来schedule
 							pipeline.addLast(new HeartBeatHandler()); // 要在IdleStateHandler之后
 						}
 					});
 
+			// 可以绑定2个端口。 会生成不同的NioServerSocketChannel. 因为boss-NioEventLoopGroup当前是1个线程，所以注册在同一个selector上。
+			// 如果boss-NioEventLoopGroup是2个线程，则会分开注册到各自线程代表的selector上。
 			ChannelFuture future = bootstrap.bind(8090).sync();
 			ChannelFuture future2 = bootstrap.bind(8080).sync();
-
 			future.channel().closeFuture().sync();
 		} catch (Exception e) {
 			e.printStackTrace();

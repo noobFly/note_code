@@ -1,4 +1,4 @@
-package com.noob.LRU;
+package com.noob.sort.LRU;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

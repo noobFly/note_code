@@ -1,8 +1,8 @@
 package com.noob;
 
+import com.noob.json.JSON;
 import com.noob.request.component.BService;
 import com.noob.request.component.ExecuteSortComponent;
-import com.noob.util.JacksonUtil;
 import lombok.Data;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -51,14 +51,14 @@ public class WeBaseConfig {
 		private List<Object> contractAbiObj;
 
 		public void init() throws IOException {
-			contractAbiObj = (List<Object>)JacksonUtil.jsonToCollection(contractAbi, List.class, Object.class);
+			contractAbiObj =JSON.parseArray(contractAbi,  Object.class);
 		}
 	}
 
 
-	public static void  main(String[] args) throws IOException {
+	public static void  main(String[] args)   {
 		String msg = "[{\"constant\":false,\"inputs\":[{\"name\":\"assetId\",\"type\":\"string\"},{\"name\":\"assetJson\",\"type\":\"string\"}],\"name\":\"storeAsset\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"assetId\",\"type\":\"string\"}],\"name\":\"queryAsset\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"newAdmin\",\"type\":\"address\"}],\"name\":\"addAdmin\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"assetId\",\"type\":\"string\"}],\"name\":\"queryAssetHisotry\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}]";
-		List<Object>  contractAbiObj =  (List<Object>)JacksonUtil.jsonToCollection(msg, List.class, Object.class);
+		List<Object>  contractAbiObj =  JSON.parseArray(msg,  Object.class);
 		System.out.print("");
 	}
 

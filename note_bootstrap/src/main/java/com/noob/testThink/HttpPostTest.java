@@ -27,7 +27,7 @@ public class HttpPostTest {
 
     public void init() {
 
-        PoolingHttpClientConnectionManager poolingConnectionManager = new PoolingHttpClientConnectionManager(2, TimeUnit.MINUTES);
+        PoolingHttpClientConnectionManager poolingConnectionManager = new PoolingHttpClientConnectionManager(2, TimeUnit.MINUTES);// 指定连接存活时长，如果未指定则是-1，表示Long.MAX_VALUE 基本可以说是永久有效了
         int availableProcessors = Runtime.getRuntime().availableProcessors();
         poolingConnectionManager.setMaxTotal(2); // 连接池最大连接数
         poolingConnectionManager.setDefaultMaxPerRoute(1); // 每个访问服务端主机的并发
@@ -74,7 +74,7 @@ public class HttpPostTest {
             } finally {
                 if (response != null) {
                     try {
-                        ((CloseableHttpResponse) response).close(); // 这里从逻辑上来说是不需要了。 它会直接关闭掉，连接池不会回收！!
+                        ((CloseableHttpResponse) response).close(); // 这里从池化复用逻辑上来说是不需要了。 它会直接关闭掉该链接，不会连接池回收！!
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

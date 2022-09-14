@@ -8,7 +8,6 @@ import java.util.TreeMap;
 
 /**
  * 参考：https://www.cnkirito.moe/consistent-hash-lb/
- * @author fengjie
  *
  */
 public abstract class AbstractShadingSelector implements ShadingSelector {

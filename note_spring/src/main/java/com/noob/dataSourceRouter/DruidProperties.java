@@ -1,5 +1,6 @@
 package com.noob.dataSourceRouter;
 
+import com.alibaba.druid.filter.config.ConfigTools;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -83,5 +84,10 @@ public class DruidProperties {
 		datasource.addConnectionProperty("config.decrypt", "true");
 		datasource.addConnectionProperty("config.decrypt.key", publicKey);
 		return datasource;
+	}
+
+
+	public static void main(String args[]) throws Exception{
+		ConfigTools.main(new String[]{"Bms@2019"});
 	}
 }

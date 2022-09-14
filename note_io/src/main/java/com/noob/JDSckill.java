@@ -1,6 +1,6 @@
 package com.noob;
 
-import com.noob.util.JacksonUtil;
+import com.noob.json.JSON;
 import lombok.Getter;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -31,7 +31,7 @@ public class JDSckill {
 				"https://marathon.jd.com/seckillnew/orderService/pc/submitOrder.action?skuId=100012033476");
 
 		// 转json参数
-		String paramJson = JacksonUtil.toJson(new Data());
+		String paramJson = JSON.toJson(new Data());
 		StringEntity stringEntity = new StringEntity(paramJson, ContentType.create("text/json", "UTF-8"));
 		httpPost.setEntity(stringEntity);
 		httpPost.addHeader("Content-Type", "application/json");
@@ -95,6 +95,6 @@ class Data {
 	private String townName = "兴华街道";
 
 	public HashMap toMap() throws IOException {
-		return (HashMap) JacksonUtil.jsonToObject(JacksonUtil.toJson(this), HashMap.class);
+		return (HashMap) JSON.parseObject(JSON.toJson(this), HashMap.class);
 	}
 }

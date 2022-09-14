@@ -2,7 +2,7 @@ package com.noob.test;
 
 import java.util.Random;
 
-import com.noob.LRU.LRUCache;
+import com.noob.sort.LRU.LRUCache;
 
 public class TestLRU {
 	/**

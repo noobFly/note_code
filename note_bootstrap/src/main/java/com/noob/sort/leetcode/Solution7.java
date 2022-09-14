@@ -1,5 +1,5 @@
 package com.noob.sort.leetcode;
-
+// 翻转数值
 public class Solution7 {
     public static int reverse(int x) {
         if (-9 < x && x < 9) return x; // 个位数 不用处理

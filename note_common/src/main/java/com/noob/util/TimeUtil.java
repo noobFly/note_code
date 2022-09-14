@@ -10,7 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class TimeUtil extends org.apache.commons.lang3.time.DateUtils {
-    String DATE_PATTERN = "yyyy-MM-dd";
+    public static final String DATE_PATTERN = "yyyy-MM-dd";
 
     private static String[] parsePatterns = {"yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyy-MM",
             "yyyy/MM/dd", "yyyy/MM/dd HH:mm:ss", "yyyy/MM/dd HH:mm", "yyyy/MM", "yyyy.MM.dd", "yyyy.MM.dd HH:mm:ss",
@@ -31,7 +31,7 @@ public class TimeUtil extends org.apache.commons.lang3.time.DateUtils {
      * @param format 格式
      * @return
      */
-    static String formatDate(Date date, String format) {
+    public static String formatDate(Date date, String format) {
         try {
             DateFormat df = new SimpleDateFormat(format);
             return df.format(date);
@@ -40,7 +40,7 @@ public class TimeUtil extends org.apache.commons.lang3.time.DateUtils {
         }
     }
 
-    static int getBetweenDays(Date fDate, Date sDate) {
+    public static int getBetweenDays(Date fDate, Date sDate) {
         return (int) ((fDate.getTime() - sDate.getTime()) / 86400000L);// (24小时 * 60分 * 60秒 * 1000毫秒= 1天毫秒数)
     }
 
@@ -72,7 +72,7 @@ public class TimeUtil extends org.apache.commons.lang3.time.DateUtils {
      * @param date
      * @return
      */
-    static Date getDateBegin(Date date) {
+    public static Date getDateBegin(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -88,7 +88,7 @@ public class TimeUtil extends org.apache.commons.lang3.time.DateUtils {
      * @param date
      * @return
      */
-    static Date getDateEnd(Date date) {
+    public static Date getDateEnd(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.set(Calendar.HOUR_OF_DAY, 23);
@@ -106,7 +106,7 @@ public class TimeUtil extends org.apache.commons.lang3.time.DateUtils {
      * @param beginDate 开始时间
      * @return
      */
-    static int getMonthDiff(Date endDate, Date beginDate) {
+    public static int getMonthDiff(Date endDate, Date beginDate) {
         Calendar c1 = Calendar.getInstance();
         Calendar c2 = Calendar.getInstance();
         c1.setTime(endDate);

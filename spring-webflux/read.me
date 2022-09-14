@@ -1,0 +1,18 @@
+spring-boot-starter-web和spring-boot-starter-webflux能否一起工作？
+
+当两者一起时配置的并不是webflux web application, 仍然时一个spring mvc web application。
+
+官方文档中有这么一段注解：很多开发者添加spring-boot-start-webflux到他们的spring mvc web applicaiton去是为了使用reactive WebClient.
+如果希望更改webApplication 类型需要显示的设置，如SpringApplication.setWebApplicationType(WebApplicationType.REACTIVE).
+
+
+
+
+在WebFlux的函数式开发模式中，我们用HandlerFunction和RouterFunction来实现上边这两点：
+
+HandlerFunction相当于Controller中的具体处理方法，输入为请求，输出为装在Mono中的响应；
+    Mono<T extends ServerResponse> handle(ServerRequest request);
+
+RouterFunction，顾名思义，路由，相当于@RequestMapping，用来判断什么样的url映射到那个具体的HandlerFunction，输入为请求，输出为装在Mono里边的Handlerfunction：
+    Mono<HandlerFunction<T>> route(ServerRequest request);
+

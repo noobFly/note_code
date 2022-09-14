@@ -1,7 +1,7 @@
 
 package com.noob.testThink;
 
-import com.noob.util.JacksonUtil;
+import com.noob.json.JSON;
 import lombok.Data;
 import org.assertj.core.util.Lists;
 
@@ -33,22 +33,22 @@ public class GroupingByDownstreamTest {
         // RealName分组并排序 (用LinkedHashMap来保存Map插入的顺序)
         Map<String, List<Person>> collect = list.stream().sorted(Comparator.comparing(Person::getRealName).reversed()).
                 collect(Collectors.groupingBy(Person::getRealName, LinkedHashMap::new, Collectors.toList()));
-        System.out.println(JacksonUtil.toJson(collect));
+        System.out.println(JSON.toJson(collect));
 
         // 先RealName分组 -> 只取taskType
         Map<String, List<String>> collect1 = list.stream().collect(Collectors.groupingBy(Person::getRealName,
                 Collectors.mapping(Person::getTaskType, Collectors.toList())));
-        System.out.println(JacksonUtil.toJson(collect1));
+        System.out.println(JSON.toJson(collect1));
 
 
         // 先RealName分组 -> 再统计time
         Map<String, IntSummaryStatistics> collect2 = list.stream().collect(Collectors.groupingBy(Person::getRealName, Collectors.summarizingInt(Person::getTime)));
-        System.out.println(JacksonUtil.toJson(collect2));
+        System.out.println(JSON.toJson(collect2));
 
         // 先RealName分组 -> 再取最大/最小的time
         Map<String, Person> collect3 = list.stream().collect(Collectors.groupingBy(Person::getRealName,
                 Collectors.collectingAndThen(Collectors.maxBy(Comparator.comparing(Person::getTime)), Optional::get)));
-        System.out.println(JacksonUtil.toJson(collect3));
+        System.out.println(JSON.toJson(collect3));
 
 
         // RealName分组 -> TaskType分组 -> 按time排序
@@ -56,7 +56,7 @@ public class GroupingByDownstreamTest {
                 Collectors.groupingBy(Person::getTaskType,
                         Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(Person::getTime)
                         )), Function.identity()))));
-        System.out.println(JacksonUtil.toJson(collect4));
+        System.out.println(JSON.toJson(collect4));
 
 
     }

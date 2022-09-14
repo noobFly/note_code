@@ -1,8 +1,8 @@
 package com.noob.request.controller;
 
+import com.noob.json.JSON;
 import com.noob.util.ExceptionUtil;
 import com.noob.util.File.GZIPUtils;
-import com.noob.util.JacksonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -115,7 +115,7 @@ public class RequestController {
         log.info("requestMethod: {}", request.getMethod());
         log.info("contentType: {}", request.getContentType());
 
-        log.info(JacksonUtil.toJson(map));
+        log.info(JSON.toJson(map));
         log.info(param1);
 
     }
@@ -132,8 +132,8 @@ public class RequestController {
     public void test2(@RequestBody List<String> list, @RequestParam List<String> list2, HttpServletRequest request) {
         log.info("requestMethod: {}", request.getMethod());
         log.info("contentType: {}", request.getContentType());
-        log.info(JacksonUtil.toJson(list));
-        log.info(JacksonUtil.toJson(list2));
+        log.info(JSON.toJson(list));
+        log.info(JSON.toJson(list2));
 
     }
 

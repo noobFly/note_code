@@ -43,7 +43,7 @@
 			<artifactId>spring-boot-properties-migrator</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		      <dependency>
+	<dependency>
         <groupId>com.netflix.hystrix</groupId>
         <artifactId>hystrix-javanica</artifactId>
         <version>1.5.18</version>

@@ -5,7 +5,7 @@ import com.alibaba.excel.enums.CellExtraTypeEnum;
 import com.alibaba.excel.util.IoUtils;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
-import com.noob.util.JacksonUtil;
+import com.noob.json.JSON;
 import com.noob.util.security.MD5;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -105,7 +105,7 @@ public class ExcelTableCreator {
 
         });
         table.setTableName(convert(result.stream().filter(a -> a.getSrc().equals(table.getSheetName())).findAny().orElse(null).getDst()));
-        System.out.println(JacksonUtil.toJson(table));
+        System.out.println(JSON.toJson(table));
 
         StringBuilder sb = new StringBuilder("create table ");
         sb.append(table.getTableName()).append("(").append("\n")
@@ -182,7 +182,7 @@ public class ExcelTableCreator {
         String msg = StringEscapeUtils.unescapeJava(new String(IoUtils.toByteArray(stream)));
 
         System.out.println(msg);
-        Result result = JacksonUtil.jsonToObject(msg, Result.class);
+        Result result = JSON.parseObject(msg, Result.class);
 
         return result.getTrans_result();
 

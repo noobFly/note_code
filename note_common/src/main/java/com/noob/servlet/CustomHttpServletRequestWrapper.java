@@ -15,7 +15,7 @@ import java.io.InputStreamReader;
 
 /**
  * 重写获取流的方式 .
- * TODO 这种wrap方式会占用额外内存, 在destroy时主动设置缓存的字节数组为空
+ * TODO 这种wrap方式会占用额外内存, 需要在destroy时主动设置缓存的字节数组为空
  */
 @Slf4j
 public class CustomHttpServletRequestWrapper extends HttpServletRequestWrapper {

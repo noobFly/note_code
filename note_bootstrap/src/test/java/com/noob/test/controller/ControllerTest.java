@@ -2,9 +2,9 @@ package com.noob.test.controller;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.noob.json.JSON;
 import com.noob.request.component.ITestTransactionOnInterfaceService;
 import com.noob.request.controller.GroupTestDTO;
-import com.noob.util.JacksonUtil;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -40,21 +40,21 @@ public class ControllerTest extends BaseTest {
         try {
             System.out.println(mockMvc
                     .perform(MockMvcRequestBuilders.get("/validate/testAdvice").param("testParamters", "testParamters")
-                            .contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtil.toJson(test)))
+                            .contentType(MediaType.APPLICATION_JSON_UTF8).content(JSON.toJson(test)))
                     .andDo(MockMvcResultHandlers.print()).andReturn().getResponse().getContentAsString());
             System.out.println(mockMvc
                     .perform(MockMvcRequestBuilders.get("/validate/testGroupDefault")
-                            .contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtil.toJson(test)))
+                            .contentType(MediaType.APPLICATION_JSON_UTF8).content(JSON.toJson(test)))
                     .andDo(MockMvcResultHandlers.print()).andReturn().getResponse().getContentAsString());
 
             System.out.println(mockMvc
                     .perform(MockMvcRequestBuilders.get("/validate/testGroupParent")
-                            .contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtil.toJson(test)))
+                            .contentType(MediaType.APPLICATION_JSON_UTF8).content(JSON.toJson(test)))
                     .andDo(MockMvcResultHandlers.print()).andReturn().getResponse().getContentAsString());
 
             System.out.println(mockMvc
                     .perform(MockMvcRequestBuilders.get("/validate/testGroupExtends")
-                            .contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtil.toJson(test)))
+                            .contentType(MediaType.APPLICATION_JSON_UTF8).content(JSON.toJson(test)))
                     .andDo(MockMvcResultHandlers.print()).andReturn().getResponse().getContentAsString());
         } catch (Exception e) {
             e.printStackTrace();
@@ -89,14 +89,14 @@ public class ControllerTest extends BaseTest {
 
             try {
                 System.out.println(mockMvc
-                        .perform(MockMvcRequestBuilders.post("/request/test1").content(JacksonUtil.toJson(map))
+                        .perform(MockMvcRequestBuilders.post("/request/test1").content(JSON.toJson(map))
                                 .param("param1", "param1"))
                         .andExpect(MockMvcResultMatchers.status().isOk()).andDo(MockMvcResultHandlers.print())
                         .andReturn().getResponse().getContentAsString());
 
                 System.out.println(mockMvc
                         .perform(MockMvcRequestBuilders.get("/request/test1").param("param1", "param1")
-                                .contentType(MediaType.APPLICATION_JSON_UTF8).content(JacksonUtil.toJson(map)))
+                                .contentType(MediaType.APPLICATION_JSON_UTF8).content(JSON.toJson(map)))
                         .andExpect(MockMvcResultMatchers.status().isOk()).andDo(MockMvcResultHandlers.print())
                         .andReturn().getResponse().getContentAsString());
             } catch (Exception e) {
@@ -110,13 +110,13 @@ public class ControllerTest extends BaseTest {
         try {
             System.out.println(mockMvc
                     .perform(MockMvcRequestBuilders.post("/request/test2").contentType(MediaType.APPLICATION_JSON_UTF8)
-                            .content(JacksonUtil.toJson(Lists.newArrayList("1", "2", "3")))
+                            .content(JSON.toJson(Lists.newArrayList("1", "2", "3")))
                             .param("list2", new String[]{"4", "5", "6"}))
                     .andExpect(MockMvcResultMatchers.status().isOk()).andDo(MockMvcResultHandlers.print()).andReturn()
                     .getResponse().getContentAsString());
             System.out.println(mockMvc
                     .perform(MockMvcRequestBuilders.get("/request/test2").contentType(MediaType.APPLICATION_JSON_UTF8)
-                            .content(JacksonUtil.toJson(Lists.newArrayList("1", "2", "3")))
+                            .content(JSON.toJson(Lists.newArrayList("1", "2", "3")))
                             .param("list2", new String[]{"4", "5", "6"}))
                     .andExpect(MockMvcResultMatchers.status().isOk()).andDo(MockMvcResultHandlers.print()).andReturn()
                     .getResponse().getContentAsString());
