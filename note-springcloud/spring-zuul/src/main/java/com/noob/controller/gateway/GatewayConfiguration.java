@@ -17,8 +17,8 @@ public class GatewayConfiguration {
 
     @Bean
     public FilterRegistrationBean<GatewayLogFilter> gatewayLogFilterRegistrationBean(GatewayLogFilter gatewayLogFilter) {
-        FilterRegistrationBean<GatewayLogFilter> registration = new FilterRegistrationBean<>(gatewayLogFilter,
-                new ServletRegistrationBean[0]);
+        FilterRegistrationBean<GatewayLogFilter> registration = new FilterRegistrationBean<>();
+        registration.setFilter(gatewayLogFilter);
         registration.addUrlPatterns(new String[]{"/gateway/*"});
         return registration;
     }
