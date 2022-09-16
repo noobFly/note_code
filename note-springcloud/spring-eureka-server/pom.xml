@@ -62,5 +62,12 @@
           </exclusion>
         </exclusions>
       </dependency>
+
+		<dependency>
+			<groupId>org.codehaus.janino</groupId>
+			<artifactId>janino</artifactId>
+			<version>2.6.1</version>
+		</dependency>
+
 	</dependencies>
 </project>

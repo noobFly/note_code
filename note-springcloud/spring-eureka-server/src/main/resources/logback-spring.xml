@@ -110,29 +110,14 @@
 		<appender-ref ref="RPC-LOG"/>
 	</appender>
 
-	<root level="INFO">
-		<if condition ='property("smsEnv")== "" || property("smsEnv").equals("dev")'>
-			<then>
-				<appender-ref ref="STDOUT" />
-			</then>
-		</if>
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT" />
 		<appender-ref ref="ASYNC-INFO" />
 		<appender-ref ref="ASYNC-ERROR" />
 	</root>
 
-	<logger name="cn.utrust.fintech.framework.rest.AutoWrapperRequestResponseBodyMethodProcessor" level="INFO" />
 	<logger name="org.apache" value="INFO" />
 	<logger name="org.springframework" value="INFO" />
-	<logger name="org.springframework" value="INFO" />
-	<logger name="cn.utrust.fintech.utrusts.spring.boot.webservice.service.WebServiceServiceProxy" level="INFO" additivity="false">
-		<appender-ref ref="ASYNC-RPC"/>
-	</logger>
-	<logger name="cn.utrust.fintech.utrusts.service.impl.TaRpcServiceImpl" level="INFO" additivity="false">
-		<appender-ref ref="ASYNC-RPC"/>
-	</logger>
-	<logger name="cn.utrust.fintech.utrusts.service.impl.UtrustsDataCenterServiceImpl" level="INFO" additivity="false">
-		<appender-ref ref="ASYNC-RPC"/>
-	</logger>
 	<logger name="com.hundsun.wm.bus.platform.sdk.http.AbstractHttpSDK" level="INFO" additivity="false">
 		<appender-ref ref="ASYNC-RPC"/>
 	</logger>

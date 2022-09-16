@@ -18,7 +18,9 @@ import java.util.Set;
 
 /**
  * 验证校验分组
- *
+ * <p>
+ *  对于 post 请求 @RequestBody 的方式而言， 如果符合 【@Validated 修饰类 + @Valid 修饰入参 】的要求，
+ *  它在 RequestResponseBodyMethodProcessor 里校验之后也还是会再进入 MethodValidationInterceptor 的拦截逻辑里，它两是独立不相关的。
  * @author admin
  */
 
@@ -45,6 +47,13 @@ public class ValidateGroupController {
         return "success";
     }
 
+
+    /**
+     * 1、 @Valid或@Validate的参数后必须紧挨着一个BindingResult参数，否则spring会在校验不通过时直接抛出异常
+     *    因为 ： RequestResponseBodyMethodProcessor#resolveArgument: 使用WebDataBinderFactory#createBinder创建的WebDataBinder里面持有了BindingResult对象，它绑定了当前请求入参对象和BindingResult一一对应。
+     *           当解析参数过程校验失败时的具体错误信息由BindingResult保存，把它以MODEL_KEY_PREFIX 写入到ModelAndViewContainer存起来。 由 ErrorsMethodArgumentResolver 再从ModelAndViewContainer以 MODEL_KEY_PREFIX查找拿出BindingResult当做Controller层方法入参返回。
+     * 2、 An Errors/BindingResult argument is expected to be declared immediately after the model attribute, the @RequestBody or the @RequestPart arguments！ 相当于来说是入参一定要是 复杂对象！
+      */
     @RequestMapping("/test3")
     public String test3(@RequestBody GroupTestDTO test, BindingResult result) {
         springValidator.validate(test, result);

@@ -15,6 +15,8 @@ import java.nio.charset.Charset;
 import java.util.stream.Collectors;
 
 /**
+ * 输出指定URL模式请求的日志
+ * <p>
  * 把过滤器的bean注入到FilterRegistrationBean中，并设置一些属性，过滤的url，执行的顺序（order的数值越小，优先级越高）。
  * 这样就不用在该过滤器上添加注解@WebFilter(urlPatterns={})或@Configuration @Component等
  */
@@ -49,7 +51,7 @@ public class GatewayLogFilter implements Filter {
                 if (StringUtils.isNotBlank(queryString)) {
                     requestURI += "?" + queryString;
                 }
-                //TODO 保存网关请求日志
+                //TODO 异步保存网关请求日志 最好是执行前先写一次， 执行后再更新一次
 
             }
             return;

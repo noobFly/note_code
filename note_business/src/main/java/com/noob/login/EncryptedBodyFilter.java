@@ -26,12 +26,13 @@ import java.util.stream.Collectors;
  * @param systemProperties
  * @param cacheManager
  * @return
- * @Bean public FilterRegistrationBean<EncryptedBodyFilter> encryptedBodyFilterBean(SystemProperties systemProperties, CacheManager cacheManager){
+ * @Bean
+ * public FilterRegistrationBean<EncryptedBodyFilter> encryptedBodyFilterBean(SystemProperties systemProperties, CacheManager cacheManager){
  * EncryptedBodyFilter encryptedBodyFilter = new EncryptedBodyFilter(SystemProperties.getPrivateKey(), (token) -> {
- * Cache cache = cacheManager.getCache(CacheKeys.CHALLEGE_TOKEN);
+ * Cache cache = cacheManager.getCache(CacheKeys.CHALLEGE_TOKEN); // 每次申请一个令牌
  * Cache.ValueWrapper valueWrapper = cache.get(token);
  * if(valueWrapper.get() != null) {
- * cache.evict(token); //只能使用一次
+ * cache.evict(token); // 只能使用一次
  * }
  * return valueWrapper.get() != null;
  * });
@@ -40,7 +41,6 @@ import java.util.stream.Collectors;
  * bean.setUrlPatterns(Arrays.asList("/*"));
  * return bean;
  * }
- * @see  申请token SysLoginController#getToken()
  */
 
 /**
@@ -97,7 +97,7 @@ public class EncryptedBodyFilter implements Filter {
         chain.doFilter(request, response);
     }
 
-    // request body 带有 Body-Encrypted 才需要加解密处理
+    // request body 带有 Body-Encrypted 才需要加解密处理 !!!
     private boolean isBodyEncrypted(HttpServletRequest req) {
         return StringUtils.equalsAnyIgnoreCase(req.getMethod(), "POST", "PUT") && "true".equals(req.getHeader("Body-Encrypted"));
     }
