@@ -8,10 +8,18 @@
   <groupId>com.noob.zookeeper</groupId>
   <artifactId>zookeeper</artifactId>
   <packaging>pom</packaging>
-  <modules>
-  	<module>zookeeper-connect</module>
-  	<module>zookeeper-guid</module>
-  	<module>zookeeper-lock</module>
-  	<module>zookeeper-test</module>
-  </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.noob</groupId>
+            <artifactId>common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <version>3.4.9</version>
+        </dependency>
+    </dependencies>
 </project>

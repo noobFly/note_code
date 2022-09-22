@@ -8,16 +8,16 @@
 	<packaging>pom</packaging>
 
     <modules>
-        <module>note_common</module>
-        <module>note_spring</module>
-        <module>note_business</module>
-        <module>noob_concurrent</module>
-        <module>note_shardingjdbc</module>
-        <module>note_bootstrap</module>
-        <module>note_io</module>
-		<module>note-springcloud</module>
+        <module>common</module>
+        <module>spring</module>
+        <module>business</module>
+        <module>concurrent</module>
+        <module>shardingjdbc</module>
+        <module>bootstrap</module>
+        <module>io</module>
+		<module>springcloud</module>
         <module>zookeeper</module>
-        <module>note-excel</module>
+        <module>excel</module>
         <module>spring-webflux</module>
 
     </modules>
