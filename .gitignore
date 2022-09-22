@@ -18,3 +18,5 @@ hs_err_pid*
 *.iml
 note-excel/target/classes/
 logs/
+excel/target/
+zookeeper/target/

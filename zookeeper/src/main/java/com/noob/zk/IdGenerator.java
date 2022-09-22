@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**这种方式不建议使用！zookeeper服务端是java内存, 当节点过多，内存管理越来越庞大，性能会急剧下降
+ * 同时它是CAP里的CP模式,为了保证强一致性一些场景下会无法提供可用服务！
  * Created by noob on 2017/4/6.
  */
 @Slf4j

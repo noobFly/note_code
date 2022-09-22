@@ -97,7 +97,7 @@ public class DistributedLock implements BasicLock {
                     //如果是最小的节点,则表示取得锁
                     result = true;
                 } else {
-                    //如果不是最小的节点，找到比自己小1的节点
+                    //如果不是最小的节点，找到比自己小1的节点, 避免都watch到第一个节点产生惊群现象
                     String sortNumber = currentLockNode
                             .substring(currentLockNode.lastIndexOf(slant) + 1); // 当前创建节点的序号
                     waitNode = lockObjNodes
