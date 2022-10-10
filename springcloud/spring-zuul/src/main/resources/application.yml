@@ -21,6 +21,9 @@ logging:
 
 eureka:
   client:
+    registerWithEureka: true  #将自己注册到EurekaServer ， 这个配置的开关，在eurekaZone上是否显示会有延时。
+    fetchRegistry: true  #要不要去注册中心获取其他服务的地址
+    healthcheck.enabled: true
     serviceUrl:
       defaultZone: http://localhost:2100/eureka/,http://localhost:2000/eureka/
     healthcheck:

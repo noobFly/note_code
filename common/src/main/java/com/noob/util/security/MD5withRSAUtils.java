@@ -12,6 +12,7 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.RSAPrivateKeySpec;
+import java.security.spec.RSAPublicKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.HashMap;
 import java.util.Map;
@@ -201,7 +202,7 @@ public class MD5withRSAUtils {
         X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(keyBytes);
         KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
         Key publicK = keyFactory.generatePublic(x509KeySpec);
-        RSAPrivateKeySpec keySpec = keyFactory.getKeySpec(publicK, RSAPrivateKeySpec.class);
+        RSAPublicKeySpec  keySpec = keyFactory.getKeySpec(publicK, RSAPublicKeySpec.class);
         BigInteger modulus = keySpec.getModulus();
         int keyLengtth = modulus.toString(2).length();//转换为二进制
         int maxDecryptBlock = keyLengtth >> 3; //最大解密长度
@@ -258,7 +259,7 @@ public class MD5withRSAUtils {
         X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(keyBytes);
         KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
         Key publicK = keyFactory.generatePublic(x509KeySpec);
-        RSAPrivateKeySpec keySpec = keyFactory.getKeySpec(publicK, RSAPrivateKeySpec.class);
+        RSAPublicKeySpec keySpec = keyFactory.getKeySpec(publicK, RSAPublicKeySpec.class);
         BigInteger modulus = keySpec.getModulus();
         int keyLengtth = modulus.toString(2).length();//转换为二进制
         int maxEncryptBlock = (keyLengtth >> 3) - 11; //最大加密长度

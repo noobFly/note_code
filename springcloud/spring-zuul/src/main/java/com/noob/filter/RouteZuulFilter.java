@@ -49,6 +49,6 @@ public class RouteZuulFilter extends BaseZuulFilter {
 	@Override
 	public int filterOrder() {
 		return 0;
-	}
+	} // 最先执行！！
 
 }

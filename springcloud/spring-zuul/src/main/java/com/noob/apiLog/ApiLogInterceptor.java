@@ -23,7 +23,8 @@ import java.util.Date;
  * 5 = {AnnotationAwareAspectJAutoProxyCreator@5545} "proxyTargetClass=true; optimize=false; opaque=false; exposeProxy=false; frozen=false"
  * 6 = {MethodValidationPostProcessor@5511} "proxyTargetClass=true; optimize=false; opaque=false; exposeProxy=false; frozen=false"
  * <p>
- * 但也受创建代理的逻辑影响！！！ 下面会包两层proxy: target->proxy->proxy  这里就是先MethodValidationInterceptor后ApiLogInterceptor
+ * 但也受创建代理的逻辑影响！！！所以还得按实际代码情况分析
+ * 下面会包两层proxy: target->proxy->proxy  这里就是先MethodValidationInterceptor后ApiLogInterceptor
  * 9 = {AnnotationAwareAspectJAutoProxyCreator@7763} "proxyTargetClass=true; optimize=false; opaque=false; exposeProxy=false; frozen=false"
  * ... ...
  * 13 = {DefaultAdvisorAutoProxyCreator@6361} "proxyTargetClass=true; optimize=false; opaque=false; exposeProxy=false; frozen=false"
