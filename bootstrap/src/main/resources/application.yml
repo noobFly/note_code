@@ -96,7 +96,7 @@ spring:
         login-username: admin
         login-password: 123456
       filter:       ########### 启用内置过滤器（第一个 stat必须，否则监控不到SQL）##########
-        stat:
+        stat: #webStatFilter  会输出慢sql日志
           enabled: true
           # 慢SQL记录
           log-slow-sql: true

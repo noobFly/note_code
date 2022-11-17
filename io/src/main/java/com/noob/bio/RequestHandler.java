@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RequestHandler implements Runnable {
 
-    private Socket clientSocket;       //客户端socket
+    private Socket clientSocket;       //与客户端网络通讯的的socket
 
     private InputStream inputStream;        // 输入请求
     private OutputStream outputStream;       // 输出响应
@@ -55,10 +55,10 @@ public class RequestHandler implements Runnable {
             } catch (Exception e) {
                 e.printStackTrace();
                 try {
-                    clientSocket.shutdownInput();
-                    clientSocket.shutdownOutput();
-                    clientSocket.close(); // 只是关闭服务端这边的socket输入和输出， 客户端也需要自己主动关闭。
-                } catch (IOException e1) {
+                    //     clientSocket.shutdownInput();
+                    // clientSocket.shutdownOutput();
+                      clientSocket.close(); // 只是关闭服务端这边的socket输入和输出， 客户端也需要自己主动关闭。
+                } catch (Exception e1) {
                     e1.printStackTrace();
                 }
             }

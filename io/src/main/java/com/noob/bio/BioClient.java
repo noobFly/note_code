@@ -104,25 +104,29 @@ public class BioClient {
 
 			AtomicInteger time = new AtomicInteger(1);
 			service.scheduleWithFixedDelay(() -> {
-				if(!socket.isClosed()) { // 客户端不主动关闭会一直发送，但服务端已经关闭了对端，它将不再被服务端接收处理。
-					String msg = "客户端" + socket.getLocalSocketAddress() + "的慰问" + time.intValue() + "\n";
-					/*
-					 * if (time.intValue() > 1) { msg = "【test】"; // 验证read()不会主动清空原有数据
-					 * ,而readLine()会定位nextLine的起始索引 }
-					 */
-					log.info("发出信息 ->>>>" + msg);
-					outputPrint.write(msg);
-					// outputPrint.println();
-					outputPrint.flush(); // 这里才能正式推，很关键！
-					time.addAndGet(1);
-				} else {
-					System.out.println("sokcet 被关闭了！");
+				try {
+					if(!socket.isClosed()) { // 客户端不主动关闭会一直发送，但服务端已经关闭了对端，它将不再被服务端接收处理。
+						String msg = "客户端" + socket.getLocalSocketAddress() + "的慰问" + time.intValue() + "\n";
+						/*
+						 * if (time.intValue() > 1) { msg = "【test】"; // 验证read()不会主动清空原有数据
+						 * ,而LineNumberReader#readLine()会定位下一行的的起始索引 }
+						 */
+						log.info("发出信息 ->>>>" + msg);
+						outputPrint.write(msg);
+						// outputPrint.println();
+						outputPrint.flush(); // 这里才能正式推，很关键！
+						time.addAndGet(1);
+					} else {
+						System.out.println("sokcet 被关闭了！");
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}, 0, 3, TimeUnit.SECONDS);
 
 		});
 		outputThread.start();
-		return 1000000;
+		return 10000000;
 	}
 
 	/**

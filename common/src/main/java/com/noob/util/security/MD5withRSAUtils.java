@@ -35,6 +35,9 @@ public class MD5withRSAUtils {
 
     /**
      * 签名算法
+     * 将正文通过MD5数字摘要后，将密文 再次通过生成的RSA密钥加密，生成数字签名，
+     *  将明文与密文以及公钥发送给对方，对方拿到公钥对数字签名进行解密，与明文经过MD5加密后数据进行比较
+     *  如果一致则通过
      */
     public static final String SIGNATURE_ALGORITHM = "MD5withRSA";
 
