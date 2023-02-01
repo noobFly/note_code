@@ -26,7 +26,7 @@ public class TestRepayPlanGenerator {
 
 	public static void interestFirstRepaymentPlanGeneratorTest() throws ParseException {
 		LoanParam dto = buildParam();
-		dto.setRateBaseType(RateBaseTypeEnum.DAYLY_365.getType());
+		dto.setRateBaseType(RateBaseTypeEnum.MONTH.getType());
 		print(new InterestFirstRepayPlanGenerator().handle(dto));
 
 	}
@@ -40,14 +40,14 @@ public class TestRepayPlanGenerator {
 
 	public static void averageCapitalAndInterestRepayPlanGeneratorTest() throws Exception {
 		LoanParam dto = buildParam();
-		dto.setRateBaseType(RateBaseTypeEnum.DAYLY_365.getType());
+		dto.setRateBaseType(RateBaseTypeEnum.MONTH.getType());
 		print(new AverageCapitalAndInterestRepayPlanGenerator().handle(dto));
 
 	}
 
 	public static void averageCapitalRepayPlanGeneratorTest() throws Exception {
 		LoanParam dto = buildParam();
-		dto.setRateBaseType(RateBaseTypeEnum.MONTH.getType());
+		dto.setRateBaseType(RateBaseTypeEnum.DAYLY_365.getType());
 		print(new AverageCapitalRepayPlanGenerator().handle(dto));
 
 	}
@@ -55,13 +55,13 @@ public class TestRepayPlanGenerator {
 	private static LoanParam buildParam() throws ParseException {
 		LoanParam dto = new LoanParam();
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-		dto.setStartDate(df.parse("2019-12-17"));
-		dto.setEndDate(df.parse("2020-12-17"));
-		dto.setTotalPeriod(12);
-		dto.setAmount(new BigDecimal("100000"));
+		dto.setStartDate(df.parse("2023-01-29"));
+		dto.setEndDate(df.parse("2053-01-01"));
+		dto.setTotalPeriod(12*30);
+		dto.setAmount(new BigDecimal("3960000"));
 		dto.setPeriodMinDay(10);
-		dto.setRepaymentDay(17);
-		dto.setYearRate(new BigDecimal("2.76"));
+		dto.setRepaymentDay(1);
+		dto.setYearRate(new BigDecimal("3.65"));
 		dto.setLoanNo("testLoan123456");
 		dto.setGraceDays(2);
 
