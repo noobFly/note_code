@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.noob.json.JSON;
 import com.noob.util.TimeUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,9 +29,9 @@ import lombok.extern.slf4j.Slf4j;
  * 5、等额本息每月还款金额相同，按剩余未还本金计算月利息， 差额就是每月还款本金
  * <p>
  * 6、指定还款日与首期最小天数合用。即使选择了按月计息，但指定了还款日, 首期依然按日计息(默认全年按365，后续可扩展)，余下的期数按指定计息方式
- * 
- * 
- * 
+ *
+ *
+ *
  */
 @Slf4j
 public abstract class AbstractRepayPlanGenerator implements RepayPlanGenerator {
@@ -47,8 +48,8 @@ public abstract class AbstractRepayPlanGenerator implements RepayPlanGenerator {
 		List<RepayPlan> list = calculate(loanDto);
 
 		if (log.isDebugEnabled()) {
-			log.debug("{} 总利息：{}", this.getClass(),
-					list.stream().map(t -> t.getShouldRepaymentInterest()).reduce(BigDecimal.ZERO, (a, b) -> a.add(b)));
+			log.debug("{} 总利息：{}, 截止时间：{}", this.getClass(),
+					list.stream().map(t -> t.getShouldRepaymentInterest()).reduce(BigDecimal.ZERO, (a, b) -> a.add(b)), JSON.toJSONString(loanDto.getEndDate()));
 		}
 
 		return list;
@@ -92,7 +93,7 @@ public abstract class AbstractRepayPlanGenerator implements RepayPlanGenerator {
 
 	/**
 	 * 计算利息
-	 * 
+	 *
 	 * @param basePeriods          计息总基准周期
 	 * @param amount               金额
 	 * @param rate                 利率
@@ -124,7 +125,7 @@ public abstract class AbstractRepayPlanGenerator implements RepayPlanGenerator {
 	 * 默认按月利率计息
 	 * <p>
 	 * 指定还款日时，首期优先判定是否大于单期最小天数，小于则递推至下月。无论是否指定计息方式，首期都采用按日利息计算！！！
-	 * 
+	 *
 	 * @param startDate    开始时间
 	 * @param totalPeriod  总期数
 	 * @param repaymentDay 指定还款日
