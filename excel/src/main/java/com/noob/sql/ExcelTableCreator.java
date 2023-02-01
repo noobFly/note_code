@@ -120,7 +120,7 @@ public class ExcelTableCreator {
 
         });
         table.setTableName(convert(result.stream().filter(a -> a.getSrc().equals(table.getSheetName())).findAny().orElse(null).getDst()));
-        System.out.println(JSON.toJson(table));
+        System.out.println(JSON.toJSONString(table));
 
         StringBuilder sb = new StringBuilder("create table ");
         sb.append(table.getTableName()).append("(").append("\n")

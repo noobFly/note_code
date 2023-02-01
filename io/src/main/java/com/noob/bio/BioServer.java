@@ -38,13 +38,12 @@ public class BioServer {
 	 */
 	public static void main(String[] args) throws IOException {
 
-		ServerSocket serverSocket = new ServerSocket(8080);
+		ServerSocket serverSocket = new ServerSocket(8080, 100); //设置backlog tcp连接队列的长度
 		log.info("服务器启动, 服务地址: " + serverSocket.getLocalSocketAddress());
 
 		while (true) {
 			Socket clientSocket = serverSocket.accept(); // 等待客户端连接--阻塞!!!  在第三次握手之后 或则 第三次握手将数据和ack一起返回
 			clientSocket.setSoTimeout(2000); // 与此 Socket 关联的 SocketInputStream#read() 将阻塞至该事件，  如果数据包传输超过超时值，该Socket将引发 java.net.SocketTimeoutException
-
 			/**
 			 * java.net.SocketTimeoutException: Read timed out
 			 * 	at java.net.SocketInputStream.socketRead0(Native Method)
@@ -57,7 +56,8 @@ public class BioServer {
 			 * 	at java.io.FilterInputStream.read(FilterInputStream.java:107)
 			 */
 
-
+			// 绑定的 IP地址 + 端口时，只要 IP 地址不是正好(exactly)相同，那么允许绑定
+			clientSocket.setReuseAddress(true); // 如果当前启动进程绑定的 IP+PORT 有存在处于TIME_WAIT 状态的连接占用，但是新启动的进程使用了 SO_REUSEADDR 选项，那么该进程就可以绑定成功。
 			clientSocket.setTcpNoDelay(true);
 			clientSocket.setKeepAlive(true);
 			

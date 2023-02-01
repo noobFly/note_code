@@ -14,7 +14,7 @@ import com.noob.repayPlan.RepayPlan;
 /**
  * 等额本金
  * <p>
- * 先均分本金， 按剩余本金计算每月利息
+ * 先均分本金， 按剩余本金计算每月利息 （首期是按日计息，余下的按月或日）
  * 
  */
 public class AverageCapitalRepayPlanGenerator extends AbstractRepayPlanGenerator {
@@ -44,7 +44,7 @@ public class AverageCapitalRepayPlanGenerator extends AbstractRepayPlanGenerator
 					: 1;// 首期或指定 则用日利息计算。
 			BigDecimal basePeriods = isDayRate && !RateBaseTypeEnum.useDayRate(loanDto.getRateBaseType())
 					? RateBaseTypeEnum.DAYLY_365.getBase()
-					: defaultBasePeriods; // 按日计息基数365
+					: defaultBasePeriods; // 首月按日计息基数365，其他月份则以入参为准
 
 			BigDecimal interest = calculateInterest(basePeriods, calculateAmount, yearRate,
 					loanDto.getInterestRoundingMode(), realPeriods);

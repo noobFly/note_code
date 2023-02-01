@@ -78,7 +78,7 @@ public class ApiLogInterceptor {
                     }
                 }
                 if (!isFile) {
-                    requestParams = JSON.toJson(params);
+                    requestParams = JSON.toJSONString(params);
                     logger.info("request_param : {}", requestParams);
                 } else {
                     logger.info("request_param not execute Jackson!");
@@ -86,7 +86,7 @@ public class ApiLogInterceptor {
 
             }
             result = pjp.proceed();
-            String responseValue =  JSON.toJson(result);
+            String responseValue =  JSON.toJSONString(result);
             logger.info("response_body: {}", responseValue);
             saveLog(name, method, request, requestParams, responseValue);
         } finally {

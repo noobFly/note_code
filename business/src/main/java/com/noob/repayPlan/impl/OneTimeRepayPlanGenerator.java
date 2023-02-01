@@ -11,7 +11,7 @@ import com.noob.repayPlan.LoanParam;
 import com.noob.repayPlan.RepayPlan;
 
 /**
- * 一次性还本付息还款方式
+ * 一次性还本付息还款方式: 最终转换成了按日计息
  * 
  */
 public class OneTimeRepayPlanGenerator extends AbstractRepayPlanGenerator {
@@ -22,8 +22,8 @@ public class OneTimeRepayPlanGenerator extends AbstractRepayPlanGenerator {
 		int interestDays = calculateInterestDays(loanDto.isCalculateInterestFromNow(), startDate, endDate);
 		int yearDays = loanDto.getRateBaseType() == RateBaseTypeEnum.DAYLY_360.getType() ? 360 : 365;
 		BigDecimal amount = loanDto.getAmount();
-		BigDecimal interest = calculateInterest(BigDecimal.valueOf(yearDays * 100), amount, loanDto.getYearRate(),
-				loanDto.getInterestRoundingMode(), interestDays);
+		BigDecimal interest = calculateInterest(BigDecimal.valueOf(yearDays), amount, loanDto.getYearRate().divide(new BigDecimal("100")),
+				loanDto.getInterestRoundingMode(), interestDays); // 按日计息
 
 		return Arrays.asList(RepayPlan.init(loanDto.getLoanNo(), loanDto.getGraceDays(), 1, endDate, amount, interest,
 				BigDecimal.ZERO));

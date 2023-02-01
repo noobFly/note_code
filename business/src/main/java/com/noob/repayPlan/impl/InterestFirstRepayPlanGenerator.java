@@ -36,10 +36,10 @@ public class InterestFirstRepayPlanGenerator extends AbstractRepayPlanGenerator 
 
 			int realPeriods = isDayRate
 					? calculateInterestDays(loanDto.isCalculateInterestFromNow(), periodBeginDate, periodEndDate)
-					: 1;// 首期或指定 则用日利息计算。
+					: 1;// 首期或指定：则用日利息计算。
 			BigDecimal basePeriods = isDayRate && !RateBaseTypeEnum.useDayRate(loanDto.getRateBaseType())
 					? RateBaseTypeEnum.DAYLY_365.getBase()
-					: defaultBasePeriods; // 按日计息基数365
+					: defaultBasePeriods; // 首月按日计息基数365，其他月份则以入参为准
 
 			BigDecimal capital = BigDecimal.ZERO;
 			BigDecimal interest = BigDecimal.ZERO;
@@ -51,13 +51,13 @@ public class InterestFirstRepayPlanGenerator extends AbstractRepayPlanGenerator 
 					BigDecimal totalInterest = calculateInterest(
 							RateBaseTypeEnum.useDayRate(loanDto.getRateBaseType()) ? defaultBasePeriods
 									: RateBaseTypeEnum.DAYLY_365.getBase(),
-							amount, yearRate, interestRoundingMode, totalDays); // 按日利息计算实际总利息
-					interest = totalInterest.subtract(distributedInterest);
+							amount, yearRate, interestRoundingMode, totalDays);
+					interest = totalInterest.subtract(distributedInterest);// 按日利息计算实际总利息 减掉已分配利息。
 				}
 			}
 
 			if (BigDecimal.ZERO.equals(interest)) {
-				interest = calculateInterest(basePeriods, amount, yearRate, interestRoundingMode, realPeriods);// 等额本金这的金额基数是剩余未还本金
+				interest = calculateInterest(basePeriods, amount, yearRate, interestRoundingMode, realPeriods);// 等额本金这的金额基数是： 剩余未还本金
 			}
 
 			validate(capital, interest);

@@ -70,6 +70,7 @@ public abstract class AbstractRepayPlanGenerator implements RepayPlanGenerator {
 				loanDto.getRateBaseType(), loanDto.getRepaymentDay(), loanDto.getPeriodMinDay()); // 各期还款截止时间
 
 		if (!RepayMode.SYS001.equals(getRepayMode())) {
+			// 非分期还款则补全最后还款时间
 			loanDto.setEndDate(periodEndDateMap.entrySet().stream().max(Comparator.comparing(Map.Entry::getKey)).get().getKey());
 		} else {
 			loanDto.setTotalPeriod(1);
@@ -101,8 +102,7 @@ public abstract class AbstractRepayPlanGenerator implements RepayPlanGenerator {
 	 */
 	protected BigDecimal calculateInterest(BigDecimal basePeriods, BigDecimal amount, BigDecimal rate,
 			RoundingMode interestRoundingMode, int realPeriods) {
-		return amount.multiply(rate).multiply(BigDecimal.valueOf(realPeriods)).divide(basePeriods, 2,
-				interestRoundingMode);
+		return amount.multiply(rate).divide(basePeriods, 2, interestRoundingMode).multiply(BigDecimal.valueOf(realPeriods));
 	}
 
 	protected Calendar dateToCalendar(Date date) {
@@ -123,7 +123,7 @@ public abstract class AbstractRepayPlanGenerator implements RepayPlanGenerator {
 	/**
 	 * 默认按月利率计息
 	 * <p>
-	 * 指定还款日时，首期优先判定是否大于单期最小天数，小于则地推至下月，无论是否指定，都采用按日利息计算。
+	 * 指定还款日时，首期优先判定是否大于单期最小天数，小于则递推至下月。无论是否指定计息方式，首期都采用按日利息计算！！！
 	 * 
 	 * @param startDate    开始时间
 	 * @param totalPeriod  总期数
@@ -164,7 +164,7 @@ public abstract class AbstractRepayPlanGenerator implements RepayPlanGenerator {
 			int addMonth = 1;
 			while (addMonth <= totalPeriod) {
 				periodCalendar.setTime(startDate); // 防止月天数28、 29 、30 、 31 带来的误差
-				periodCalendar.add(Calendar.MONTH, addMonth);
+				periodCalendar.add(Calendar.MONTH, addMonth); // 如果下个月没有，会落到那个月的最后一天
 				addMonth++;
 				dateMap.put(periodCalendar.getTime(), useDayRate);
 			}

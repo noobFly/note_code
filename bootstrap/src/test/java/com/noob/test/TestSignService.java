@@ -15,6 +15,6 @@ public class TestSignService {
 		domain.setFlowNo("flowNo123456788");
 		domain.setLoanType("XXL-001");
 		String templateParameters = "templateInput.flowNo,applyLimit.loanType,channel,customer.customerName,customer.certificateNo";
-		System.out.println(JSON.toJson(service.sign(domain, templateParameters)));
+		System.out.println(JSON.toJSONString(service.sign(domain, templateParameters)));
 	}
 }

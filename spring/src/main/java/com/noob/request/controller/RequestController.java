@@ -115,7 +115,7 @@ public class RequestController {
         log.info("requestMethod: {}", request.getMethod());
         log.info("contentType: {}", request.getContentType());
 
-        log.info(JSON.toJson(map));
+        log.info(JSON.toJSONString(map));
         log.info(param1);
 
     }
@@ -132,8 +132,8 @@ public class RequestController {
     public void test2(@RequestBody List<String> list, @RequestParam List<String> list2, HttpServletRequest request) {
         log.info("requestMethod: {}", request.getMethod());
         log.info("contentType: {}", request.getContentType());
-        log.info(JSON.toJson(list));
-        log.info(JSON.toJson(list2));
+        log.info(JSON.toJSONString(list));
+        log.info(JSON.toJSONString(list2));
 
     }
 

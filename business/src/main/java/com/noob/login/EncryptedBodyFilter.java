@@ -18,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
@@ -76,7 +77,7 @@ public class EncryptedBodyFilter implements Filter {
             if (StringUtils.isNotBlank(content)) {
                 try {
                     String decryptData = new String(MD5withRSAUtils.decryptByPrivateKey(content, privateKey), StandardCharsets.UTF_8);
-
+                    decryptData = URLDecoder.decode(decryptData, "UTF-8");//在http传输过程中可能会有编码转义问题
                     JSONObject json = JSON.parseObject(decryptData);
 
                     String data = json.getString("data");

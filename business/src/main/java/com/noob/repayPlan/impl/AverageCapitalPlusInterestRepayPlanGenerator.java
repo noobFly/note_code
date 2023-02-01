@@ -41,11 +41,9 @@ public class AverageCapitalPlusInterestRepayPlanGenerator extends AbstractRepayP
 	 * <p>
 	 * 最后一期仍然用每期应还总额-剩余本金 = 利息 的方式得出的利息可能为负数。
 	 * <p>
-	 * 因为每期应还总额是按月利率算出的值，每期还的总额固定。 按日计息则可能当前期利息收的会多，本金收的少。那下一期剩余本金就多，利息也多，剩余本金更加多。
+	 * 因为每期应还总额是按月利率算出的值，每期还的总额固定。 按日计息则可能当前期利息收的会多，本金收的少。那下一期剩余本金就多，再计算利息也多，这样....每一期的剩余本金比正常情况下会偏多。
 	 * <p>
-	 * 最终最后一剩余本金可能会超出每期应还总额的值
-	 * <p>
-	 * 这种情况最后一期利息就按日计算
+	 * 最终：最后一剩余本金可能会超出每期应还总额的值 , 这种情况最后一期利息就按日计算！！
 	 */
 	@Override
 	public List<RepayPlan> calculate(LoanParam loanDto, Map<Date, Boolean> periodEndDateMap,
@@ -76,7 +74,7 @@ public class AverageCapitalPlusInterestRepayPlanGenerator extends AbstractRepayP
 					: defaultBasePeriods;
 			if (curPeriod == periodCount) {
 				capital = calculateAmount;
-				if (isDayRate) { // 末期 & 按日计息 （按周期计息只有第一期可能是会换成按日计息）
+				if (isDayRate) { // 末期 & 按日计息 （分期还款只有第一期可能是会换成按日计息）
 					interest = calculateInterest(basePeriods, calculateAmount, yearRate,
 							loanDto.getInterestRoundingMode(), realPeriods);
 				} else {

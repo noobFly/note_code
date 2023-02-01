@@ -49,7 +49,7 @@ public class LoanParam {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd",  timezone = "GMT+8")
 	protected Date startDate;
 	/**
-	 * 截息日 YYYY-MM-DD （周期性还款非必传，内部计算。一次性还款付息必填）
+	 * 截息日 YYYY-MM-DD （分期还款则非必传，内部计算。一次性还款付息必填）
 	 */
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd",  timezone = "GMT+8")
 	// 	@JsonFormat(shape = JsonFormat.Shape.NUMBER, timezone = "GMT+8")
@@ -66,8 +66,12 @@ public class LoanParam {
 	 */
 	protected int RateBaseType;
 	/**
-	 * 等本等息 及 先息后本 是否需要在末期补利息差额
-	 * 
+	 * 等本等息 及 先息后本 是否需要在末期以利息差额作为末期应还利息： 以按日计息方式得出实际天数总利息，减掉历史已分配利息！
+	 * 如果选择了按日计息则意义不大，但如果是按周期计息则有一定轧差作用：每月天数都有一定变化。
+	 * <p>为什么其他不需要：
+	 * 一次性还本付息本来就是按日计息；
+	 * 等额本息： 通常按期计息，则末期一定是轧差, 因为它是先算出一个每月平均还款固定总额；
+	 * 等额本金：本金每月固定，计息方式以约定为准，通常会约定为按日计息。
 	 */
 	protected boolean endComplementInterest = true;
 	/**

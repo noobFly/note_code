@@ -1,11 +1,15 @@
 package com.noob.json;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.noob.json.exception.JsonParseException;
 import com.noob.json.exception.JsonSerializeException;
@@ -28,14 +32,14 @@ import java.util.TimeZone;
 
 /**
  * JSON解析处理，替换fastjson库
- * 
  */
 public class JSON {
 
     private static final Logger logger = LoggerFactory.getLogger(JSON.class);
 
-	private static final ObjectMapper objectMapper = new ObjectMapper();
-	private static final ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter(); // 也可以： mapper.enable(SerializationFeature.INDENT_OUTPUT);
+
 
     static {
         // 设置输入时忽略在JSON字符串中存在但Java对象实际没有的属性
@@ -47,10 +51,9 @@ public class JSON {
         // 去掉默认的时间戳格式
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-
     }
-	
-	public static void toJSONString(OutputStream os, Object value) {
+
+    public static void toJSONString(OutputStream os, Object value) {
         try {
             objectMapper.writeValue(os, value);
         } catch (Exception e) {
@@ -65,7 +68,7 @@ public class JSON {
             throw new JsonSerializeException(e);
         }
     }
-    
+
     public static String toPrettyJSONString(Object value) {
         try {
             return objectWriter.writeValueAsString(value);
@@ -108,7 +111,7 @@ public class JSON {
             throw new JsonParseException(e);
         }
     }
-    
+
     public static <T> T parseObject(String str, Type valueType) {
         try {
             return objectMapper.readValue(str, TypeFactory.defaultInstance().constructType(valueType));
@@ -116,24 +119,24 @@ public class JSON {
             throw new JsonParseException(e);
         }
     }
-    
+
     public static <T> List<T> parseArray(String str, Class<T> rawType) {
         try {
             Type type = new ParameterizedType() {
-                
+
                 @Override
                 public Type getRawType() {
                     return ArrayList.class;
                 }
-                
+
                 @Override
                 public Type getOwnerType() {
-                    return null ;
+                    return null;
                 }
-                
+
                 @Override
                 public Type[] getActualTypeArguments() {
-                    return new Class[] {rawType};
+                    return new Class[]{rawType};
                 }
             };
             return objectMapper.readValue(str, TypeFactory.defaultInstance().constructType(type));
@@ -141,7 +144,7 @@ public class JSON {
             throw new JsonParseException(e);
         }
     }
-    
+
     public static <T> T parseObject(String str, TypeReference<T> typeReference) {
         try {
             return objectMapper.readValue(str, typeReference);
@@ -149,29 +152,31 @@ public class JSON {
             throw new JsonParseException(e);
         }
     }
-    
+
     public static JSONObject parseObject(String str) {
-    	if(StringUtils.isBlank(str)) {
-    		return null;
-    	}
+        if (StringUtils.isBlank(str)) {
+            return null;
+        }
         try {
             return objectMapper.readValue(str, JSONObject.class);
         } catch (Exception e) {
             throw new JsonParseException(e);
         }
     }
-    
+
     public static Map<String, String> parseMapString(String str) {
         try {
-            return objectMapper.readValue(str, new TypeReference<Map<String, String>>() {});
+            return objectMapper.readValue(str, new TypeReference<Map<String, String>>() {
+            });
         } catch (Exception e) {
             throw new JsonParseException(e);
         }
     }
-    
+
     public static Map<String, Object> parseMapObject(String str) {
         try {
-            return objectMapper.readValue(str, new TypeReference<Map<String, Object>>() {});
+            return objectMapper.readValue(str, new TypeReference<Map<String, Object>>() {
+            });
         } catch (Exception e) {
             throw new JsonParseException(e);
         }
@@ -182,60 +187,30 @@ public class JSON {
     }
 
     /**
-     * 把对象转换成json数据
+     * 忽略指定对象属性！  非线程安全
      *
      * @param bean
      * @param ignoreVar
      * @return
      */
-    public static String toJson(Object bean, String... ignoreVar) {
+    public static String toJSON(Object bean, Class cla, String... ignoreVar) {
+        // 1、@JsonIgnore 可以直接放在field上面表示要忽略的filed
+        //  2、@JsonIgnoreProperties(value = { "id",  "firstName"}) 类级别忽略特定字段
+        // 3、 @JsonIgnoreType 忽略整个bean 忽略指定类型的所有字段
 
-        BeanInfo beanInfo = null;
-        StringBuilder sBuilder = null;
-        try {
-            sBuilder = new StringBuilder();
-            beanInfo = Introspector.getBeanInfo(bean.getClass());
-            PropertyDescriptor propertyDescriptors[] = beanInfo.getPropertyDescriptors();
-            sBuilder.append("{");
-            for (PropertyDescriptor property : propertyDescriptors) {
-                String propertyName = property.getName();
-                if (!propertyName.equals("class") && !isContains(propertyName, ignoreVar)) {
-                    Method readMethod = property.getReadMethod();
-                    String result = (String) readMethod.invoke(bean, new Object[0]);
-                    if (result == null) {
-                        result = "";
-                    }
-                    sBuilder.append("\"" + propertyName + "\":\"" + result + "\",");
-                    logger.debug("\"" + propertyName + "\":\"" + result + "\"");
-                }
-            }
-            String temp = sBuilder.toString();
-            if (temp.length() > 0) {
-                String result = temp.substring(0, temp.lastIndexOf(","));
-                return result + "}";
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            logger.debug("exception" + e.getMessage());
-            return null;
-        }
+        FilterProvider filterProvider = new SimpleFilterProvider()
+                .addFilter("ignoreVarFilter", SimpleBeanPropertyFilter.serializeAllExcept(ignoreVar)); // 定义一个过滤器ignoreVarFilter
+        objectMapper.setFilters(filterProvider); // 非线程安全
+
+        // 第一种方式: 在bean的class上指定     @JsonFilter("ignoreVarFilter") ;
+        // 第二种方式: 定义一个申明过滤器ignoreVarFilter的接口类，并把它和实体class绑定
+        objectMapper.addMixInAnnotations(cla, JsonFilterMixIn.class);
+
+        return toJSONString(bean);
     }
-    /**
-     * 判断被忽略的字段是否等于当前字段
-     *
-     * @param propertyName
-     * @param ignoreVar
-     * @return
-     */
-    private static boolean isContains(String propertyName, String[] ignoreVar) {
-        if (ignoreVar != null && ignoreVar.length > 0) {
-            for (String str : ignoreVar) {
-                if (propertyName.equals(str)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+
+    @JsonFilter("ignoreVarFilter")
+    public  interface JsonFilterMixIn {
+
     }
 }

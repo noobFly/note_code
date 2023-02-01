@@ -28,7 +28,7 @@ public class IOHandler {
 	private Selector selector; // 多路复用器
 	private boolean stop = false; // 是否中断执行
 	private boolean isServer = false; // 是否是服务端
-	private Selector selector2; // 多路复用器
+	private Selector selector_new; // 多路复用器
 
 	private Map<SocketChannel, String> msgMap = new HashMap<SocketChannel, String>(); // 客户端传入的消息集合
 	private Map<SocketChannel, Integer> acceptMap = new HashMap<SocketChannel, Integer>(); // 客户端传入消息的次数
@@ -38,7 +38,7 @@ public class IOHandler {
 	public IOHandler(Selector selector, boolean isServer) throws Exception {
 		this.selector = selector;
 		this.isServer = isServer;
-		selector2 = Selector.open();
+		selector_new = Selector.open();
 
 	
 	}
@@ -135,8 +135,8 @@ public class IOHandler {
 												// available or an I/O error occurs.
 
 				sc.configureBlocking(false);// localAddress: /0.0.0.0:8080 ; remoteAddress: /127.0.0.1:51066
-				SelectionKey sk = sc.register(selector2, SelectionKey.OP_READ);
-				new Thread(() -> this.exectue(selector2)).start();
+				SelectionKey sk = sc.register(selector_new, SelectionKey.OP_READ);
+				new Thread(() -> this.exectue(selector_new)).start();
 
 				System.out.println(sk);
 			}

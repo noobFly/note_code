@@ -57,10 +57,13 @@ public class HttpServer {
 																										// http消息在传输的过程中可能是一片片的消息片端，就需要HttpObjectAggregator来把它们聚合起来。
 							pipeline.addLast(new HttpServerHandler());
 						}
-					}).option(ChannelOption.TCP_NODELAY, true)
+					})
+					.option(ChannelOption.TCP_NODELAY, true)
+					.option(ChannelOption.SO_REUSEADDR, true) // 如果当前启动进程绑定的 IP+PORT 有存在处于TIME_WAIT 状态的连接占用，但是新启动的进程使用了 SO_REUSEADDR 选项，那么该进程就可以绑定成功；绑定的 IP地址 + 端口时，只要 IP 地址不是正好(exactly)相同，那么允许绑定
+					.option(ChannelOption.SO_BACKLOG,128) // 临时存放已完成三次握手的请求的队列的最大长度。 如果大于队列的最大长度，请求会被拒绝. 默认设置见方法 NetUtil#SOMAXCONN
+					.childOption(ChannelOption.SO_KEEPALIVE, true)
 					.attr(AttributeKey.newInstance("parent_attr"), "noobFly_p")
-					.childAttr(AttributeKey.newInstance("child_attr"), "noobFly_c")
-					.childOption(ChannelOption.TCP_NODELAY, true).childOption(ChannelOption.SO_KEEPALIVE, true);
+					.childAttr(AttributeKey.newInstance("child_attr"), "noobFly_c");
 			ChannelFuture f = b.bind(8080).sync(); // 每绑定1个端口， 就会创建1个NioServerSocketChannel去监听端口事件，
 													// 同时也会从master上分配1个NioEventLoop去处理。
 			ChannelFuture f2 = b.bind(8082).sync();// 同一个端口只能被绑定一次，但可以绑定多个端口。

@@ -15,7 +15,7 @@ import com.noob.repayPlan.RepayPlan;
 /**
  * 等本等息
  * <p>
- * 与等额本金基本相同，唯一区别是计算利息时，本金始终等于总本金。 每月可按月或按日计算利息并返还
+ * 与等额本金基本相同，唯一区别是计算利息时，本金始终等于总本金。 每月可按月或按日计算利息
  * <p>
  * 最终利息与一次性还本付息、先息后本的利息额相同（分期会因为每期尾数抛弃而略有差异）
  * <p>
@@ -61,7 +61,7 @@ public class AverageCapitalAndInterestRepayPlanGenerator extends AbstractRepayPl
 					BigDecimal totalInterest = calculateInterest(
 							RateBaseTypeEnum.useDayRate(loanDto.getRateBaseType()) ? defaultBasePeriods
 									: RateBaseTypeEnum.DAYLY_365.getBase(),
-							amount, yearRate, interestRoundingMode, totalBaseCount); // 按日利息计算实际总利息
+							amount, yearRate, interestRoundingMode, totalBaseCount); // 默认以365天为基准， 按日计算实际总利息
 					interest = totalInterest.subtract(distributedInterest);
 				}
 			} else {
