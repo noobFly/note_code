@@ -194,17 +194,22 @@ public class JSON {
      * @return
      */
     public static String toJSON(Object bean, Class cla, String... ignoreVar) {
-        // 1、@JsonIgnore 可以直接放在field上面表示要忽略的filed
-        //  2、@JsonIgnoreProperties(value = { "id",  "firstName"}) 类级别忽略特定字段
-        // 3、 @JsonIgnoreType 忽略整个bean 忽略指定类型的所有字段
+        /**
+         * 声明式 无法动态指定
+         * 1、@JsonIgnore 可以直接放在field上面表示要忽略的filed
+         * 2、@JsonIgnoreProperties(value = { "id",  "firstName"}) 类级别忽略特定字段
+         * 3、 @JsonIgnoreType 忽略整个bean 忽略指定类型class的所有字段
+         */
 
         FilterProvider filterProvider = new SimpleFilterProvider()
                 .addFilter("ignoreVarFilter", SimpleBeanPropertyFilter.serializeAllExcept(ignoreVar)); // 定义一个过滤器ignoreVarFilter
         objectMapper.setFilters(filterProvider); // 非线程安全
 
-        // 第一种方式: 在bean的class上指定     @JsonFilter("ignoreVarFilter") ;
-        // 第二种方式: 定义一个申明过滤器ignoreVarFilter的接口类，并把它和实体class绑定
-        objectMapper.addMixInAnnotations(cla, JsonFilterMixIn.class);
+        /**该过滤器要生效，可以：
+         * 第一种方式: 在bean的class上指定： @JsonFilter("ignoreVarFilter") ;
+         * 第二种方式: 定义一个申明过滤器ignoreVarFilter的接口类，并把它和实体class绑定
+         */
+       // objectMapper.addMixInAnnotations(cla, JsonFilterMixIn.class);
 
         return toJSONString(bean);
     }
