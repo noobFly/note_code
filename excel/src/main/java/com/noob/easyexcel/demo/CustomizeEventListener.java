@@ -4,6 +4,7 @@ import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.google.common.base.Strings;
 import com.noob.easyexcel.demo.entity.BaseEntity;
+import com.noob.json.JSON;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -49,7 +50,7 @@ public class CustomizeEventListener<T extends BaseEntity> extends AnalysisEventL
 
     @Override
     public void invokeHeadMap(Map<Integer, String> headMap, AnalysisContext context) {
-
+        log.info(JSON.toJSONString(headMap)); // 输出标题情况
     }
 
 }
