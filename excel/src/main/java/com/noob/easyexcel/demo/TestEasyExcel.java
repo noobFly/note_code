@@ -28,7 +28,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -85,10 +84,10 @@ public class TestEasyExcel {
             // 可以用sheetName或sheetIndex来约定写入的sheet
             WriteSheet writeSheet = EasyExcel.writerSheet(0).head(CreditBank.class).registerWriteHandler(new ExcelMergeHandler(mergeRowIndex, mergeColumIndex)).build();
             FillConfig fillConfig = FillConfig.builder().direction(WriteDirectionEnum.VERTICAL).forceNewRow(Boolean.TRUE).build();
-            excelWriter.fill(new FillWrapper("list", list), fillConfig, writeSheet);
+            excelWriter.fill(new FillWrapper("list", list), fillConfig, writeSheet);// 对象插入
             excelWriter.fill(new FillWrapper("list2", list), fillConfig, writeSheet); // 不同区域的数据分成不同的warpper插入。
             if (MapUtils.isNotEmpty(extraMap)) {
-                excelWriter.fill(extraMap, writeSheet);
+                excelWriter.fill(extraMap, writeSheet); // 单个属性值
             }
         });
 
@@ -131,7 +130,7 @@ public class TestEasyExcel {
         WriteSheet writeSheet = EasyExcel.writerSheet(type.getMsg()).head(cls).build();
         // 填写配置，forceNewRow true表示自动创建一行，后面的数据后移
         FillConfig fillConfig = FillConfig.builder().direction(WriteDirectionEnum.VERTICAL).forceNewRow(Boolean.TRUE).build();
-        dataWrapperList.stream().forEach(t -> excelWriter.fill(t, fillConfig, writeSheet));
+        dataWrapperList.stream().forEach(t -> excelWriter.fill(t, fillConfig, writeSheet)); //对象插入
         if (MapUtils.isNotEmpty(extraMap)) {
             excelWriter.fill(extraMap, writeSheet); // 最后写入extraMap!
         }

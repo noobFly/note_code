@@ -25,6 +25,7 @@ public class CreditBank extends BaseEntity {
      * 授信额度
      */
     @ExcelProperty(index = 3)
+    @com.alibaba.excel.annotation.format.NumberFormat(value = "0.00") // 导出格式化
     private java.math.BigDecimal credit;
 
     /**

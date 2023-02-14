@@ -8,6 +8,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -74,10 +75,16 @@ public class GroupingByDownstreamTest {
 
         // 相同key的value相加
         List<Map<String, BigDecimal>> list2 = com.google.common.collect.Lists.newArrayList(collect9, collect9);
-        Map<String, BigDecimal> collect15 =  list2.stream().reduce((x, m) -> {
-            x.forEach((key, value) -> m.merge(key, value, BigDecimal::add));
-            return x;
-        }).get();
+
+        BinaryOperator<Map<String, BigDecimal>> mapBinaryOperator = (x, m) -> {
+            x.forEach((key, value) -> m.compute(key, (key2, oldValue) -> { // Map的merge和compute很像，但merge需要传入的value不为空,否则merge会报错。 所以用compute更合适。
+                if (oldValue == null) return value;
+                if (value == null) return oldValue;
+                return value.add(oldValue);
+            }));
+            return m;  // 返回最全的map
+        };
+        Map<String, BigDecimal> collect15 = list2.stream().reduce(mapBinaryOperator).orElse(null);
         System.out.println(JSON.toJSONString(collect15));
 
         // 先RealName分组 -> 再计数
