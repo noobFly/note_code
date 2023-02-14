@@ -77,7 +77,7 @@ public class GroupingByDownstreamTest {
         List<Map<String, BigDecimal>> list2 = com.google.common.collect.Lists.newArrayList(collect9, collect9);
 
         BinaryOperator<Map<String, BigDecimal>> mapBinaryOperator = (x, m) -> {
-            x.forEach((key, value) -> m.compute(key, (key2, oldValue) -> { // Map的merge和compute很像，但merge需要传入的value不为空,否则merge会报错。 所以用compute更合适。
+            x.forEach((key, value) -> m.compute(key, (key2, oldValue) -> { // Map的merge和compute很像，但merge需要传入的value不为空,否则merge会报错; 所以用compute更合适。
                 if (oldValue == null) return value;
                 if (value == null) return oldValue;
                 return value.add(oldValue);
