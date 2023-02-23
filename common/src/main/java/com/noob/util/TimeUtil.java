@@ -24,6 +24,10 @@ public class TimeUtil extends org.apache.commons.lang3.time.DateUtils {
         return new Date(time);
     }
 
+    public static final String dateTime(final Date date) {
+        return date == null ? null : formatDate(date, DATE_PATTERN);
+    }
+
     /**
      * 日期格式化
      *
@@ -43,7 +47,6 @@ public class TimeUtil extends org.apache.commons.lang3.time.DateUtils {
     public static int getBetweenDays(Date fDate, Date sDate) {
         return (int) ((fDate.getTime() - sDate.getTime()) / 86400000L);// (24小时 * 60分 * 60秒 * 1000毫秒= 1天毫秒数)
     }
-
 
     /**
      * 计算两个时间差

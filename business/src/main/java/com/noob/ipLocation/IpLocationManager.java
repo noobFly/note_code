@@ -1,4 +1,4 @@
-package com.noob.ipLimit;
+package com.noob.ipLocation;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;

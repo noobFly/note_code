@@ -12,12 +12,10 @@ import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-
 public class GroupingByDownstreamTest {
     @JsonFilter("ignoreVarFilter")
     @Data
     public static class Person {
-
         private String realName;
         // 任务类型
         private String taskType;
@@ -25,7 +23,6 @@ public class GroupingByDownstreamTest {
         private BigDecimal decimal;
 
     }
-
 
     public static void main(String[] args) {
         List<Person> list = Lists.newArrayList();
@@ -37,7 +34,6 @@ public class GroupingByDownstreamTest {
             person.setDecimal(new BigDecimal(person.getTime()));
             list.add(person);
         }
-
         // 累加的方式
         int a = list.stream().collect(Collectors.summingInt(Person::getTime));
         System.out.println(a);
@@ -48,7 +44,20 @@ public class GroupingByDownstreamTest {
         BigDecimal d = list.stream().map(Person::getDecimal).reduce(BigDecimal::add).get();
         System.out.println(d);
 
+        //   list.stream().forEach(t->list.remove(t)); List和Map的stream里也不能直接remove!!! 都会expectedModCount<初始实例化迭代器就固定为修改次数modCount>和modCount(remove操作会++)不一致抛出ConcurrentModificationException
 
+        // 把list转成1:1的map.
+       //  Map<String, Person> e = list.stream().collect(Collectors.toMap(Person::getRealName, Function.identity()));   //  这里因为数据源重复问题会报错，如果想支持后覆盖前，可改写底层的mergeFunction
+        /** Exception in thread "main" java.lang.IllegalStateException: Duplicate key GroupingByDownstreamTest.Person(realName=RealName0, taskType=TaskType0, time=0, decimal=0)
+         at java.util.stream.Collectors.lambda$throwingMerger$0(Collectors.java:133)
+         at java.util.HashMap.merge(HashMap.java:1254)
+         at java.util.stream.Collectors.lambda$toMap$58(Collectors.java:1320)
+         at java.util.stream.ReduceOps$3ReducingSink.accept(ReduceOps.java:169)
+         **/
+        Map<String, Person> e = list.stream().collect(Collectors.toMap(Person::getRealName, Function.identity(),(k1, k2)-> k1));
+        System.out.println(JSON.toJSONString(e));
+
+        // 验证JSON动态屏蔽某个参数
         System.out.println(JSON.toJSON(list, Person.class, "realName"));
 
         // RealName分组并排序 (用LinkedHashMap来保存Map插入的顺序)
@@ -64,7 +73,6 @@ public class GroupingByDownstreamTest {
         Map<String, List<String>> collect1 = list.stream().collect(Collectors.groupingBy(Person::getRealName,
                 Collectors.mapping(Person::getTaskType, Collectors.toList())));
         System.out.println(JSON.toJSONString(collect1));
-
 
         // 先RealName分组 -> 再统计time
         Map<String, IntSummaryStatistics> collect2 = list.stream().collect(Collectors.groupingBy(Person::getRealName, Collectors.summarizingInt(Person::getTime)));
@@ -96,7 +104,6 @@ public class GroupingByDownstreamTest {
                 Collectors.collectingAndThen(Collectors.maxBy(Comparator.comparing(Person::getTime)), Optional::get)));
         System.out.println(JSON.toJSONString(collect3));
 
-
         // RealName分组 -> TaskType分组 -> 按time排序
         Map<String, Map<String, TreeSet<Person>>> collect4 = list.stream().collect(Collectors.groupingBy(Person::getRealName,
                 Collectors.groupingBy(Person::getTaskType,
@@ -104,8 +111,6 @@ public class GroupingByDownstreamTest {
                         )), Function.identity()))));
         System.out.println(JSON.toJSONString(collect4));
 
-
     }
-
 
 }

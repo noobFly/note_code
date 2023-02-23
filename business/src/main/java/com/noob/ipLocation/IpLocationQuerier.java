@@ -1,4 +1,4 @@
-package com.noob.ipLimit;
+package com.noob.ipLocation;
 
 /**
  * IP所在地查询器

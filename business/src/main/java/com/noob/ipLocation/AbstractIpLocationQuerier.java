@@ -1,4 +1,4 @@
-package com.noob.ipLimit;
+package com.noob.ipLocation;
 
 import lombok.extern.slf4j.Slf4j;
 

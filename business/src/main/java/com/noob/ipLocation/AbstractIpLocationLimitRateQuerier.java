@@ -1,4 +1,4 @@
-package com.noob.ipLimit;
+package com.noob.ipLocation;
 
 import cn.hutool.core.lang.Assert;
 import com.google.common.util.concurrent.RateLimiter;

@@ -1,4 +1,4 @@
-package com.noob.ipLimit;
+package com.noob.ipLocation;
 
 import com.noob.util.HttpUtils;
 import org.apache.commons.lang3.StringUtils;

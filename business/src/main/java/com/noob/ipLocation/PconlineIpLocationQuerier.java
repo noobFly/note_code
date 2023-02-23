@@ -1,4 +1,4 @@
-package com.noob.ipLimit;
+package com.noob.ipLocation;
 
 import com.noob.json.JSON;
 import com.noob.json.JSONObject;
