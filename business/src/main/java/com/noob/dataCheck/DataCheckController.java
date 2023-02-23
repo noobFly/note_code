@@ -107,6 +107,7 @@ public class DataCheckController {
         List<CheckResult.CheckDetail> outerOverList = Lists.newArrayList(); // 外部超出的
         List<CheckResult.CheckDetail> matchFailList = Lists.newArrayList(); // 数据比对失败的
         List<CheckResult.CheckDetail> dbOverList = Lists.newArrayList(); // 数据比对失败的
+        List<CheckResult.CheckDetail> allList = Lists.newArrayList();
 
         int successCount = 0;
 
@@ -146,10 +147,11 @@ public class DataCheckController {
         finalResult.setMatchFaiLCount(size(matchFailList));
         finalResult.setInnerOverCount(size(dbOverList));
         finalResult.setOuterOverCount(size(outerOverList));
-        outerOverList.addAll(matchFailList);
-        outerOverList.addAll(dbOverList);
-        outerOverList.addAll(outerErrorList);
-        finalResult.setFailList(outerOverList);
+        allList.addAll(matchFailList);
+        allList.addAll(dbOverList);
+        allList.addAll(outerOverList);
+        finalResult.setFailList(allList);
+
 
         return finalResult;
     }
@@ -213,7 +215,9 @@ public class DataCheckController {
         StringBuilder sb = new StringBuilder();
         primaryKeyColumns.forEach(columnMapping -> {
                     String val = DataCheckConfig.DataTypeEnum.valueOf(columnMapping.getDataType()).clear(data.get(columnMapping.getTitle()), columnMapping.getProperties());
-                    sb.append(val).append(SYMBOL);
+                    if (!Strings.isNullOrEmpty(val)) {
+                        sb.append(val).append(SYMBOL);
+                    }
                 }
 
         );

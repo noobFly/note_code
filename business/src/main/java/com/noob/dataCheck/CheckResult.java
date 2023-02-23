@@ -12,7 +12,7 @@ public class CheckResult {
     private String date;
     //比对主体
     private String sheetName;
-    // 数据总量
+    // 数据表总量
     private int dbCount;
     // 上传总量
     private int uploadCount;
@@ -37,6 +37,7 @@ public class CheckResult {
         sb.append("\n【本地表溢出】: \n").append(failList.stream().filter(t -> t.getFailType() == FailType.DB_OVER).map(CheckDetail::getKey).collect(Collectors.joining("\n")));
 
         return sb.toString();
+
     }
 
 
@@ -44,6 +45,7 @@ public class CheckResult {
     public static class CheckDetail {
         private boolean success;
         private String msg;
+        // 数据主键
         private String key;
 
         // 1 外多内少 2 外少内多 3 数据不一致
@@ -55,6 +57,7 @@ public class CheckResult {
     @Data
     @AllArgsConstructor
     public static class Diff {
+        //字段英文名
         private String column;
         private Object excelVal;
         private Object dbVal;
