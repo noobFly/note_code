@@ -44,10 +44,11 @@ public class GroupingByDownstreamTest {
         BigDecimal d = list.stream().map(Person::getDecimal).reduce(BigDecimal::add).get();
         System.out.println(d);
 
-        //   list.stream().forEach(t->list.remove(t)); List和Map的stream里也不能直接remove!!! 都会expectedModCount<初始实例化迭代器就固定为修改次数modCount>和modCount(remove操作会++)不一致抛出ConcurrentModificationException
+        //   list.stream().forEach(t->list.remove(t)); List和Map的stream里也不能直接remove!!! 都会expectedModCount<初始实例化迭代器就固定为当前的modCount修改次数>和modCount(remove操作会++)不一致抛出ConcurrentModificationException
 
         // 把list转成1:1的map.
-       //  Map<String, Person> e = list.stream().collect(Collectors.toMap(Person::getRealName, Function.identity()));   //  这里因为数据源重复问题会报错，如果想支持后覆盖前，可改写底层的mergeFunction
+       //  Map<String, Person> e = list.stream().collect(Collectors.toMap(Person::getRealName, Function.identity()));
+        //  这里因为数据源重复问题会报错，如果想支持后覆盖前，可改写底层的mergeFunction
         /** Exception in thread "main" java.lang.IllegalStateException: Duplicate key GroupingByDownstreamTest.Person(realName=RealName0, taskType=TaskType0, time=0, decimal=0)
          at java.util.stream.Collectors.lambda$throwingMerger$0(Collectors.java:133)
          at java.util.HashMap.merge(HashMap.java:1254)

@@ -195,7 +195,7 @@ public class JSON {
      */
     public static String toJSON(Object bean, Class cla, String... ignoreVar) {
         /**
-         * 声明式 无法动态指定
+         * 声明式 缺点：无法动态指定
          * 1、@JsonIgnore 可以直接放在field上面表示要忽略的filed
          * 2、@JsonIgnoreProperties(value = { "id",  "firstName"}) 类级别忽略特定字段
          * 3、 @JsonIgnoreType 忽略整个bean 忽略指定类型class的所有字段
