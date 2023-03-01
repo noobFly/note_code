@@ -20,7 +20,7 @@ CREATE TABLE `data_check_table_mapping` (
 	`topic` TINYINT(4) NOT NULL COMMENT '主题： 1 产基项目',
 	`sheet_name` VARCHAR(100) NOT NULL DEFAULT '' COMMENT 'excel表',
 	`table_name` VARCHAR(200) NOT NULL COMMENT '关联的数据表',
-	`head_index` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '标题行',
+	`head_index` VARCHAR(16) NOT NULL DEFAULT '0' COMMENT '标题行, 支持多个标题行合并',
 	`data_start_index` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '数据开始行',
 	`create_by` VARCHAR(64) NULL DEFAULT NULL COMMENT '创建者',
 	`create_time` DATETIME NULL DEFAULT NULL COMMENT '创建时间',
@@ -36,8 +36,8 @@ AUTO_INCREMENT=1000
 ;
 
 
-INSERT INTO `data_check_table_mapping` ( `topic`, `sheet_name`, `table_name`, `head_index`, `data_start_index`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES
-( 1, '项目情况表', 'ft_project_collect', 1, 3, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `data_check_table_mapping` ( `topic`, `sheet_name`, `table_name`, `head_index`, `data_start_index`) VALUES
+( 1, '项目情况表', 'ft_project_collect', '1,2,3', 6);
 
 INSERT INTO `data_check_column_mapping` (`topic`, `title`, `column_name`, `data_type`, `primary_key`, `extra`) VALUES
 ( 1, '基金名称', 'fund_name', 'DEFAULT', 'Y', ''),
@@ -46,5 +46,5 @@ INSERT INTO `data_check_column_mapping` (`topic`, `title`, `column_name`, `data_
 ( 1, '最新持股比例', 'last_shareholding_ratio', 'NUMBER', '', '{"scale":"2","roundingMode":"4","defaultValue":"0","clear":"%|-|/"}'),
 ( 1, '签约投资金额', 'sign_amount', 'NUMBER', '', '{"scale":"2","roundingMode":"4","defaultValue":"0","clear":",|-|/"}'),
 ( 1, '员工跟投额', 'follow_invest_amount', 'NUMBER', '', '{"scale":"2","roundingMode":"4","defaultValue":"0","clear":",|-|/"}'),
-(1, '实际退出日期', 'exit_date', 'DATE', '', '');
+( 1, '实际退出日期', 'exit_date', 'DATE', '', '');
 

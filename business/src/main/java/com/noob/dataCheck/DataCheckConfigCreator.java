@@ -24,8 +24,9 @@ public abstract class DataCheckConfigCreator {
 
     @PostConstruct
     public void init() {
-        // 方法一定是public
-        methodMap.put(DataEntity.class, Arrays.asList(DataEntity.class.getDeclaredMethods()));
+        for (DataCheckTopic element : DataCheckTopic.values()) {
+            methodMap.put(element.cls, Arrays.asList(element.cls.getDeclaredMethods())); // 方法一定是public
+        }
     }
 
     public void clear(String topic) {
@@ -69,7 +70,7 @@ public abstract class DataCheckConfigCreator {
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum DataCheckTopic {
-        PROJECT(1, "view_report_project_activity_industry_fund", DataEntity.class, "项目信息");
+        PROJECT(1, "ft_project_collect", DataEntity.class, "项目信息");
         private int topic;
         private String table; //用来页面指定查询表的字段明细
         private Class cls;
@@ -84,10 +85,10 @@ public abstract class DataCheckConfigCreator {
     }
 
 
-    //TODO 字段对应关系
-    public abstract List<DataCheckColumnMapping> getColumnConfig(String topic) ;
+    // 列-字段 配置
+    protected abstract List<DataCheckColumnMapping> getColumnConfig(String topic);
 
-    // TODO 表对应关系
-    public abstract List<DataCheckTableMapping> getTableConfig(String topic);
+    // sheet-表 配置
+    protected abstract List<DataCheckTableMapping> getTableConfig(String topic);
 
 }

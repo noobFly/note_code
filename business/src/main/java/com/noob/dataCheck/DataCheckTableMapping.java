@@ -1,6 +1,7 @@
 
 package com.noob.dataCheck;
 
+import com.google.common.collect.Lists;
 import lombok.Data;
 
 import java.util.List;
@@ -25,9 +26,9 @@ public class DataCheckTableMapping {
      */
     private String tableName;
     /**
-     * 标题行
+     * 标题行 多个以逗号分开
      */
-    private Integer headIndex;
+    private String headIndex;
     /**
      * 数据开始行
      */
@@ -56,6 +57,11 @@ public class DataCheckTableMapping {
     // 主键 -> 一定要选择字符串类型
     private List<DataCheckColumnMapping> primaryKeyColumns;
     private List<DataCheckColumnMapping> columnMappings;
+
+    public List<String> getHeadIndexList() {
+        return Lists.newArrayList(headIndex.split(","));
+    }
+
 
 }
 

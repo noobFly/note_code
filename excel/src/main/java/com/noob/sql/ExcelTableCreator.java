@@ -24,7 +24,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-// 从excel的列转成create table
+/**
+ * 从excel的列转成create table
+ */
 public class ExcelTableCreator {
 
     // 百度翻译API
@@ -33,19 +35,17 @@ public class ExcelTableCreator {
     public static String remote = "http://api.fanyi.baidu.com/api/trans/vip/translate?from=zh&to=en&q=%s&appid=%s&salt=%s&sign=%s";
 
     public static int sheetNum = 0; // 指定sheet
-    public static int[] headRow = new int[]{4, 5}; // 指定excel里标题行的index
-    public static String path = "C:\\Users\\noob\\Desktop\\有息负债明细表模板.xls(1).xlsx"; // 模板文件
-
+    public static int[] headRow = new int[]{1, 2, 3}; // 指定excel里标题行的index
+    public static String path = "C:\\Users\\noob\\Desktop\\有息负债明细表模板.xlsx"; // 模板文件
     public static Map<Integer, String> ENtransferMap = Maps.newHashMap(); // 需要转英文的中文名称
 
-    // 默认的sql字段类型
+    // 根据中文关键字来指定 默认的sql字段类型
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum SpecialType {
-        DEFAULT(0, "varchar(100)"),
-        RATE(4, "decimal(12,6)"),
-        MONEY(3, "decimal(20,4)"), DATE(2, "date"), enumList(1, "tinyint");
+        DEFAULT("varchar(100)"),
+        RATE("decimal(12,6)"),
+        MONEY("decimal(20,4)"), DATE("date"), enumList("tinyint");
 
-        private int code;
         @Getter
         private String sqlType;
     }
@@ -85,17 +85,13 @@ public class ExcelTableCreator {
 
         /**
          * 多个sheet不同的实体类
-         ExcelReader excelReader = EasyExcel.read(new ByteArrayInputStream(file.getBytes())).build();
-         excelReader.read(
-         EasyExcel.readSheet(0).head(CreditGrantedEachBank.class).headRowNumber(5).registerReadListener(creditGrantedEachBankHandler).build(),
-         EasyExcel.readSheet(1).head(FinancialInfo.class).headRowNumber(4).registerReadListener(financialInfoHandler).build(),
-         EasyExcel.readSheet(2).head(ProjectCooperation.class).headRowNumber(4).registerReadListener(projectCooperationHandler).build(),
-         EasyExcel.readSheet(3).head(DepositsFinancialInvestment.class).headRowNumber(4).registerReadListener(depositsFinancialInvestmentHandler).build());
-         // 这里千万别忘记关闭，读的时候会创建临时文件
-         excelReader.finish();
+         * ExcelReader excelReader = EasyExcel.read(new ByteArrayInputStream(file.getBytes())).build();
+         * excelReader.read(
+         * EasyExcel.readSheet(0).head(CreditGrantedEachBank.class).headRowNumber(5).registerReadListener(creditGrantedEachBankHandler).build(),
+         * EasyExcel.readSheet(1).head(FinancialInfo.class).headRowNumber(4).registerReadListener(financialInfoHandler).build(),
+         * // 这里千万别忘记关闭，读的时候会创建临时文件
+         * excelReader.finish();
          */
-
-
 
 
         Table table = new Table();
@@ -122,22 +118,21 @@ public class ExcelTableCreator {
         table.setTableName(convert(result.stream().filter(a -> a.getSrc().equals(table.getSheetName())).findAny().orElse(null).getDst()));
         System.out.println(JSON.toJSONString(table));
 
-        StringBuilder sb = new StringBuilder("create table ");
-        sb.append(table.getTableName()).append("(").append("\n")
-                .append("id bigint(20)  not null  auto_increment comment '主键' ,").append("\n");
-        sb.append(table.getColumnList().stream().map(t -> {
-            String column = t.getColumnName();
-            return String.join(" ", column, t.getType().getSqlType(), "comment", "'" + t.getComment() + "'");
-        }).collect(Collectors.joining(", \n"))).append(",\n");
+        StringBuilder sb = new StringBuilder("create table ").append(table.getTableName()).append("(").append("\n")
+                .append("id bigint(20)  not null  auto_increment comment '主键' ,").append("\n")
+                .append(table.getColumnList().stream().map(t -> {
+                    String column = t.getColumnName();
+                    return String.join(" ", column, t.getType().getSqlType(), "comment", "'" + t.getComment() + "'");
+                }).collect(Collectors.joining(", \n"))).append(",\n");
+
         sb.append("upload_month date not null  comment '数据月份'").append(",\n") // TODO 可以选择性加入自定义默认字段
                 .append("create_time datetime null default current_timestamp comment '创建时间'").append(",\n")
                 .append("update_time datetime null default current_timestamp on update current_timestamp comment '更新时间'").append(",\n")
                 .append("primary key (`id`) )").append("\n").append("COMMENT='").append(table.getSheetName()).append("' AUTO_INCREMENT=1000;");
+
         System.out.println(sb.toString());
 
     }
-
-
 
 
     @Data

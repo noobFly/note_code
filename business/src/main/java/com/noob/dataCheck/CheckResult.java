@@ -10,20 +10,21 @@ import java.util.stream.Collectors;
 public class CheckResult {
     // 数据比对日期
     private String date;
-    //比对主体
+    //比对的sheet名
     private String sheetName;
-    // 数据表总量
+    // 数据表数据总量
     private int dbCount;
     // 上传总量
     private int uploadCount;
+    // 比对成功总量
     private int successCount;
-    // 外部无效数据
+    // 外部无效数据总量
     private int outerErrorCount;
-    // 外部多的数据
+    // 数据表无法匹配主键数据总量
     private int outerOverCount;
-    // 本地多的数据
+    // Excel无法匹配主键数据总量
     private int innerOverCount;
-    // 匹配失败数据
+    // 匹配失败数据总量
     private int matchFaiLCount;
     private List<CheckDetail> failList;
 
@@ -37,18 +38,27 @@ public class CheckResult {
         sb.append("\n【本地表溢出】: \n").append(failList.stream().filter(t -> t.getFailType() == FailType.DB_OVER).map(CheckDetail::getKey).collect(Collectors.joining("\n")));
 
         return sb.toString();
-
     }
 
 
     @Data
     public static class CheckDetail {
+        /**
+         * 结果
+         */
         private boolean success;
+        /**
+         * 描述
+         */
         private String msg;
-        // 数据主键
+        /**
+         * 数据主键
+         */
         private String key;
 
-        // 1 外多内少 2 外少内多 3 数据不一致
+        /**
+         * 1 数据表无该主键 (外多内少) 2 Excel无该主键(外少内多) 3 数据不一致
+         */
         private int failType;
         private List<Diff> diffList;
 
@@ -57,9 +67,17 @@ public class CheckResult {
     @Data
     @AllArgsConstructor
     public static class Diff {
-        //字段英文名
+        /**
+         * 字段
+         */
         private String column;
+        /**
+         * excel值
+         */
         private Object excelVal;
+        /**
+         * 数据库值
+         */
         private Object dbVal;
     }
 

@@ -62,6 +62,7 @@ public class DataCheckConfig {
 
             public boolean compare(String a, String d, Map<String, String> extraProperties) {
                 try {
+                    // 取 yyyy-MM-dd 固定格式来比对; 如果需要其他的格式可以在extraProperties中配置
                     return new SimpleDateFormat(TimeUtil.DATE_PATTERN).parse(a).equals(new SimpleDateFormat(TimeUtil.DATE_PATTERN).parse(d));
                 } catch (Exception e) {
                     System.out.println(String.format("DATE异常: a: %s  b: %s", a, d));
@@ -79,10 +80,9 @@ public class DataCheckConfig {
 
         public abstract boolean compare(String a, String b, Map<String, String> extraProperties);
 
-        // 外部数据里不同的数据有差异化的清理规则! 需要让字符强制符合约定的类型， 自定义默认值。
+        // 外部数据里不同的数据有差异化的清理规则! 需要让字符强制复核约定的类型
         public String clear(Object data, Map<String, String> properties) {
             String defaultValue = StringUtils.EMPTY;
-            if (data == null) return defaultValue;
 
             String clearRegex = null;
             boolean notEmpty = properties != null && !properties.isEmpty();
@@ -96,6 +96,8 @@ public class DataCheckConfig {
                     clearRegex = clearChar;
                 }
             }
+
+            if (data == null) return defaultValue; // 默认值
 
             String val = Strings.nullToEmpty(String.valueOf(data)).trim();
             if (!Strings.isNullOrEmpty(clearRegex)) {
