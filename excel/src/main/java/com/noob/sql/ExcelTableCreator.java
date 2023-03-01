@@ -35,8 +35,9 @@ public class ExcelTableCreator {
     public static String remote = "http://api.fanyi.baidu.com/api/trans/vip/translate?from=zh&to=en&q=%s&appid=%s&salt=%s&sign=%s";
 
     public static int sheetNum = 0; // 指定sheet
-    public static int[] headRow = new int[]{1, 2, 3}; // 指定excel里标题行的index
+    public static int[] headRow = new int[]{4,5}; // 指定excel里标题行的index
     public static String path = "C:\\Users\\noob\\Desktop\\有息负债明细表模板.xlsx"; // 模板文件
+
     public static Map<Integer, String> ENtransferMap = Maps.newHashMap(); // 需要转英文的中文名称
 
     // 根据中文关键字来指定 默认的sql字段类型
