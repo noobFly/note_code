@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.noob.commonSqlQuery.CommonAdmMapper">
+
+
+    <select id="query" resultType="java.util.Map">
+        select
+        <choose>
+            <when test=" queryModel.selectColumnList != null and queryModel.selectColumnList.size > 0">
+                <foreach collection=" queryModel.selectColumnList" item="column" separator=",">${column}</foreach>
+            </when>
+            <otherwise>*</otherwise>
+        </choose>
+        from ${table}
+
+        <if test=" queryModel.filterConditionList != null and queryModel.filterConditionList.size > 0 ">
+            <where>
+                <foreach collection=" queryModel.filterConditionList" item="condition">
+
+                    ${condition.column}
+
+                    <choose>
+                        <when test=" condition.type == 2">  <![CDATA[ < ]]> #{condition.value} </when>
+                        <when test=" condition.type == 3">  <![CDATA[ <= ]]> #{condition.value}</when>
+                        <when test=" condition.type == 4"> >  #{condition.value}</when>
+                        <when test=" condition.type == 5"> >= #{condition.value} </when>
+                        <when test=" condition.type == 6"> like concat('%',#{condition.value},'%') </when>
+                        <when test=" condition.type == 7"> in (${condition.value}) </when>
+                        <when test=" condition.type == 8"> is not null </when>
+                        <when test=" condition.type == 9"> is null 9 </when>
+                        <otherwise> = #{condition.value}  </otherwise>
+                    </choose>
+
+                </foreach>
+
+            </where>
+        </if>
+
+        <if test = "queryModel.orderBy != null and queryModel.orderBy != '' " > order by ${queryModel.orderBy}
+            <choose>
+                <when test=" sort != null and sort != ''  ">
+                    ${sort}
+                </when>
+                <otherwise> ASC  </otherwise>
+            </choose>
+
+        </if>
+    </select>
+
+
+</mapper>
