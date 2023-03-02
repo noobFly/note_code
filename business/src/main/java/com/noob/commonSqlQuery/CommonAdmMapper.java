@@ -6,5 +6,5 @@ import java.util.List;
 import java.util.Map;
 
 public interface CommonAdmMapper {
-    List<Map<String, Object>> query(@Param("table") String table, @Param("sort") String sort, @Param("queryModel") CommonQueryDTO queryDTO);
+    List<Map<String, Object>> query(@Param("table") String table, @Param("queryModel") CommonQueryDTO queryDTO);
 }

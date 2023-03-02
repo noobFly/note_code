@@ -14,22 +14,30 @@ import java.util.Map;
  * 本意是想支持通道式的通用查询。但如果查询条件比较复杂就无法支持！而且前端还得注意属性值的写法。
  * 鸡肋!!!! 不建议使用。
  * <p>
-         {
-         "type": 3,
-         "startPage": false,
-         "orderBy": "fund_name",
-         "orderSort": "asc",
-         "selectColumnList": [
-         "fund_name"
-         ],
-         "filterConditionList": [
-         {
-         "column": "fund_name",
-         "value": "'中山贝森医疗产业投资企业（有限合伙）'",
-         "type": "7"
-         }
-         ]
-         }
+     {
+     "type": 3,
+     "startPage": false,
+     "sortConditionList": [
+     {
+     "order": "fund_name",
+     "sort": "desc"
+     },
+     {
+     "order": "fund_name",
+     "sort": "asc"
+     }
+     ],
+     "selectColumnList": [
+     "substr(fund_name,2)"
+     ],
+     "filterConditionList": [
+     {
+     "column": "fund_name",
+     "value": "'中山贝森医疗产业投资企业（有限合伙）'",
+     "type": "7"
+     }
+     ]
+     }
  * </>
  */
 public class CommonQueryHandler {
@@ -38,17 +46,14 @@ public class CommonQueryHandler {
 
     public List<Map<String, Object>> queryAdm(CommonQueryDTO queryDTO) {
         String table = TableEnum.findTable(queryDTO.getTopic());
-        String sortType = queryDTO.getSortType();
-        String sort = Strings.isNullOrEmpty(sortType) ? null : ("up".equals(sortType) ? "asc" : "desc");
-        return commonAdmMapper.query(table,sort, queryDTO);
+        return commonAdmMapper.query(table, queryDTO);
     }
 
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum TableEnum {
         view_plt_fund_activity_details(1),
-        view_plt_project_activity_details(2),
-        view_project_invest_all(3);
+        view_plt_project_activity_details(2);
         private int topic;
 
         public static String findTable(int topic) {

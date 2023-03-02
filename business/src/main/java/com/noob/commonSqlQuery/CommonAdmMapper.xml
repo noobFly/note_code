@@ -20,15 +20,15 @@
                     ${condition.column}
 
                     <choose>
-                        <when test=" condition.type == 2">  <![CDATA[ < ]]> #{condition.value} </when>
+                        <when test=" condition.type == 2">  <![CDATA[ < ]]> #{condition.value}</when>
                         <when test=" condition.type == 3">  <![CDATA[ <= ]]> #{condition.value}</when>
-                        <when test=" condition.type == 4"> >  #{condition.value}</when>
-                        <when test=" condition.type == 5"> >= #{condition.value} </when>
-                        <when test=" condition.type == 6"> like concat('%',#{condition.value},'%') </when>
-                        <when test=" condition.type == 7"> in (${condition.value}) </when>
-                        <when test=" condition.type == 8"> is not null </when>
-                        <when test=" condition.type == 9"> is null 9 </when>
-                        <otherwise> = #{condition.value}  </otherwise>
+                        <when test=" condition.type == 4">> #{condition.value}</when>
+                        <when test=" condition.type == 5">>= #{condition.value}</when>
+                        <when test=" condition.type == 6">like concat('%',#{condition.value},'%')</when>
+                        <when test=" condition.type == 7">in (${condition.value})</when>
+                        <when test=" condition.type == 8">is not null</when>
+                        <when test=" condition.type == 9">is null 9</when>
+                        <otherwise>= #{condition.value}</otherwise>
                     </choose>
 
                 </foreach>
@@ -36,15 +36,12 @@
             </where>
         </if>
 
-        <if test = "queryModel.orderBy != null and queryModel.orderBy != '' " > order by ${queryModel.orderBy}
-            <choose>
-                <when test=" sort != null and sort != ''  ">
-                    ${sort}
-                </when>
-                <otherwise> ASC  </otherwise>
-            </choose>
-
+        <if test="queryModel.sortConditionList != null and queryModel.sortConditionList.size > 0 ">order by
+            <foreach collection="queryModel.sortConditionList" item="condition" separator=",">
+                ${condition.order} ${condition.sort}
+            </foreach>
         </if>
+        
     </select>
 
 
