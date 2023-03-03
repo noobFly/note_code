@@ -7,11 +7,11 @@
         select
         <choose>
             <when test=" queryModel.selectColumnList != null and queryModel.selectColumnList.size > 0">
-                <foreach collection=" queryModel.selectColumnList" item="column" separator=",">${column}</foreach>
+                <foreach collection=" queryModel.selectColumnList" item="column" separator=",">t.${column}</foreach>
             </when>
-            <otherwise>*</otherwise>
+            <otherwise>t.*</otherwise>
         </choose>
-        from ${table}
+        from ${table} t
 
         <if test=" queryModel.filterConditionList != null and queryModel.filterConditionList.size > 0 ">
             <where>

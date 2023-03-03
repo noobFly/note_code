@@ -2,6 +2,8 @@ package com.noob.nio;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.SocketOption;
+import java.net.StandardSocketOptions;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
@@ -36,8 +38,9 @@ public class NioServer {
         serverSocketChannel2.bind(new InetSocketAddress(8090));
         serverSocketChannel2.configureBlocking(false);
         serverSocketChannel2.register(selector, SelectionKey.OP_ACCEPT);
-
-
+        serverSocketChannel2.setOption(StandardSocketOptions.SO_KEEPALIVE, true);
+        serverSocketChannel2.setOption(StandardSocketOptions.TCP_NODELAY, true);
+        serverSocketChannel2.socket().setSoTimeout(6000);
         Thread thread = new Thread(() -> {
             try {
                 while (true) {
