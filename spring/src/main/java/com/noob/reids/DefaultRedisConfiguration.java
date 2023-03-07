@@ -32,7 +32,7 @@ import java.util.Map;
  * 默认的redis配置<br>
  * spring.redis.expires下的键值对作为缓存的“缓存名：缓存时间”的配置值<br>
  */
-@ConfigurationProperties(prefix = "spring.cache", ignoreUnknownFields = true)
+@ConfigurationProperties(prefix = "spring.redis", ignoreUnknownFields = true)
 @ConditionalOnClass(value = org.springframework.data.redis.connection.RedisConnectionFactory.class)
 @Configuration
 public class DefaultRedisConfiguration {
