@@ -47,10 +47,11 @@ public class JSON {
         // 设置为中国上海时区
         objectMapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         // 空值不序列化
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL); // 一般而言 控制也需要序列化
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL); // 一般而言：空值也需要序列化
         // 去掉默认的时间戳格式
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        // objectMapper.registerModule(new JavaTimeModule());
     }
 
     public static void toJSONString(OutputStream os, Object value) {

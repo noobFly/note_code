@@ -60,7 +60,7 @@ public class DefaultRedisConfiguration {
         if (expires != null && !expires.isEmpty()) {
             expires.forEach((key, value) -> {
                 RedisCacheConfiguration cacheConfig = RedisCacheConfiguration.defaultCacheConfig()
-                        .serializeValuesWith(jacksonSerializer).entryTtl(Duration.ofSeconds(value));    
+                        .serializeValuesWith(jacksonSerializer).entryTtl(Duration.ofSeconds(value)).prefixCacheNameWith(key);//建议不要用.disableKeyPrefix(); 毕竟redis是多业务共用的, 用带cache名的前缀来管理redis上的key!
                 configMap.put(key, cacheConfig);
             });
         }
