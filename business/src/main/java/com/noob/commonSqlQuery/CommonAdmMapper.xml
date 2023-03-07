@@ -7,7 +7,7 @@
         select
         <choose>
             <when test=" queryModel.selectColumnList != null and queryModel.selectColumnList.size > 0">
-                <foreach collection=" queryModel.selectColumnList" item="column" separator=",">t.${column}</foreach>
+                <foreach collection=" queryModel.selectColumnList" item="column" separator=","> t.${column}</foreach>
             </when>
             <otherwise>t.*</otherwise>
         </choose>
@@ -17,18 +17,18 @@
             <where>
                 <foreach collection=" queryModel.filterConditionList" item="condition">
 
-                    ${condition.column}
+                    and ${condition.column}
 
                     <choose>
-                        <when test=" condition.type == 2">  <![CDATA[ < ]]> #{condition.value}</when>
-                        <when test=" condition.type == 3">  <![CDATA[ <= ]]> #{condition.value}</when>
-                        <when test=" condition.type == 4">> #{condition.value}</when>
-                        <when test=" condition.type == 5">>= #{condition.value}</when>
-                        <when test=" condition.type == 6">like concat('%',#{condition.value},'%')</when>
-                        <when test=" condition.type == 7">in (${condition.value})</when>
-                        <when test=" condition.type == 8">is not null</when>
-                        <when test=" condition.type == 9">is null 9</when>
-                        <otherwise>= #{condition.value}</otherwise>
+                        <when test=" condition.type == 2"> <![CDATA[ < ]]> #{condition.value} </when>
+                        <when test=" condition.type == 3"> <![CDATA[ <= ]]> #{condition.value} </when>
+                        <when test=" condition.type == 4"> > #{condition.value} </when>
+                        <when test=" condition.type == 5"> >= #{condition.value} </when>
+                        <when test=" condition.type == 6"> like concat('%',#{condition.value},'%') </when>
+                        <when test=" condition.type == 7"> in (${condition.value}) </when>
+                        <when test=" condition.type == 8"> is not null </when>
+                        <when test=" condition.type == 9"> is null 9 </when>
+                        <otherwise> = #{condition.value} </otherwise>
                     </choose>
 
                 </foreach>
@@ -41,7 +41,7 @@
                 ${condition.order} ${condition.sort}
             </foreach>
         </if>
-        
+
     </select>
 
 
