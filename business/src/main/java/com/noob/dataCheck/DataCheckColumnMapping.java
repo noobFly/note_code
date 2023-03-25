@@ -36,7 +36,7 @@ public class DataCheckColumnMapping {
      */
     private String primaryKey;
     /**
-     * 额外特殊处理的json
+     * 额外特殊处理的json,用来处理差异性
      */
     private String extra;
 

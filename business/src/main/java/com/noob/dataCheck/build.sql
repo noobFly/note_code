@@ -37,14 +37,14 @@ AUTO_INCREMENT=1000
 
 
 INSERT INTO `data_check_table_mapping` ( `topic`, `sheet_name`, `table_name`, `head_index`, `data_start_index`) VALUES
-( 1, '项目情况表', 'ft_project_collect', '1,2,3', 6);
+( 1, '项目情况表', 'view_fund_activity_details', '1,2,3', 6);
 
 INSERT INTO `data_check_column_mapping` (`topic`, `title`, `column_name`, `data_type`, `primary_key`, `extra`) VALUES
 ( 1, '基金名称', 'fund_name', 'DEFAULT', 'Y', ''),
-( 1, '所投项目公司名称', 'project_name', 'DEFAULT', 'Y', ''),
+( 1, '项目公司名称', 'project_name', 'DEFAULT', 'Y', ''),
 ( 1, '投资时间', 'invest_date', 'DATE', 'Y', '{"dateModel":"array"}'),
-( 1, '最新持股比例', 'last_shareholding_ratio', 'NUMBER', '', '{"scale":"2","roundingMode":"4","defaultValue":"0","clear":"%|-|/"}'),
+( 1, '最新持股比例', 'shareholding_ratio', 'NUMBER', '', '{"scale":"2","roundingMode":"4","defaultValue":"0","clear":"%|-|/"}'),
 ( 1, '签约投资金额', 'sign_amount', 'NUMBER', '', '{"scale":"2","roundingMode":"4","defaultValue":"0","clear":",|-|/"}'),
 ( 1, '员工跟投额', 'follow_invest_amount', 'NUMBER', '', '{"scale":"2","roundingMode":"4","defaultValue":"0","clear":",|-|/"}'),
-( 1, '实际退出日期', 'exit_date', 'DATE', '', '');
+( 1, '实退出日期', 'exit_date', 'DATE', '', '');
 

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Data
@@ -27,6 +28,13 @@ public class CheckResult {
     // 匹配失败数据总量
     private int matchFaiLCount;
     private List<CheckDetail> failList;
+
+    /**
+     * 只是为了做数据传输载体
+     */
+    private DataCheckTableMapping tableMapping;
+    private List<String> headList;
+
 
     public String getDesc() {
         StringBuilder sb = new StringBuilder();
@@ -62,6 +70,10 @@ public class CheckResult {
         private int failType;
         private List<Diff> diffList;
 
+        // 可能是Excel数据 也可能是db多的数据
+        private Map<String, Object> originData;
+
+
     }
 
     @Data
@@ -71,6 +83,8 @@ public class CheckResult {
          * 字段
          */
         private String column;
+        // 对应到的sheet的列描述
+        private String title;
         /**
          * excel值
          */
@@ -79,6 +93,9 @@ public class CheckResult {
          * 数据库值
          */
         private Object dbVal;
+        // 错误报告
+        private String reportMsg;
+
     }
 
     public interface FailType {
@@ -88,23 +105,25 @@ public class CheckResult {
         int OUT_UNVALID = 4;
     }
 
-    public static CheckResult.CheckDetail failDetail(int failType, String key, String msg) {
-        CheckDetail detail = fail(failType, msg);
-        detail.setKey(key);
-        return detail;
-    }
-
-    public static <T> CheckResult.CheckDetail failDetailWithData(int failType, String key, List<Diff> diffList, String msg) {
-        CheckDetail detail = fail(failType, msg);
+    public static CheckResult.CheckDetail failDetailWithData(int failType, String key, List<Diff> diffList, Map<String, Object> data) {
+        CheckDetail detail = fail(failType, key, null);
         detail.setDiffList(diffList);
+        detail.setOriginData(data);
         return detail;
     }
 
-    private static CheckDetail fail(int failType, String msg) {
+    public static CheckDetail fail(int failType, String key, String msg) {
         CheckDetail detail = new CheckDetail();
         detail.setSuccess(false);
         detail.setFailType(failType);
         detail.setMsg(msg);
+        detail.setKey(key);
+        return detail;
+    }
+
+    public static CheckDetail fail(int failType, String key, String msg, Map<String, Object> data) {
+        CheckDetail detail = fail(failType, key, null);
+        detail.setOriginData(data);
         return detail;
     }
 
@@ -114,4 +133,5 @@ public class CheckResult {
         detail.setKey(key);
         return detail;
     }
+
 }

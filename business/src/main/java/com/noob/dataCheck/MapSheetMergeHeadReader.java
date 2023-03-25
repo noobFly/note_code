@@ -9,7 +9,10 @@ import cn.hutool.poi.excel.reader.AbstractSheetReader;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.noob.json.JSON;
+import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -22,6 +25,8 @@ import java.util.stream.Collectors;
  */
 public class MapSheetMergeHeadReader extends AbstractSheetReader<List<Map<String, Object>>> {
     private final List<Integer> headerRowIndexs;
+    @Getter
+    private List<String> headerList;
 
     /**
      * 构造
@@ -56,7 +61,7 @@ public class MapSheetMergeHeadReader extends AbstractSheetReader<List<Map<String
         final int endRowIndex = Math.min(this.endRowIndex, lastRowNum);// 读取结束行（包含）
 
         // 读取header
-        List<String> headerList = aliasHeader(readRow(sheet, headerRowIndexs));
+        headerList = aliasHeader(readRow(sheet, headerRowIndexs));
 
         final List<Map<String, Object>> result = new ArrayList<>(endRowIndex - startRowIndex + 1);
         List<Object> rowList;
@@ -76,7 +81,7 @@ public class MapSheetMergeHeadReader extends AbstractSheetReader<List<Map<String
     protected List<Object> readRow(Sheet sheet, List<Integer> headerRowIndexList) {
         List<List<Object>> headRowList =
                 headerRowIndexList.stream().map(rowIndex -> RowUtil.readRow(sheet.getRow(rowIndex), this.cellEditor)).collect(Collectors.toList()); //按顺序排列的名称
-        return headRowList.size() == 1 ? headRowList.get(0) : merge(headRowList);
+        return headRowList.size() == 1 ? clear(headRowList.get(0)) : merge(headRowList);
 
     }
 
@@ -91,7 +96,7 @@ public class MapSheetMergeHeadReader extends AbstractSheetReader<List<Map<String
                     continue;
                 }
 
-                String tmp = title.get(i) == null ? "" : title.get(i).toString();
+                String tmp = title.get(i) == null ? StringUtils.EMPTY : title.get(i).toString();
 
                 if (Strings.isNullOrEmpty(val)) {
                     val = tmp;
@@ -106,8 +111,17 @@ public class MapSheetMergeHeadReader extends AbstractSheetReader<List<Map<String
 
         }
         System.out.println(JSON.toJSONString(result));
-        return result;
+        return clear(result);
 
+    }
+
+    private List<Object> clear(List<Object> result) {
+        if (CollectionUtils.isEmpty(result)) {
+            return null;
+        } else {
+            // n 回车(u000a) t 水平制表符(u0009) s 空格(u0008) r 换行(u000d)*/
+            return result.stream().map(t -> t == null ? StringUtils.EMPTY : String.valueOf(t).replaceAll("\\s*|t|r|n", "")).collect(Collectors.toList());
+        }
     }
 
 

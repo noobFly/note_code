@@ -13,7 +13,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class GroupingByDownstreamTest {
-    @JsonFilter("ignoreVarFilter")
+    // @JsonFilter("ignoreVarFilter")
     @Data
     public static class Person {
         private String realName;
@@ -41,13 +41,13 @@ public class GroupingByDownstreamTest {
         int b = list.stream().mapToInt(Person::getTime).sum();
         System.out.println(b);
 
-        BigDecimal d = list.stream().map(Person::getDecimal).reduce(BigDecimal::add).get();
+        BigDecimal d = list.stream().map(Person::getDecimal).reduce(BigDecimal::add).get(); //当数据为空时这种reduce写法会报错
         System.out.println(d);
 
         //   list.stream().forEach(t->list.remove(t)); List和Map的stream里也不能直接remove!!! 都会expectedModCount<初始实例化迭代器就固定为当前的modCount修改次数>和modCount(remove操作会++)不一致抛出ConcurrentModificationException
 
         // 把list转成1:1的map.
-       //  Map<String, Person> e = list.stream().collect(Collectors.toMap(Person::getRealName, Function.identity()));
+        //  Map<String, Person> e = list.stream().collect(Collectors.toMap(Person::getRealName, Function.identity()));
         //  这里因为数据源重复问题会报错，如果想支持后覆盖前，可改写底层的mergeFunction
         /** Exception in thread "main" java.lang.IllegalStateException: Duplicate key GroupingByDownstreamTest.Person(realName=RealName0, taskType=TaskType0, time=0, decimal=0)
          at java.util.stream.Collectors.lambda$throwingMerger$0(Collectors.java:133)
@@ -55,7 +55,7 @@ public class GroupingByDownstreamTest {
          at java.util.stream.Collectors.lambda$toMap$58(Collectors.java:1320)
          at java.util.stream.ReduceOps$3ReducingSink.accept(ReduceOps.java:169)
          **/
-        Map<String, Person> e = list.stream().collect(Collectors.toMap(Person::getRealName, Function.identity(),(k1, k2)-> k1));
+        Map<String, Person> e = list.stream().collect(Collectors.toMap(Person::getRealName, Function.identity(), (k1, k2) -> k1));
         System.out.println(JSON.toJSONString(e));
 
         // 验证JSON动态屏蔽某个参数
@@ -79,7 +79,7 @@ public class GroupingByDownstreamTest {
         Map<String, IntSummaryStatistics> collect2 = list.stream().collect(Collectors.groupingBy(Person::getRealName, Collectors.summarizingInt(Person::getTime)));
         System.out.println(JSON.toJSONString(collect2));
 
-        Map<String, BigDecimal> collect9 = list.stream().collect(Collectors.groupingBy(Person::getRealName, Collectors.mapping(Person::getDecimal, Collectors.reducing(BigDecimal.ZERO, (x, m) -> x.add(m)))));
+        Map<String, BigDecimal> collect9 = list.stream().collect(Collectors.groupingBy(Person::getRealName, Collectors.mapping(Person::getDecimal, Collectors.reducing(BigDecimal.ZERO, (x, m) -> x.add(m))))); //这种的reduce写法，在数据为空时会给默认值0进行累加
         System.out.println(JSON.toJSONString(collect9));
 
         // 相同key的value相加

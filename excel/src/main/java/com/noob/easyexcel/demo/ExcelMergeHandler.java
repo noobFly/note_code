@@ -13,8 +13,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import java.util.List;
 
 /**
- * 合并单元格
- * <p>也可以指定具体哪几个组合的(rowIndex_begin, rowIndex_end)要合并，就不需要比对cellData数据是否前后一致</>
+ * 比对cellData数据是否前后一致，合并单元格
  */
 public class ExcelMergeHandler implements CellWriteHandler {
     private int[] mergeColumnIndex; // 哪些下标列需要合并 --- 按实际模板情况而定

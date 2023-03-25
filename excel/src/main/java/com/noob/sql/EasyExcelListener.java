@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
+// 整合多表头的列标题
 @Slf4j
 public class EasyExcelListener<T> extends AnalysisEventListener<T> {
     public int[] headRow; // 指定excel里标题行的index

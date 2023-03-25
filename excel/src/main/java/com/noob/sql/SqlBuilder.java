@@ -15,9 +15,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 分表分库时sql的创建
- * <dependency> <groupId>com.alibaba</groupId> <artifactId>druid</artifactId>
- * <version>1.1.6</version> </dependency>
+ * 单表sql转成分表分库时sql
+ * <dependency>
+ *     <groupId>com.alibaba</groupId>
+ *     <artifactId>druid</artifactId>
+ * 		<version>1.1.6</version>
+ * </dependency>
  *
  */
 public class SqlBuilder {
@@ -27,7 +30,7 @@ public class SqlBuilder {
 		BufferedReader fin = null;
 		try {
 			fin = new BufferedReader(new InputStreamReader(new FileInputStream(filePath)));
-			String line = null;
+			String line ;
 			while ((line = fin.readLine()) != null) {
 				list.add(line);
 			}
@@ -82,15 +85,15 @@ public class SqlBuilder {
 			sqlTable.put(SQLUtils.toMySqlString(stmt), tableName);
 		}
 
-		List<String> convertLsit = Lists.newArrayList();
+		List<String> convertList = Lists.newArrayList();
 		sqlTable.forEach((sql, tableName) -> {
 			for (int i = 0; i < 32; i++) {
 				String no = i < 10 ? "0" + i : i + "";
-				convertLsit.add(StringUtils.replaceOnce(sql, tableName, tableName + "_" + no)); // 字段名有可能包含表名，所以只是覆盖第一个
+				convertList.add(StringUtils.replaceOnce(sql, tableName, tableName + "_" + no)); // 字段名有可能包含表名，所以只是覆盖第一个
 			}
 		});
 
-		out(String.join("\n", convertLsit), "C:\\Users\\admin\\Desktop\\sqlResult.sql");
+		out(String.join("\n", convertList), "C:\\Users\\admin\\Desktop\\sqlResult.sql");
 
 	}
 

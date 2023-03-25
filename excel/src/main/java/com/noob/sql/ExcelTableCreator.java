@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 从excel的列转成create table
+ * 从excel的列标题转成create table语句
  */
 public class ExcelTableCreator {
 

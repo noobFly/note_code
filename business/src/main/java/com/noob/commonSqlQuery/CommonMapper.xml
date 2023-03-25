@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.noob.commonSqlQuery.CommonAdmMapper">
+<mapper namespace="com.noob.commonSqlQuery.CommonMapper">
 
 
     <select id="query" resultType="java.util.Map">
         select
         <choose>
             <when test=" queryModel.selectColumnList != null and queryModel.selectColumnList.size > 0">
-                <foreach collection=" queryModel.selectColumnList" item="column" separator=","> t.${column}</foreach>
+                <foreach collection=" queryModel.selectColumnList" item="column" separator=","> ${column}</foreach>
             </when>
-            <otherwise>t.*</otherwise>
+            <otherwise>*</otherwise>
         </choose>
-        from ${table} t
+        from ${table}
 
         <if test=" queryModel.filterConditionList != null and queryModel.filterConditionList.size > 0 ">
             <where>
