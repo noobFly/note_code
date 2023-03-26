@@ -55,11 +55,11 @@ public enum DataTypeEnum {
             return Strings.nullToEmpty(val);
         }
 
-        public boolean compare(String a, String d, Map<String, String> extraProperties) {
+        public boolean compare(String a, String b, Map<String, String> extraProperties) {
             try {
-                return new SimpleDateFormat(TimeUtil.DATE_PATTERN).parse(a).compareTo(new SimpleDateFormat(TimeUtil.DATE_PATTERN).parse(d)) == 0;
+                return TimeUtil.parseDate(a).compareTo(TimeUtil.parseDate(b)) == 0;
             } catch (Exception e) {
-                System.out.println(String.format("DATE异常: a: %s  b: %s", a, d));
+                System.out.println(String.format("DATE比较异常: a: %s  b: %s", a, b));
                 e.printStackTrace();
                 return false;
             }

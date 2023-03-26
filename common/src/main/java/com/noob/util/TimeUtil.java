@@ -242,6 +242,7 @@ public class TimeUtil extends org.apache.commons.lang3.time.DateUtils {
         try {
             return parseDate(str.toString(), parsePatterns);
         } catch (ParseException e) {
+            e.printStackTrace();
             return null;
         }
     }
