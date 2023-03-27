@@ -1,6 +1,5 @@
 package com.noob.dataCheck;
 
-import com.google.common.base.Strings;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +15,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 如果是使用每个库表对应的实体来获取数据则需要提前预设Method的映射;
+ * <p>如果是使用每个库表对应的实体来获取数据则需要提前预设Method的映射; 就需要有#clear方法
  * <p>但如果用通用查询通道方式则不用, 它返回的Map<String,Object>的key就是表字段
  */
 public abstract class DataCheckConfigCreator {

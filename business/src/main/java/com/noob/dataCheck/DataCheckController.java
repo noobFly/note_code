@@ -214,6 +214,7 @@ public class DataCheckController {
     private List<Map<String, Object>> queryDbData(int topic) {
         CommonQueryDTO queryDTO = new CommonQueryDTO();
         queryDTO.setType(topic);
+        queryDTO.setMergeDefaultFilterCondition(true);
         return commonQueryHandler.queryAdm(queryDTO);
     }
 

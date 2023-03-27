@@ -1,5 +1,6 @@
 package com.noob.commonSqlQuery;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -28,12 +29,13 @@ public class CommonQueryHandler {
         return commonMapper.query(table.name(), queryDTO);
     }
 
+    @JsonFormat(shape = JsonFormat.Shape.OBJECT) // enum默认jackson输出到前端是只有名字的! 加上后能转成object输出
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum TableEnum {
-        view_fund_activity_details(1, null, null, false),
-        view_activity_industry_fund(2, "产业基金", new CommonQueryDTO.QueryCondition("tag1", "明细"), true),
-        view_direct_project_total(3, "创投直投项目金额统计", null, false);
+        fund_activity_details(1, null, null, false),
+        activity_industry_fund(2, "产业基金", new CommonQueryDTO.QueryCondition("tag1", "明细"), true),
+        direct_project_total(3, "创投项目金额统计", null, false);
         private int type;
         private String msg;
         private CommonQueryDTO.QueryCondition extraFilterCondition;
