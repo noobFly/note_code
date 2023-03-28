@@ -27,7 +27,7 @@
      }
      ],
      "selectColumnList": [
-     "substr(fund_name,2)"
+     "substr(fund_name,2) as fund_name"
      ],
      "filterConditionList": [
      {

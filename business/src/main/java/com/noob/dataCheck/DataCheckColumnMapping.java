@@ -43,9 +43,14 @@ public class DataCheckColumnMapping {
     // 对应的字段方法
     private Method getter;
 
-    public Map<String, String> getProperties(){
+
+    public DataCheckColumnMapping(String title) {
+        this.title = title;
+    }
+
+    public Map<String, String> getProperties() {
         String extraProperties = this.getExtra();
-        return  Strings.isNullOrEmpty(extraProperties) ? null : JSON.parseMapString(extraProperties);
+        return Strings.isNullOrEmpty(extraProperties) ? null : JSON.parseMapString(extraProperties);
     }
 
 }

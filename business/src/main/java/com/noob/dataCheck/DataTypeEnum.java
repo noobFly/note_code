@@ -4,18 +4,17 @@ import com.google.common.base.Strings;
 import com.noob.util.TimeUtil;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.Map;
 
 
 // 映射的字段类型
+@Slf4j
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum DataTypeEnum {
@@ -34,7 +33,8 @@ public enum DataTypeEnum {
                 try {
                     return new BigDecimal(a).setScale(scale, model).compareTo(new BigDecimal(b).setScale(scale, model)) == 0;
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.warn("NUMBER类型比较错误 a:{} b:{}", a, b, e);
+                    return false;
                 }
             }
             return isSame;
@@ -59,8 +59,7 @@ public enum DataTypeEnum {
             try {
                 return TimeUtil.parseDate(a).compareTo(TimeUtil.parseDate(b)) == 0;
             } catch (Exception e) {
-                System.out.println(String.format("DATE比较异常: a: %s  b: %s", a, b));
-                e.printStackTrace();
+                log.warn("DATE类型比较错误 a:{} b:{}", a, b, e);
                 return false;
             }
         }
@@ -101,7 +100,6 @@ public enum DataTypeEnum {
         return Strings.isNullOrEmpty(val) ? defaultValue : val;
     }
 
-
     private interface ExtraKey {
         String clear = "clear";
         String default_value = "defaultValue";
@@ -112,3 +110,4 @@ public enum DataTypeEnum {
     }
 
 }
+

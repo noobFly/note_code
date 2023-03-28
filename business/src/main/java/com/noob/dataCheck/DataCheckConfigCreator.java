@@ -102,7 +102,7 @@ public abstract class DataCheckConfigCreator {
 
 
     // 列-字段 配置
-    protected abstract List<DataCheckColumnMapping> getColumnConfig(Integer topic);
+    public abstract List<DataCheckColumnMapping> getColumnConfig(Integer topic);
 
     // sheet-表 配置
     protected abstract DataCheckTableMapping getTableConfig(Integer topic);

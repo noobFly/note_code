@@ -8,6 +8,10 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.noob.commonSqlQuery.CommonQueryDTO;
 import com.noob.commonSqlQuery.CommonQueryHandler;
+import com.noob.json.JSON;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.collections.CollectionUtils;
@@ -26,9 +30,13 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -54,6 +62,81 @@ public class DataCheckController {
     private final String SYMBOL = " &^& ";
     private final String COMMA = ",";
 
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    private static class DTO {
+        @NotNull(message = "表的类型不能为空")
+        Integer topic;
+        /**
+         * 额外的查询入参
+         */
+        String param;
+        String msg;
+    }
+
+    @NoArgsConstructor
+    @Data
+    @Valid
+    private static class SheetDTO {
+        @NotBlank(message = "sheet名称不能为空")
+        String name;
+        @NotNull(message = "表的类型不能为空")
+        Integer topic;
+        @NotEmpty(message = "标题行不能为空")
+        List<Integer> indexList;
+    }
+
+    /**
+     * 支持的稽查表
+     *
+     * @return
+     */
+    @GetMapping("/support")
+    public List<DTO> supportCheckTable() {
+        return Arrays.asList(CommonQueryHandler.TableEnum.values()).stream().filter(CommonQueryHandler.TableEnum::isNeedCheck).map(t -> new DTO(t.getType(), null, t.getMsg())).collect(Collectors.toList());
+    }
+
+    /**
+     * sheet表的标题  requestParam入参结构：[{"name":"产业信息表","topic":1,"indexList":[1,2,3]}]
+     *
+     * @param requestParam 额外的复杂参数需要用@RequestPart的方式处理, postman上就用form-data传入文本 eg. requestParam:[{"name":"项目情况表","topic":5,"indexList":[1]}]！@RequestParam对简单类型参数可以处理，但复杂入参无法用postman模拟出！
+     * @param file
+     * @return
+     */
+    @GetMapping("/sheetColumn")
+    public Map<String, List<DataCheckColumnMapping>> sheetColumn(@RequestPart("requestParam") String requestParam, @RequestPart("file") MultipartFile file) throws Exception {
+        List<SheetDTO> list = JSON.parseArray(requestParam, SheetDTO.class);
+        Map<String, List<DataCheckColumnMapping>> headerMap = Maps.newHashMap();
+        try (Workbook workbook = WorkbookUtil.createBook(file.getInputStream())) {
+            list.forEach(dto -> {
+                String sheetName = dto.getName();
+                Sheet sheet = workbook.getSheet(sheetName);
+                if (sheet == null) {
+                    throw new RuntimeException(String.format("[%s]在excel文件中不存在！请修改稽查配置后重试", sheetName));
+                }
+                MapSheetMergeHeadReader reader = new MapSheetMergeHeadReader(dto.getIndexList().stream().map(String::valueOf).collect(Collectors.toList()), 0, 0);
+                reader.read(sheet);
+                List<String> headList = reader.getHeaderList().stream().filter(t -> !Strings.isNullOrEmpty(t)).collect(Collectors.toList());
+                if (CollectionUtils.isNotEmpty(headList)) {
+                    List<DataCheckColumnMapping> existList = dataCheckConfigCreator.getColumnConfig(dto.getTopic());
+                    headerMap.put(sheetName, headList.stream().map(t -> {
+                        DataCheckColumnMapping column;
+                        if (CollectionUtils.isNotEmpty(existList) && (column = existList.stream().filter(exist -> exist.getTitle().equals(t)).findAny().orElse(null)) != null) {
+                            return column;
+                        } else {
+                            return new DataCheckColumnMapping(t);
+                        }
+                    }).collect(Collectors.toList()));
+                }
+            });
+        }
+
+        if (headerMap.size() == 0) {
+            throw new RuntimeException("无法解析各个sheet下的标题名");
+        }
+        return headerMap;
+    }
 
     /**
      * 上传后即刻开始比对
@@ -114,6 +197,8 @@ public class DataCheckController {
                 workbook.write(response.getOutputStream());
             } catch (Exception e) {
                 throw new RuntimeException("稽查报告文件生成异常", e);
+            } finally {
+                response.flushBuffer();
             }
         }
 
@@ -194,6 +279,7 @@ public class DataCheckController {
                 writer.write(reportDataList, false).autoSizeColumnAll();
 
             });
+
             stopWatch.stop();
             log.info("[回写错误报告数据]结束. cost:{}ms.", stopWatch.getLastTaskTimeMillis());
 
