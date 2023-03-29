@@ -89,9 +89,8 @@ public static void main(String args[]){
     /**
      * sheet表的标题  requestParam入参结构：[{"name":"信息表","topic":1,"indexList":[1,2,3]}]
      *
-     * @param requestParam 额外的复杂参数需要用@RequestPart的方式处理, postman上就用form-data传入文本 eg. requestParam:[{"name":"情况表","topic":5,"indexList":[1]}]！
-     *                     @RequestParam对简单类型参数可以处理，但复杂入参无法用postman模拟出！
-     * @param file
+     * @param requestParam 额外的复杂参数需要: postman上就用form-data传入文本 eg. requestParam:[{"name":"情况表","topic":5,"indexList":[1]}]！
+     *                     在url后拼接参数对简单类型可以处理，但复杂入参无法用postman模拟出！ 代码里@RequestPart和@RequestParam都能接收
      * @return
      */
     @GetMapping("/sheetColumn")
