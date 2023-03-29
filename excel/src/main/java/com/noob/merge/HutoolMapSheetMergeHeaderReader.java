@@ -1,4 +1,4 @@
-package com.noob.dataCheck;
+package com.noob.merge;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.IterUtil;
@@ -10,9 +10,9 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.noob.json.JSON;
 import lombok.Getter;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 /**
  * 扩写cn.hutool.poi.excel.reader.MapSheetReader 支持多行作为表头head
  */
-public class MapSheetMergeHeadReader extends AbstractSheetReader<List<Map<String, Object>>> {
+public class HutoolMapSheetMergeHeaderReader extends AbstractSheetReader<List<Map<String, Object>>> {
     private final List<Integer> headerRowIndexs;
     @Getter
     private List<String> headerList;
@@ -35,7 +35,7 @@ public class MapSheetMergeHeadReader extends AbstractSheetReader<List<Map<String
      * @param startRowIndex  起始行（包含，从0开始计数）
      * @param endRowIndex    结束行（包含，从0开始计数）
      */
-    public MapSheetMergeHeadReader(List<String> headerRowIndex, int startRowIndex, int endRowIndex) {
+    public HutoolMapSheetMergeHeaderReader(List<String> headerRowIndex, int startRowIndex, int endRowIndex) {
         super(startRowIndex, endRowIndex);
         this.headerRowIndexs = headerRowIndex.stream().map(Integer::parseInt).collect(Collectors.toList());
     }

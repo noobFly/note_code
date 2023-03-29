@@ -1,9 +1,7 @@
-package com.noob.Excel;
+package com.noob.util;
 
 import cn.hutool.core.convert.Convert;
 import com.noob.util.File.FileTypeUtils;
-import com.noob.util.ReflectHelper;
-import com.noob.util.TimeUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -40,7 +38,7 @@ public class ExcelUtil<T> {
     private static final Logger log = LoggerFactory.getLogger(ExcelUtil.class);
 
     /**
-     * Excel sheet最大行数，默认65536
+     * util sheet最大行数，默认65536
      */
     public static final int maxSheetSize = 65536;
 
@@ -812,7 +810,7 @@ public class ExcelUtil<T> {
                 if (cell.getCellType() == CellType.NUMERIC || cell.getCellType() == CellType.FORMULA) {
                     val = cell.getNumericCellValue();
                     if (DateUtil.isCellDateFormatted(cell)) {
-                        val = DateUtil.getJavaDate((Double) val); // POI Excel 日期格式转换
+                        val = DateUtil.getJavaDate((Double) val); // POI util 日期格式转换
                     } else {
                         if ((Double) val % 1 != 0) {
                             val = new BigDecimal(val.toString());

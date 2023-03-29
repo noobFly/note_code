@@ -12,6 +12,7 @@ import com.google.common.collect.Maps;
 import com.noob.easyexcel.demo.entity.BaseEntity;
 import com.noob.easyexcel.demo.entity.CreditBank;
 import com.noob.easyexcel.demo.entity.ProjectCooperation;
+import com.noob.merge.EasyexcelMergeCellDataHandler;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -82,7 +83,7 @@ public class TestEasyExcel {
             int mergeRowIndex = 5;
 
             // 可以用sheetName或sheetIndex来约定写入的sheet
-            WriteSheet writeSheet = EasyExcel.writerSheet(0).head(CreditBank.class).registerWriteHandler(new ExcelMergeHandler(mergeRowIndex, mergeColumIndex)).build();
+            WriteSheet writeSheet = EasyExcel.writerSheet(0).head(CreditBank.class).registerWriteHandler(new EasyexcelMergeCellDataHandler(mergeRowIndex, mergeColumIndex)).build();
             FillConfig fillConfig = FillConfig.builder().direction(WriteDirectionEnum.VERTICAL).forceNewRow(Boolean.TRUE).build();
             excelWriter.fill(new FillWrapper("list", list), fillConfig, writeSheet);// 对象插入
             excelWriter.fill(new FillWrapper("list2", list), fillConfig, writeSheet); // 不同区域的数据分成不同的warpper插入。

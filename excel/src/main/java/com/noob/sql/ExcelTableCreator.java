@@ -6,6 +6,7 @@ import com.alibaba.excel.util.IoUtils;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.noob.json.JSON;
+import com.noob.merge.EasyExcelMergeHeaderListener;
 import com.noob.util.security.MD5;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -80,7 +81,7 @@ public class ExcelTableCreator {
 
     public static void main(String[] args) throws Exception {
         File file = new File(path);
-        EasyExcelListener readListener = new EasyExcelListener(headRow);
+        EasyExcelMergeHeaderListener readListener = new EasyExcelMergeHeaderListener(headRow);
         // 默认只读第一个sheet
         EasyExcel.read(file, readListener).extraRead(CellExtraTypeEnum.MERGE).autoTrim(true).sheet(sheetNum).headRowNumber(headRow[headRow.length - 1] + 1).doRead();
 

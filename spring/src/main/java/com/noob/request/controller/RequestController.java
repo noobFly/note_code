@@ -1,5 +1,6 @@
 package com.noob.request.controller;
 
+import com.ecc.emp.data.DataElement;
 import com.noob.json.JSON;
 import com.noob.util.ExceptionUtil;
 import com.noob.util.File.GZIPUtils;
@@ -28,8 +29,11 @@ import java.util.Map;
 @RestController
 public class RequestController {
 
-    private static final String TMP = System.getProperty("java.io.tmpdir") + File.separator;
+    private static final String TMP = System.getProperty("java.io.tmpdir") + File.separator; // On Windows: java.io.tmpdir:[C:\Users\用户名\AppData\Local\Temp\]
 
+public static void main(String args[]){
+    System.out.println(System.getProperty("java.io.tmpdir"));
+}
     /**
      * 可支持多文件上传。
      * <p>
@@ -80,6 +84,23 @@ public class RequestController {
         data = GZIPUtils.compress(data);
         System.out.println(name + "压缩前: " + length + " 压缩后: " + data.length);
 
+    }
+
+    /**
+     * sheet表的标题  requestParam入参结构：[{"name":"信息表","topic":1,"indexList":[1,2,3]}]
+     *
+     * @param requestParam 额外的复杂参数需要用@RequestPart的方式处理, postman上就用form-data传入文本 eg. requestParam:[{"name":"情况表","topic":5,"indexList":[1]}]！
+     *                     @RequestParam对简单类型参数可以处理，但复杂入参无法用postman模拟出！
+     * @param file
+     * @return
+     */
+    @GetMapping("/sheetColumn")
+    public void sheetColumn(@RequestPart("requestParam") String requestParam, @RequestPart("file") MultipartFile file, HttpServletRequest request) {
+        System.out.println(requestParam);
+        System.out.println(file.getOriginalFilename());
+        List<DataElement> list = JSON.parseArray(requestParam, DataElement.class);
+        String tmp = request.getParameter("requestParam");
+        System.out.println(tmp);
     }
 
     @PostMapping(value = "/file/download")

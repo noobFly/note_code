@@ -1,4 +1,4 @@
-package com.noob.easyexcel.demo;
+package com.noob.merge;
 
 import com.alibaba.excel.metadata.Head;
 import com.alibaba.excel.metadata.data.WriteCellData;
@@ -13,14 +13,14 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import java.util.List;
 
 /**
- * 比对cellData数据是否前后一致，合并单元格
+ * 比对cellData数据是否前后一致，合并单元格!
  */
-public class ExcelMergeHandler implements CellWriteHandler {
+public class EasyexcelMergeCellDataHandler implements CellWriteHandler {
     private int[] mergeColumnIndex; // 哪些下标列需要合并 --- 按实际模板情况而定
     private int mergeRowIndex; // 从哪个下标行开始进入合并逻辑 --- 按实际模板情况而定
 
 
-    public ExcelMergeHandler(int mergeRowIndex, int[] mergeColumnIndex) {
+    public EasyexcelMergeCellDataHandler(int mergeRowIndex, int[] mergeColumnIndex) {
         this.mergeRowIndex = mergeRowIndex;
         this.mergeColumnIndex = mergeColumnIndex;
     }

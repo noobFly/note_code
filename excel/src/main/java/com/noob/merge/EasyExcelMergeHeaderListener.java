@@ -1,4 +1,4 @@
-package com.noob.sql;
+package com.noob.merge;
 
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 // 整合多表头的列标题
 @Slf4j
-public class EasyExcelListener<T> extends AnalysisEventListener<T> {
+public class EasyExcelMergeHeaderListener<T> extends AnalysisEventListener<T> {
     public int[] headRow; // 指定excel里标题行的index
     public boolean loadSheetName = true; // 读sheet名
     @Getter
@@ -28,7 +28,7 @@ public class EasyExcelListener<T> extends AnalysisEventListener<T> {
     public static List importList = new ArrayList();
     public static final ThreadLocal<String> RESP = new ThreadLocal();
 
-    public EasyExcelListener(int[] headRow) {
+    public EasyExcelMergeHeaderListener(int[] headRow) {
         this.headRow = headRow;
         headComposableList = Lists.newArrayListWithCapacity(headRow.length);
     }

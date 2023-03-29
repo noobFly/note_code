@@ -9,6 +9,7 @@ import com.google.common.collect.Maps;
 import com.noob.commonSqlQuery.CommonQueryDTO;
 import com.noob.commonSqlQuery.CommonQueryHandler;
 import com.noob.json.JSON;
+import com.noob.merge.HutoolMapSheetMergeHeaderReader;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -115,7 +116,7 @@ public class DataCheckController {
                 if (sheet == null) {
                     throw new RuntimeException(String.format("[%s]在excel文件中不存在！请修改稽查配置后重试", sheetName));
                 }
-                MapSheetMergeHeadReader reader = new MapSheetMergeHeadReader(dto.getIndexList().stream().map(String::valueOf).collect(Collectors.toList()), 0, 0);
+                HutoolMapSheetMergeHeaderReader reader = new HutoolMapSheetMergeHeaderReader(dto.getIndexList().stream().map(String::valueOf).collect(Collectors.toList()), 0, 0);
                 reader.read(sheet);
                 List<String> headList = reader.getHeaderList().stream().filter(t -> !Strings.isNullOrEmpty(t)).collect(Collectors.toList());
                 if (CollectionUtils.isNotEmpty(headList)) {
@@ -163,7 +164,7 @@ public class DataCheckController {
                 }
                 int dataStartIndex = tableMapping.getDataStartIndex();
 
-                MapSheetMergeHeadReader reader = new MapSheetMergeHeadReader(tableMapping.getHeadIndexList(), dataStartIndex, LIMIT);
+                HutoolMapSheetMergeHeaderReader reader = new HutoolMapSheetMergeHeaderReader(tableMapping.getHeadIndexList(), dataStartIndex, LIMIT);
                 List<Map<String, Object>> uploadInfoList = reader.read(sheet);
 
 
