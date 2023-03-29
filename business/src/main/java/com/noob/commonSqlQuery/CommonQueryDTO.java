@@ -19,6 +19,8 @@ public class CommonQueryDTO {
     private boolean startPage;
     //排序字段
     public List<@Valid SortCondition> sortConditionList;
+    // 分组字段
+    public List<@SqlValid @NotEmpty String> groupColumnList;
     // 需要查询的字段
     private List<@SqlValid @NotEmpty String> selectColumnList;
     //过滤条件

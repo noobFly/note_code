@@ -36,9 +36,15 @@
             </where>
         </if>
 
+        <if test="queryModel.groupColumnList != null and queryModel.groupColumnList.size > 0 ">group by
+            <foreach collection="queryModel.groupColumnList" item="column" separator=",">
+                ${column}
+            </foreach>
+        </if>
+
         <if test="queryModel.sortConditionList != null and queryModel.sortConditionList.size > 0 ">order by
             <foreach collection="queryModel.sortConditionList" item="condition" separator=",">
-                ${condition.order} ${condition.sort}
+                ${condition.order}  ${condition.sort}
             </foreach>
         </if>
 
