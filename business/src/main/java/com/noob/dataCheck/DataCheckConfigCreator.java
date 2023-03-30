@@ -54,7 +54,7 @@ public abstract class DataCheckConfigCreator {
         }
 
         List<DataCheckColumnMapping> columns = getColumnConfig(topic);
-        if (table == null) {
+        if (CollectionUtils.isEmpty(columns)) {
             throw new RuntimeException(String.format("无稽查系统表%s的字段配置", table.getTableName()));
         }
         List<DataCheckColumnMapping> children = columns.stream().filter(t -> t.getTopic().equals(table.getTopic())).collect(Collectors.toList());
