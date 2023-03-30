@@ -38,7 +38,7 @@ public abstract class DataCheckConfigCreator {
         else cache.clear();
     }
 
-    public DataCheckTableMapping create(Integer topic, boolean clearCache) {
+    public List<DataCheckTableMapping> create(Integer topic, boolean clearCache) {
 
         if (clearCache) {
             clear(topic);
@@ -47,29 +47,31 @@ public abstract class DataCheckConfigCreator {
         return create(topic);
     }
 
-    public DataCheckTableMapping create(Integer topic) {
-        DataCheckTableMapping table = getTableConfig(topic);
-        if (table == null) {
+    public List<DataCheckTableMapping> create(Integer topic) {
+        List<DataCheckTableMapping> tableList = getTableConfig(topic);
+        if (CollectionUtils.isEmpty(tableList)) {
             throw new RuntimeException("无稽查系统表配置");
         }
+        tableList.forEach(table -> {
 
-        List<DataCheckColumnMapping> columns = getColumnConfig(topic);
-        if (CollectionUtils.isEmpty(columns)) {
-            throw new RuntimeException(String.format("无稽查系统表%s的字段配置", table.getTableName()));
-        }
-        List<DataCheckColumnMapping> children = columns.stream().filter(t -> t.getTopic().equals(table.getTopic())).collect(Collectors.toList());
-        Integer tableTopic = table.getTopic();
-        Map<String, Method> map = getMethodMap(children, tableTopic);
-        // 将数据库字段映射为getter
-        children.stream().forEach(t -> t.setGetter(map.get(t.getColumnName())));
-        table.setPrimaryKeyColumns(children.stream().filter(t -> "Y".equals(t.getPrimaryKey())).collect(Collectors.toList()));
+            List<DataCheckColumnMapping> columns = getColumnConfig(table.getTopic());
+            if (CollectionUtils.isEmpty(columns)) {
+                throw new RuntimeException(String.format("无稽查系统表%s的字段配置", table.getTableName()));
+            }
+            List<DataCheckColumnMapping> children = columns.stream().filter(t -> t.getTopic().equals(table.getTopic())).collect(Collectors.toList());
+            Integer tableTopic = table.getTopic();
+            Map<String, Method> map = getMethodMap(children, tableTopic);
+            // 将数据库字段映射为getter
+            children.stream().forEach(t -> t.setGetter(map.get(t.getColumnName())));
+            table.setPrimaryKeyColumns(children.stream().filter(t -> "Y".equals(t.getPrimaryKey())).collect(Collectors.toList()));
 
-        if (CollectionUtils.isEmpty(table.getPrimaryKeyColumns())) {
-            throw new RuntimeException(String.format("无稽查系统表%s的字段主键配置", table.getTableName()));
-        }
-        children.removeAll(table.getPrimaryKeyColumns());
-        table.setColumnMappings(children);
-        return table;
+            if (CollectionUtils.isEmpty(table.getPrimaryKeyColumns())) {
+                throw new RuntimeException(String.format("无稽查系统表%s的字段主键配置", table.getTableName()));
+            }
+            children.removeAll(table.getPrimaryKeyColumns());
+            table.setColumnMappings(children);
+        });
+        return tableList;
     }
 
 
@@ -105,6 +107,6 @@ public abstract class DataCheckConfigCreator {
     public abstract List<DataCheckColumnMapping> getColumnConfig(Integer topic);
 
     // sheet-表 配置
-    protected abstract DataCheckTableMapping getTableConfig(Integer topic);
+    protected abstract List<DataCheckTableMapping> getTableConfig(Integer topic);
 
 }

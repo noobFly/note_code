@@ -154,7 +154,7 @@ public class DataCheckController {
                 int topic = Integer.parseInt(param);
                 stopWatch.start(CommonQueryHandler.TableEnum.findTable(topic).name());
 
-                DataCheckTableMapping tableMapping = dataCheckConfigCreator.create(topic);// 表、字段映射关系;
+                DataCheckTableMapping tableMapping = dataCheckConfigCreator.create(topic).get(0);// 表、字段映射关系;
 
                 String logMsg;
                 String sheetName = tableMapping.getSheetName();
