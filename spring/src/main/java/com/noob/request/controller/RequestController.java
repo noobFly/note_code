@@ -4,6 +4,8 @@ import com.ecc.emp.data.DataElement;
 import com.noob.json.JSON;
 import com.noob.util.ExceptionUtil;
 import com.noob.util.File.GZIPUtils;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,10 @@ import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -86,20 +92,45 @@ public static void main(String args[]){
 
     }
 
+    @Data
+    @Valid
+    private static class SheetDTO {
+        @NotBlank(message = "sheet名称不能为空")
+        String name;
+        @NotNull(message = "表的类型不能为空")
+        Integer topic;
+        @NotEmpty(message = "标题行不能为空")
+        List<Integer> indexList;
+    }
+
     /**
      * sheet表的标题  requestParam入参结构：[{"name":"信息表","topic":1,"indexList":[1,2,3]}]
      *
-     * @param requestParam 额外的复杂参数需要: postman上就用form-data传入文本 eg. requestParam:[{"name":"情况表","topic":5,"indexList":[1]}]！
-     *                     在url后拼接参数对简单类型可以处理，但复杂入参无法用postman模拟出！ 代码里@RequestPart和@RequestParam都能接收
+     * @param requestParam 额外的复杂参数需要: 用form-data传入json文本 eg. requestParam:[{"name":"情况表","topic":5,"indexList":[1,2,3]}]！
+     *                     在url后拼接参数对简单类型可以处理，但复杂入参(eg. 集合、数组)无法模拟出！ 代码里@RequestPart和@RequestParam都能接收
      * @return
      */
     @GetMapping("/sheetColumn")
     public void sheetColumn(@RequestPart("requestParam") String requestParam, @RequestPart("file") MultipartFile file, HttpServletRequest request) {
         System.out.println(requestParam);
         System.out.println(file.getOriginalFilename());
-        List<DataElement> list = JSON.parseArray(requestParam, DataElement.class);
+        List<SheetDTO> list = JSON.parseArray(requestParam, SheetDTO.class);
         String tmp = request.getParameter("requestParam");
         System.out.println(tmp);
+    }
+
+    /**
+     *
+     * @param dto 用form-data传入值对：
+     *            name:name
+     *            topic:1
+     *            indexList:1
+     *            indexList:2
+     *            indexList:3
+     */
+    @GetMapping("/sheetColumn2")
+    public void sheetColumn2(@Valid SheetDTO dto, @RequestPart("file") MultipartFile file) {
+        System.out.println(file.getOriginalFilename());
     }
 
     @PostMapping(value = "/file/download")
