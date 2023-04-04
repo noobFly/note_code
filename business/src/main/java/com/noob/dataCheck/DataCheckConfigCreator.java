@@ -63,7 +63,7 @@ public abstract class DataCheckConfigCreator {
             Map<String, Method> map = getMethodMap(children, tableTopic);
             // 将数据库字段映射为getter
             children.stream().forEach(t -> t.setGetter(map.get(t.getColumnName())));
-            table.setPrimaryKeyColumns(children.stream().filter(t -> "Y".equals(t.getPrimaryKey())).collect(Collectors.toList()));
+            table.setPrimaryKeyColumns(children.stream().filter(DataCheckColumnMapping::isPk).collect(Collectors.toList()));
 
             if (CollectionUtils.isEmpty(table.getPrimaryKeyColumns())) {
                 throw new RuntimeException(String.format("无稽查系统表%s的字段主键配置", table.getTableName()));

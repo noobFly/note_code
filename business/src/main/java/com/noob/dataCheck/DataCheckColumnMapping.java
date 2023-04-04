@@ -5,6 +5,8 @@ import com.google.common.base.Strings;
 import com.noob.json.JSON;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -18,25 +20,30 @@ public class DataCheckColumnMapping {
     /**
      * 主题
      */
+    @NotNull(message = "表的类型不能为空")
     private Integer topic;
     /**
      * Excel列名
      */
+    @NotBlank(message = "Excel列名不能为空")
     private String title;
     /**
      * 关联的字段名
      */
+    @NotBlank(message = "关联的表字段名不能为空")
     private String columnName;
     /**
-     * 数据类型 //取DataTypeEnum的名称
+     * 数据类型  取DataTypeEnum的名称
      */
+    @NotBlank(message = "关联的表字段数据类型不能为空")
     private String dataType;
     /**
      * 是否主键
      */
+    @NotBlank(message = "关联的表字段数据[是否主键]不能为空")
     private String primaryKey;
     /**
-     * 额外特殊处理的json,用来处理差异性
+     * 额外特殊处理的json
      */
     private String extra;
 
@@ -53,5 +60,9 @@ public class DataCheckColumnMapping {
         return Strings.isNullOrEmpty(extraProperties) ? null : JSON.parseMapString(extraProperties);
     }
 
-}
+    public boolean isPk() {
+        return "Y".equals(this.primaryKey);
+    }
 
+
+}

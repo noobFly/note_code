@@ -22,6 +22,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -86,6 +88,18 @@ public class DataCheckController {
         Integer topic;
         @NotEmpty(message = "标题行不能为空")
         List<Integer> indexList;
+    }
+
+    // 新增或编辑稽查配置
+    @PostMapping("/tableMapping/update")
+    public void updateTableMapping(@RequestBody @NotEmpty List<@Valid DataCheckTableMapping> tableList) {
+        tableList.forEach(t -> {
+            if (t.getColumnMappings().stream().noneMatch(DataCheckColumnMapping::isPk)){
+                throw new RuntimeException(t.getSheetName() + " 字段配置里没有主键");
+            }
+        });
+        // TODO update
+
     }
 
     /**
