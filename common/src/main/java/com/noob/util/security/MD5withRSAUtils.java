@@ -18,12 +18,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- 在加解密过程中，要注意：
-
- 字节数组和字符串转换时的编码格式要保持一致！
- 其次：
- 公钥：先用 X509EncodedKeySpec 编码转换
- 私钥： 先用 PKCS8EncodedKeySpec 编码转换
+ *  加签/验签 和 加密/解密 是2个不同逻辑细节的事！！
+ *
+ * 私钥加签 -> SignatureSpi#engineInitSign(PrivateKey privateKey) ！
+ * 公钥验签 -> SignatureSpi#engineInitVerify(PublicKey publicKey) ！
+ *
+ * 在加解密过程中，要注意：
+ *
+ * 字节数组和字符串转换时的编码格式要保持一致！
+ * 其次：
+ *     公钥： 先用 X509EncodedKeySpec 编码转换  ！
+ *     私钥： 先用 PKCS8EncodedKeySpec 编码转换 ！
  *
  */
 public class MD5withRSAUtils {
@@ -34,9 +39,9 @@ public class MD5withRSAUtils {
     public static final String KEY_ALGORITHM = "RSA";
 
     /**
-     * 签名算法
-     * 将正文通过MD5数字摘要后，将密文 再次通过生成的RSA密钥加密，生成数字签名，
-     *  将明文与密文以及公钥发送给对方，对方拿到公钥对数字签名进行解密，与明文经过MD5加密后数据进行比较
+     * 签名算法  RSASignature#engineVerify
+     *  将明文通过MD5数字摘要后，将摘要再次通过生成的RSA私钥生成数字签名RSASignature#encodeSignature;
+     *  将明文与数字签名发送给对方，（公钥提前给）对方拿到公钥对数字签名进行解签RSASignature#decodeSignature，与明文经过MD5加密后数据进行比较
      *  如果一致则通过
      */
     public static final String SIGNATURE_ALGORITHM = "MD5withRSA";
@@ -95,7 +100,7 @@ public class MD5withRSAUtils {
      * 用私钥对信息生成数字签名
      * </p>
      *
-     * @param data       已加密数据
+     * @param data       数据
      * @param privateKey 私钥(BASE64编码)
      * @return
      * @throws Exception
@@ -113,10 +118,10 @@ public class MD5withRSAUtils {
 
     /**
      * <p>
-     * 校验数字签名
+     * 公钥校验数字签名！！！
      * </p>
      *
-     * @param data      已加密数据
+     * @param data      数据
      * @param publicKey 公钥(BASE64编码)
      * @param sign      数字签名
      * @return
@@ -429,19 +434,20 @@ public class MD5withRSAUtils {
         byte[] data2 = "T2687934173621741{\"password\":\"123564\",\"mobile\":\"15036248519\"}1639099349985".getBytes();
         byte[] data3 = "T2687934173621741{\"mobile\":\"15036248519\",\"password\":\"123564\",\"no\":\"\"}1639099349985".getBytes();
 
-// 用公钥加密
-
+        // 用私钥加签
         String signData = MD5withRSAUtils.sign(data, privateKey);
+        System.out.println(new String(MD5withRSAUtils.decryptByPublicKey(signData, publicKey))); // 加签/验签 和 加密/解密 是2个不同的事情！！！
+        System.out.println(new String(MD5withRSAUtils.decryptByPublicKey(MD5withRSAUtils.encryptByPrivateKey(data, privateKey),publicKey)));
 
         System.err.println("签名: " + signData);
-        boolean result = false;
         try {
-            result = MD5withRSAUtils.verify(data3, publicKey, signData); // 字符串有任何变动都会校验失败！ 所以最好是String传递；
-                                                                          // 如果非要是对象，一定要去除掉null的属性，并按属性名称排序后加解签名! 因为版本更替时，字段可能调用方和服务方会不一致！
+            // 字符串有任何变动都会校验失败！ 所以最好是String传递；
+            // 如果非要是对象，一定要去除掉null的属性，并按属性名称排序后加解签名! 因为版本更替时，字段可能调用方和服务方会不一致！
+            System.out.println( MD5withRSAUtils.verify(data, publicKey, signData));
+            System.out.println( MD5withRSAUtils.verify(data3, publicKey, signData));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(result);
 
     }
 

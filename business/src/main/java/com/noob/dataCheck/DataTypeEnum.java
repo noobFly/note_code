@@ -1,15 +1,18 @@
 package com.noob.dataCheck;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.noob.util.TimeUtil;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 
@@ -42,15 +45,29 @@ public enum DataTypeEnum {
     }, DATE {
         public String clear(Object data, Map<String, String> properties) {
             String val = super.clear(data, properties);
-            if (!Strings.isNullOrEmpty(val) && MapUtils.isNotEmpty(properties)) {
-                if ("array".equals(properties.get(ExtraKey.date_model))) {
-                    String[] array = val.split(",");
-                    if (array.length > 0) {
-                        val = array[0];
+            if (!Strings.isNullOrEmpty(val)) {
+                String pattern = null;
+                if (MapUtils.isNotEmpty(properties)) {
+                    if ("array".equals(properties.get(ExtraKey.date_model))) {
+                        String split = properties.get(ExtraKey.split);
+                        List<String> array = Lists.newArrayList(val.split(Strings.isNullOrEmpty(split) ? "," : split));
+                        if (CollectionUtils.isNotEmpty(array)) {
+                            val = array.stream().filter(t -> !Strings.isNullOrEmpty(t)).findFirst().orElse(null);
+                        }
+                        if (Strings.isNullOrEmpty(val)) {
+                            return Strings.nullToEmpty(val);
+                        }
                     }
+                    pattern = properties.get(ExtraKey.pattern);
                 }
-
-                val = TimeUtil.dateTime(TimeUtil.parseDate(val));
+                if (Strings.isNullOrEmpty(pattern)) {
+                    pattern = TimeUtil.DATE_PATTERN;
+                }
+                try {
+                    val = TimeUtil.formatDate(TimeUtil.parseDate(val), pattern);
+                } catch (Exception e) {
+                    log.info("{} 转换日期错误", data, e);
+                }
             }
             return Strings.nullToEmpty(val);
         }
@@ -64,6 +81,7 @@ public enum DataTypeEnum {
             }
         }
     },
+
 
     DEFAULT {
         public boolean compare(String a, String b, Map<String, String> extraProperties) {
@@ -104,10 +122,13 @@ public enum DataTypeEnum {
         String clear = "clear";
         String default_value = "defaultValue";
         String date_model = "dateModel";
+        String split = "split";
         String scale = "scale";
         String rounding_model = "roundingMode";
+        String pattern = "pattern";
 
     }
+
 
 }
 

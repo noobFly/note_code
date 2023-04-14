@@ -42,7 +42,7 @@ INSERT INTO `data_check_table_mapping` ( `topic`, `sheet_name`, `table_name`, `h
 INSERT INTO `data_check_column_mapping` (`topic`, `title`, `column_name`, `data_type`, `primary_key`, `extra`) VALUES
 ( 1, '基金名称', 'fund_name', 'DEFAULT', 'Y', ''),
 ( 1, '项目公司名称', 'project_name', 'DEFAULT', 'Y', ''),
-( 1, '投资时间', 'invest_date', 'DATE', 'Y', '{"dateModel":"array"}'),
+( 1, '投资时间', 'invest_date', 'DATE', 'Y', '{"dateModel":"array","pattern":"yyyy-MM-dd","split":",|;|；"}'),
 ( 1, '最新持股比例', 'shareholding_ratio', 'NUMBER', '', '{"scale":"2","roundingMode":"4","defaultValue":"0","clear":"%|-|/"}'),
 ( 1, '签约投资金额', 'sign_amount', 'NUMBER', '', '{"scale":"2","roundingMode":"4","defaultValue":"0","clear":",|-|/"}'),
 ( 1, '员工跟投额', 'follow_invest_amount', 'NUMBER', '', '{"scale":"2","roundingMode":"4","defaultValue":"0","clear":",|-|/"}'),

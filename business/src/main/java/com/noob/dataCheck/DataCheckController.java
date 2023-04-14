@@ -232,6 +232,7 @@ public class DataCheckController {
             dataFont.setFontName("Arial");
             dataFont.setFontHeightInPoints((short) 20);
             writer.getCellStyle().setFont(dataFont);
+            writer.getCellStyle().setWrapText(true);
 
             dataEntryList.forEach(t -> {
                 writer.setSheet(t.getKey());
@@ -291,7 +292,7 @@ public class DataCheckController {
                 }
 
                 writer.setCurrentRow(t.getValue().getTableMapping().getDataStartIndex());
-                writer.write(reportDataList, false).autoSizeColumnAll();
+                writer.write(reportDataList, false).autoSizeColumnAll(); // 如果使用了sheet.setDefaultColumnWidth(30); auto就无效
 
             });
 
@@ -329,8 +330,7 @@ public class DataCheckController {
         }
     }
 
-    private CheckResult
-    check(List<Map<String, Object>> outerDataList, List<Map<String, Object>> innerDataList, DataCheckTableMapping tableMapping) {
+    private CheckResult  check(List<Map<String, Object>> outerDataList, List<Map<String, Object>> innerDataList, DataCheckTableMapping tableMapping) {
         CheckResult finalResult = new CheckResult();
         finalResult.setUploadCount(size(outerDataList));
         finalResult.setDbCount(size(innerDataList));
