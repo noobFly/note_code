@@ -7,7 +7,7 @@
  *    1、多表联合查询等比较复杂的操作无法支持！
  *    2、前端得注意属性值的写法。
  *    3、有sql注入的风险
- *    4、因为ibatis的默认实现：在PreparedStatementHandler#execute 执行完sql后 在DefaultResultSetHandler#handleResultSets-> #applyAutomaticMappings 根据字段属性映射给返回对象实例的属性setter值时，如果为null不操作
+ *    4、因为ibatis的默认实现：在PreparedStatementHandler#execute 执行完sql后 在DefaultResultSetHandler#handleResultSets-> #applyAutomaticMappings 根据字段属性映射给返回对象实例的属性setter值时(最后是以SetterMethod#invoke方式写入！)，如果为null不操作
  *       所以当用Map(默认HashMap)做返回对象类型时，会出现: 如果值为空，map里会没该key!
  *
  * </p>

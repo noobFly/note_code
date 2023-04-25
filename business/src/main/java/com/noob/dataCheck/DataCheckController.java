@@ -115,7 +115,7 @@ public class DataCheckController {
     /**
      * sheet表的标题   requestParam入参结构：[{"name":"sheet名称","topic":1,"indexList":[1,2,3]}]
      *
-     * @param requestParam 额外的复杂参数需要用@RequestPart的方式处理, postman上就用form-data传入文本 eg. requestParam:[{"name":"项目情况表","topic":5,"indexList":[1]}]！@RequestParam对简单类型参数可以处理，但复杂入参无法用postman模拟出！
+     * @param requestParam 额外的复杂参数需要用@RequestPart的方式处理, postman上就用form-data传入文本 eg. requestParam:[{"name":"项目情况表","topic":5,"indexList":[1]}]！@RequestParam对简单类型参数可以处理，但复杂对象入参无法用postman模拟出！
      * @param file
      * @return
      */

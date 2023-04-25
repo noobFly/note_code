@@ -91,7 +91,6 @@ public class GatewayController {
             }
 
             request.setAttribute("upstreamServer", proxyPassInfo.getUpstream()); //用于 GatewayLogFilter记录转发真实的服务器
-
             proxyPass(request, response, proxyPassInfo);
         } else {
             throw new RuntimeException("没有匹配的代理");
@@ -210,7 +209,7 @@ public class GatewayController {
         }
     }
 
-    //直接代理，不转换请求内容
+    //直接代理转发，不转换请求内容
     private void normalProxy(HttpServletRequest req, HttpServletResponse gatewayResponse, String proxyUrl, Map<String, String> headParams) throws NoSuchAlgorithmException, KeyManagementException, IOException {
         HttpURLConnection realHttpConnection;
         if (proxyUrl.startsWith("https")) {
@@ -243,9 +242,8 @@ public class GatewayController {
 
         //设置自定义请求头
         if (headParams != null) {
-            headParams.forEach((key, value) -> {
-                realHttpConnection.setRequestProperty(key, value);
-            });
+            headParams.forEach((key, value) -> realHttpConnection.setRequestProperty(key, value);
+);
         }
         //真实IP
         realHttpConnection.setRequestProperty("X-Forwarded-For", req.getRemoteAddr());

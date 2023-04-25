@@ -46,6 +46,7 @@ public class GroupingByDownstreamTest {
 
         // 把list转成1:1的map.
         //  Map<String, Person> e = list.stream().collect(Collectors.toMap(Person::getRealName, Function.identity()));
+        // Map<String, String> e = list.stream().collect(Collectors.toMap(Person::getRealName, Person::getTaskType));
         //  这里因为数据源重复问题会报错，如果想支持后覆盖前，可改写底层的mergeFunction
         /** Exception in thread "main" java.lang.IllegalStateException: Duplicate key GroupingByDownstreamTest.Person(realName=RealName0, taskType=TaskType0, time=0, decimal=0)
          at java.util.stream.Collectors.lambda$throwingMerger$0(Collectors.java:133)
