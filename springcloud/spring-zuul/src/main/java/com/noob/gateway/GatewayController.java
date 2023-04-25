@@ -242,8 +242,7 @@ public class GatewayController {
 
         //设置自定义请求头
         if (headParams != null) {
-            headParams.forEach((key, value) -> realHttpConnection.setRequestProperty(key, value);
-);
+            headParams.forEach((key, value) -> realHttpConnection.setRequestProperty(key, value));
         }
         //真实IP
         realHttpConnection.setRequestProperty("X-Forwarded-For", req.getRemoteAddr());
