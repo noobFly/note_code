@@ -60,12 +60,12 @@ public class GroupingByDownstreamTest {
         // 验证JSON动态屏蔽某个参数
         System.out.println(JSON.toJSON(list, Person.class, "realName"));
 
-        // RealName分组并以RealName排序 (用LinkedHashMap来保存Map插入的顺序)
+        // RealName分组并Key以RealName排序 (用LinkedHashMap来保存Map插入的顺序) (也可以不用先排序直接用TreeMap!)
         Map<String, List<Person>> collect = list.stream().sorted(Comparator.comparing(Person::getRealName).reversed()).
                 collect(Collectors.groupingBy(Person::getRealName, LinkedHashMap::new, Collectors.toList()));
         System.out.println(JSON.toJSONString(collect));
 
-        //RealName分组并以Time排序
+        //RealName分组并以Time排序.
         Map<String, List<Person>> map = list.stream().collect(
                 Collectors.groupingBy(Person::getRealName, HashMap::new,
                         Collectors.collectingAndThen(Collectors.toList(),

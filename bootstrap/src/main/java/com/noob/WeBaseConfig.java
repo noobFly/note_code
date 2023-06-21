@@ -1,12 +1,9 @@
 package com.noob;
 
 import com.noob.json.JSON;
-import com.noob.request.component.BService;
-import com.noob.request.component.ExecuteSortComponent;
 import lombok.Data;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
@@ -19,11 +16,7 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "webase")
 @Configuration
 public class WeBaseConfig {
-	
-    @Bean(initMethod = "initMethod" )
-	public ExecuteSortComponent executeSortComponent(BService b) {
-		return new ExecuteSortComponent(b);
-	}
+
 	
 	// 服务交易地址
 	private String transactionUrl;
