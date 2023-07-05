@@ -35,8 +35,8 @@ public class CommonQueryHandler {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum TableEnum {
         fund_activity_details(1, null, null, false),
-        activity_industry_fund(2, "产业基金", new CommonQueryDTO.QueryCondition("tag1", "明细"), true),
-        direct_project_total(3, "创投项目金额统计", null, false);
+        activity_industry_fund(2, "基金", new CommonQueryDTO.QueryCondition("tag1", "明细"), true),
+        direct_project_total(3, "创投金额统计", null, false);
         private int type;
         @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // 1.9之后： 在Setter方法上加@Jsonignore会导致整个这个属性在序列化过程中被忽略。所以： 通过设置JsonProperty的access属性来确定当前属性是不是需要自动序列化/反序列化
         private String msg;
