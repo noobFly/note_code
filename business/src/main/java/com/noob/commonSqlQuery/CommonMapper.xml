@@ -25,7 +25,12 @@
                         <when test=" condition.type == 4"> > #{condition.value} </when>
                         <when test=" condition.type == 5"> >= #{condition.value} </when>
                         <when test=" condition.type == 6"> like concat('%',#{condition.value},'%') </when>
-                        <when test=" condition.type == 7"> in (${condition.value}) </when>
+                        <when test=" condition.type == 7"> in (
+                            <foreach collection="condition.value" item="item" separator=",">
+                                #{item}
+                            </foreach>
+                            )
+                        </when>
                         <when test=" condition.type == 8"> is not null </when>
                         <when test=" condition.type == 9"> is null 9 </when>
                         <otherwise> = #{condition.value} </otherwise>

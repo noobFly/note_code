@@ -37,7 +37,7 @@ public class ExcelTableCreator {
 
     public static int sheetNum = 0; // 指定sheet
     public static int[] headRow = new int[]{4,5}; // 指定excel里标题行的index
-    public static String path = "C:\\Users\\noob\\Desktop\\有息负债明细表模板.xlsx"; // 模板文件
+    public static String path = "C:\\Users\\xiongwenjun\\Desktop\\有息负债明细表模板.xlsx"; // 模板文件
 
     public static Map<Integer, String> ENtransferMap = Maps.newHashMap(); // 需要转英文的中文名称
 
@@ -127,7 +127,7 @@ public class ExcelTableCreator {
                     return String.join(" ", column, t.getType().getSqlType(), "comment", "'" + t.getComment() + "'");
                 }).collect(Collectors.joining(", \n"))).append(",\n");
 
-        sb.append("upload_month date not null  comment '数据月份'").append(",\n") // TODO 可以选择性加入自定义默认字段
+        sb.append("upload_month date not null  comment '数据月份'").append(",\n") // TODO 可以选择性加入自定义需要创建默认字段
                 .append("create_time datetime null default current_timestamp comment '创建时间'").append(",\n")
                 .append("update_time datetime null default current_timestamp on update current_timestamp comment '更新时间'").append(",\n")
                 .append("primary key (`id`) )").append("\n").append("COMMENT='").append(table.getSheetName()).append("' AUTO_INCREMENT=1000;");

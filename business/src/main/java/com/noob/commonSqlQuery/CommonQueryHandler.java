@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.apache.commons.collections4.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -14,8 +15,12 @@ import java.util.Map;
 public class CommonQueryHandler {
     @Resource
     CommonMapper commonMapper;
+    public Long count(CommonQueryDTO queryDTO) {
+        List<Map<String, Object>> result = this.query(queryDTO.countQueryDTO());
+        return CollectionUtils.isNotEmpty(result) && result.get(0) != null && result.get(0).get("total") != null ? (Long) result.get(0).get("total") : 0;
+    }
 
-    public List<Map<String, Object>> queryAdm(CommonQueryDTO queryDTO) {
+    public List<Map<String, Object>> query(CommonQueryDTO queryDTO) {
         TableEnum table = TableEnum.findTable(queryDTO.getType());
         if (queryDTO.isMergeDefaultFilterCondition()) {
             CommonQueryDTO.QueryCondition extraFilterCondition = table.getExtraFilterCondition();

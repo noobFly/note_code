@@ -18,7 +18,7 @@ public class CompanyEnumConverter extends AutoConverter {
     @Override
     public WriteCellData<?> convertToExcelData(Object value, ExcelContentProperty contentProperty,
                                                GlobalConfiguration globalConfiguration) {
-        return new WriteCellData("xt".equals(value) ? "信托" : "其他");
+        return new WriteCellData("xt".equals(value) ? "信托" : "其他converter单位");
     }
 
 }

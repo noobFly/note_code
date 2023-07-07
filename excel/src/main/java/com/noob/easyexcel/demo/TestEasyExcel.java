@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -38,6 +39,10 @@ public class TestEasyExcel {
     public static final String FILE = "bankCooperation.xlsx"; //要用英文名,否则可能无法读取到路径文件。最好放到启动jar模块的resources文件下，需要用Class#getResourceAsStream方式读
     final String TEMP = "/template/" + FILE;
 
+    public static void main(String[] args) throws Exception {
+        //  new TestEasyExcel().upload("C:\\Users\\xiongwenjun\\Desktop\\bankCooperation.xlsx");
+        new TestEasyExcel().download();
+    }
 
     // 上传
     public void upload(String path) throws Exception {
@@ -50,7 +55,7 @@ public class TestEasyExcel {
 
         ExcelReader excelReader = EasyExcel.read(new FileInputStream(file)).build();
         try {
-            // 这里选择按指定sheet_index读入， 指定标题行号
+            // 这里选择按指定index读入多个sheet，指定标题行号
             excelReader.read(
                     EasyExcel.readSheet(0).head(CreditBank.class).headRowNumber(5).registerReadListener(creditGrantedEachBankHandler).build(),
                     EasyExcel.readSheet(1).head(ProjectCooperation.class).headRowNumber(4).registerReadListener(projectCooperationHandler).build());
@@ -63,28 +68,24 @@ public class TestEasyExcel {
         System.out.println(projectCooperationHandler.getDataList().size());
     }
 
-    public static void main(String[] args) throws Exception {
-        //  new TestEasyExcel().upload("C:\\Users\\xiongwenjun\\Desktop\\bankCooperation.xlsx");
-        new TestEasyExcel().download();
-    }
 
 
     private void download() throws FileNotFoundException {
 
-        List<CreditBank> list = Lists.newArrayList(buildCredit("1"), buildCredit("1"), buildCredit("2"), buildCredit("2"));
+        List<CreditBank> list = Lists.newArrayList(buildCredit("序列号1合并"), buildCredit("序列号1合并"), buildCredit("序列号2合并"), buildCredit("序列号3合并"));
         downLoadExcel(TEMP, new FileOutputStream(new File("C:\\Users\\xiongwenjun\\Desktop\\bankCooperation.xlsx")), excelWriter -> {
             Map<String, Object> extraMap = Maps.newHashMap();
             extraMap.put("totalLoan", BigDecimal.ZERO);
             extraMap.put("year", "2023");
 
             //需要合并的列 --- 按实际模板情况而定
-            int[] mergeColumIndex = {1};
+            int[] mergeColumnIndex = {1};
             // --- 按实际模板情况而定： 从第6行开始合并, 第一条真实数据的rowIndex
             int mergeRowIndex = 5;
 
             // 可以用sheetName或sheetIndex来约定写入的sheet
-            WriteSheet writeSheet = EasyExcel.writerSheet(0).head(CreditBank.class).registerWriteHandler(new EasyexcelMergeCellDataHandler(mergeRowIndex, mergeColumIndex)).build();
-            FillConfig fillConfig = FillConfig.builder().direction(WriteDirectionEnum.VERTICAL).forceNewRow(Boolean.TRUE).build();
+            WriteSheet writeSheet = EasyExcel.writerSheet(0).head(CreditBank.class).registerWriteHandler(new EasyexcelMergeCellDataHandler(mergeRowIndex, mergeColumnIndex)).build();
+            FillConfig fillConfig = FillConfig.builder().direction(WriteDirectionEnum.VERTICAL).forceNewRow(Boolean.TRUE).build(); // 确定集合数据的写入方向，并每个集合对象写入新一行
             excelWriter.fill(new FillWrapper("list", list), fillConfig, writeSheet);// 对象插入
             excelWriter.fill(new FillWrapper("list2", list), fillConfig, writeSheet); // 不同区域的数据分成不同的warpper插入。
             if (MapUtils.isNotEmpty(extraMap)) {
@@ -103,7 +104,7 @@ public class TestEasyExcel {
         downLoadExcel(FILE, TEMP, response, excelWriter -> {
 
             Map<String, Object> extraMap = Maps.newHashMap();
-            extraMap.put("totalLoan", BigDecimal.ZERO);
+            extraMap.put("totalLoan", BigDecimal.TEN);
             // 处理2个不同的sheet
             fillSheet(resetSerialNo(getAllCreditGrantedEachBank()), Type.CREDIT_GRANTED_BANK, CreditBank.class, excelWriter);
             fillSheet(Lists.newArrayList(new FillWrapper("list", (resetSerialNo(getAllProjectCooperation())))), extraMap, Type.COOPERATION, ProjectCooperation.class, excelWriter);
@@ -137,14 +138,6 @@ public class TestEasyExcel {
         }
     }
 
-    public <T extends BaseEntity> List<T> resetSerialNo(List<T> list) {
-        if (!CollectionUtils.isEmpty(list)) {
-            for (int index = 0; index < list.size(); index++) {
-                list.get(index).setSerialNumber(String.valueOf(index + 1));
-            }
-        }
-        return list;
-    }
 
     //按模板定义导出
     public void downLoadExcel(String fileName, String temp, HttpServletResponse response, Consumer<ExcelWriter> executeConsumer) throws Exception {
@@ -172,12 +165,22 @@ public class TestEasyExcel {
 
     }
 
+    //测试数据
     private CreditBank buildCredit(String serialNo) {
         CreditBank creditBank = new CreditBank();
         creditBank.setSerialNumber(serialNo);
         creditBank.setCorporateName("CorporateName");
-
+        creditBank.setCreditValidity(new Date());
         return creditBank;
+    }
+
+    public <T extends BaseEntity> List<T> resetSerialNo(List<T> list) {
+        if (!CollectionUtils.isEmpty(list)) {
+            for (int index = 0; index < list.size(); index++) {
+                list.get(index).setSerialNumber(String.valueOf(index + 1));
+            }
+        }
+        return list;
     }
 
     // 一定要和excel里的sheet_table名一样！ easyexcel使用了按名称匹配sheet_table！

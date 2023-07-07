@@ -38,7 +38,7 @@ public class CustomizeEventListener<T extends BaseEntity> extends AnalysisEventL
             log.warn("{} 解析到第{}行数据无效！ 将不在向下扫描！", topic, rowIndex);
             hasNext = false;
         } else {
-            data.setMonth(month);
+            data.setMonth(month); //补充数据
             dataList.add(data);
         }
     }
