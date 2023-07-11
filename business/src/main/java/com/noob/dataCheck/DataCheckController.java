@@ -317,7 +317,7 @@ public class DataCheckController {
         CommonQueryDTO queryDTO = new CommonQueryDTO();
         queryDTO.setType(topic);
         queryDTO.setMergeDefaultFilterCondition(true);
-        return commonQueryHandler.queryAdm(queryDTO);
+        return commonQueryHandler.query(queryDTO);
     }
 
     // 比较标头和稽查字段的配置是否一致

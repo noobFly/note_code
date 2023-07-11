@@ -6,15 +6,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SqlConstraintValidator implements ConstraintValidator<SqlValid, CharSequence> {
-    private static final String badStr = "script|and|exec|execute|insert|select|delete|update|count|drop|into|chr|mid|master|truncate|" +
+    private static final String badStr = "\\b(" +
+            "script|and|exec|execute|drop|into|chr|mid|master|truncate|xp_cmdshell|" +
 
-            "char|declare|sitename|net user|xp_cmdshell|or|like|and|exec|execute|insert|create|drop|" +
+            "char|declare|sitename|net user|xp_cmdshell|like|create|" +
 
             "table|from|grant|use|group_concat|column_name|" +
 
-            "information_schema|table_schema|union|where|select|delete|update|order|by|count|" +
+            "information_schema|table_schema|union|where|insert|into|select|delete|update|order|by|count|or" +
 
-            "or|;|--|\\+|,|\\*|like|\\//|\\/|%|#";//过滤掉的sql关键字
+            ")\\b" +
+            "|(:|;|-|--|\\+|,|\\*|like|\\//|\\/|%|#) ";//过滤掉的sql关键字
     private final Pattern pattern = Pattern.compile(badStr);
 
     @Override
@@ -32,7 +34,6 @@ public class SqlConstraintValidator implements ConstraintValidator<SqlValid, Cha
 
     public static void main(String[] args) {
         Pattern pattern = Pattern.compile(badStr);
-        Matcher matcher = pattern.matcher(" select ");
-        System.out.println(matcher.find());
+        System.out.println(!pattern.matcher("(".toLowerCase()).find());
     }
 }
