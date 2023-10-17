@@ -16,7 +16,7 @@ import java.util.List;
  * 比对cellData数据是否前后一致，合并单元格!
  */
 public class EasyexcelMergeCellDataHandler implements CellWriteHandler {
-    private int[] mergeColumnIndex; // 哪些下标列需要合并 --- 按实际模板情况而定
+    private int[] mergeColumnIndex; // 哪些EasyExcel下标列需要合并 --- 按实际模板情况而定
     private int mergeRowIndex; // 从哪个下标行开始进入合并逻辑 --- 按实际模板情况而定
 
 

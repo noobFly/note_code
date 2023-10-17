@@ -49,9 +49,7 @@ public class CommonController {
     @PostMapping("/common/query")
     @ApiOperation(value = "通用的查询功能")
     public Object query(@Validated @RequestBody CommonQueryDTO param) {
-        if (param.isStartPage()) {
-            // TODO  这里要根据实际情况来处理开启分页。 可以用ThreadLocal透传线程变量.
-        }
+
         List<Map<String, Object>> list = commonService.query(param);
         return param.isStartPage() ? toPage(list) : list;
     }
@@ -123,8 +121,8 @@ public class CommonController {
             for (int sheetNum = 0; sheetNum < sheetCount; sheetNum++) {
                 WriteSheet sheet = EasyExcel.writerSheet(sheetNum).head(head).needHead(true).build(); //无模板自定义标题
                 do {
-                    startPage(pageNum, BATCH_SIZE);
-                    List<List<Object>> finalDataList = commonService.query(param).stream().map(originMap -> {
+                    final int pageNum2 = pageNum;
+                    List<List<Object>> finalDataList = commonService.query(param, () -> startPage(pageNum2, BATCH_SIZE)).stream().map(originMap -> {
                         Map<String, Object> map = new LinkedHashMap<>();
                         rowList.forEach(dict -> map.put(dict.getDictLabel(), originMap.get(dict.getDictValue())));
                         return map.values().stream().collect(Collectors.toList());

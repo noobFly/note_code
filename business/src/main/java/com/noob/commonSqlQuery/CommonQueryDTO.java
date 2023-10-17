@@ -22,7 +22,7 @@ public class CommonQueryDTO {
     private Integer type;
     // 是否开启分页
     @ApiModelProperty(value = "是否开启分页")
-    private boolean startPage;
+    private boolean startPage = false;
     //排序字段
     @ApiModelProperty(value = "排序字段")
     public List<@Valid SortCondition> sortConditionList;
@@ -82,6 +82,7 @@ public class CommonQueryDTO {
         dto.setGroupColumnList(this.getGroupColumnList());
         dto.setFilterConditionList(this.getFilterConditionList());
         dto.setMergeDefaultFilterCondition(this.isMergeDefaultFilterCondition());
+        dto.setStartPage(false);
         return dto;
     }
 

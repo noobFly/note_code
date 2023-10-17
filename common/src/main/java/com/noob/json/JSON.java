@@ -199,7 +199,9 @@ public class JSON {
          * 声明式 缺点：无法动态指定
          * 1、@JsonIgnore 可以直接放在field上面表示要忽略的filed
          * 2、@JsonIgnoreProperties(value = { "id",  "firstName"}) 类级别忽略特定字段
-         * 3、 @JsonIgnoreType 忽略整个bean 忽略指定类型class的所有字段
+         * 3、 @JsonIgnoreType 忽略整个bean ，忽略指定类型class的所有字段
+         * 4、@JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // 1.9之后： 在Setter方法上加@Jsonignore会导致整个属性在(反)序列化过程中被忽略。所以： 通过设置JsonProperty的access属性来确定当前属性是不是需要自动序列化/反序列化
+         * 4、设定日期格式序列化、反序列化的格式 @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd",  timezone = "GMT+8")
          */
 
         FilterProvider filterProvider = new SimpleFilterProvider()

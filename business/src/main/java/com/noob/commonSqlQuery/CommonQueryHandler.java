@@ -15,12 +15,18 @@ import java.util.Map;
 public class CommonQueryHandler {
     @Resource
     CommonMapper commonMapper;
+
     public Long count(CommonQueryDTO queryDTO) {
         List<Map<String, Object>> result = this.query(queryDTO.countQueryDTO());
         return CollectionUtils.isNotEmpty(result) && result.get(0) != null && result.get(0).get("total") != null ? (Long) result.get(0).get("total") : 0;
     }
 
+    // TODO 这里要注意，开启分页后会对第一条sql产生影响。如果table是配置在db中的映射，那这里就会出问题！ 所以分页要在拿table映射之后开启
     public List<Map<String, Object>> query(CommonQueryDTO queryDTO) {
+        return this.query(queryDTO, null);
+    }
+
+    public List<Map<String, Object>> query(CommonQueryDTO queryDTO, Runnable startPage) {
         TableEnum table = TableEnum.findTable(queryDTO.getType());
         if (queryDTO.isMergeDefaultFilterCondition()) {
             CommonQueryDTO.QueryCondition extraFilterCondition = table.getExtraFilterCondition();
@@ -32,6 +38,11 @@ public class CommonQueryHandler {
                 filterConditionList.add(table.getExtraFilterCondition());
             }
         }
+
+        if (queryDTO.isStartPage() && startPage != null) {
+            startPage.run();
+        }
+
         return commonMapper.query(table.name(), queryDTO);
     }
 
@@ -43,7 +54,8 @@ public class CommonQueryHandler {
         activity_industry_fund(2, "基金", new CommonQueryDTO.QueryCondition("tag1", "明细"), true),
         direct_project_total(3, "创投金额统计", null, false);
         private int type;
-        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // 1.9之后： 在Setter方法上加@Jsonignore会导致整个这个属性在序列化过程中被忽略。所以： 通过设置JsonProperty的access属性来确定当前属性是不是需要自动序列化/反序列化
+        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+        // 1.9之后： 在Setter方法上加@Jsonignore会导致整个属性在(反)序列化过程中被忽略。所以： 通过设置JsonProperty的access属性来确定当前属性是不是需要自动序列化/反序列化
         private String msg;
         private CommonQueryDTO.QueryCondition extraFilterCondition;
         // 是否需要核对
