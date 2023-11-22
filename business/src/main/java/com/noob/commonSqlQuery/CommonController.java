@@ -93,6 +93,7 @@ public class CommonController {
 
     //TODO 第二种写法 com.alibaba.excel
     public void download2(CommonQueryDTO param) {
+        param.setStartPage(true);
         long total = commonService.count(param);
         if (total == 0) {
             throw new RuntimeException("当前查询条件下无可导出数据");
