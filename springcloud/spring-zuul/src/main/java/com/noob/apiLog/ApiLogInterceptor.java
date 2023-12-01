@@ -1,22 +1,26 @@
 package com.noob.apiLog;
 
+import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
 import com.noob.gateway.RequestLog;
-import com.noob.json.JSON;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 一般来说： 先  【ApiLogInterceptor的切面逻辑】 后【MethodValidationInterceptor校验@Valid的入参 -> 主要针对@RequestParam】 ;
@@ -36,22 +40,22 @@ import java.util.Date;
  * 1、 Filter的执行顺序会先于Servlet, 所以这里可以提前做对request的处理， 但无法知晓具体是路由到哪个Controller哪个方法
  * 2、Interceptor虽然可以知晓具体是路由到哪个Controller哪个方法，但如果在DispatcherServlet里解析参数时校验失败, 则不会再向后执行具体方法，此时将无法进入Interceptor切面逻辑！
  */
+@Slf4j
 @Aspect
 @Component("ApiLogInterceptor")
 public class ApiLogInterceptor {
 
-    private static final Logger logger = LoggerFactory.getLogger(ApiLogInterceptor.class);
-
+    // @Pointcut(" execution(public * com.noob.group..*Controller.*(..) )")
 
     @Pointcut("execution(public * com.noob.controller.DemoController.*(..)) "
-            +"&& !execution(public * com.noob.controller.ErrorHandlerController.*(..)) ")
+            + "&& !execution(public * com.noob.controller.ErrorHandlerController.*(..)) ")
 
     public void exeService() {
     }
 
-    @AfterThrowing("exeService()")
-    public void afterThrowing() {
-        logger.error("api拦截出现异常了......");
+    @AfterThrowing(pointcut = "exeService()", throwing = "e")
+    public void afterThrowing(Throwable e) {
+        log.error("api请求处理发生异常！", e);
     }
 
     @Around("exeService()")
@@ -59,40 +63,45 @@ public class ApiLogInterceptor {
         long startTime = System.currentTimeMillis();
         String name = pjp.getTarget().getClass().getSimpleName();
         String method = pjp.getSignature().getName();
-        logger.info(String.format("请求方法 :  %s -> %s", name, method));
+
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder
                 .getRequestAttributes();
         HttpServletRequest request = servletRequestAttributes.getRequest();
-        String requestParams = "";
-        Object result;
+
+        log.info("ip: {},请求方法: {} -> {}", getIpAddress(request), name, method);
+
         try {
+            String requestParams = null;
             Object[] params = pjp.getArgs();
             boolean isFile = request instanceof MultipartRequest;
             if (params.length > 0) { // 日志打印请求参数
+                List<Object> jsonParams = Lists.newArrayList();
                 if (!isFile) {
                     for (Object paramObject : params) {
-                        if (paramObject instanceof MultipartFile || paramObject instanceof MultipartRequest || paramObject instanceof HttpServletRequest) {
-                            isFile = true;
-                            break;
+                        if (paramObject instanceof MultipartFile || paramObject instanceof MultipartRequest || paramObject instanceof ServletRequest || paramObject instanceof ServletResponse) {
+                            // 不打印参数日志
+                        } else {
+                            jsonParams.add(paramObject);
                         }
                     }
                 }
-                if (!isFile) {
-                    requestParams = JSON.toJSONString(params);
-                    logger.info("request_param : {}", requestParams);
+
+                if (CollectionUtils.isNotEmpty(jsonParams)) {
+                    requestParams = JSONObject.toJSONString(jsonParams);
+                    log.info("request_param : {}", requestParams);
                 } else {
-                    logger.info("request_param not execute Jackson!");
+                    log.info("request_param not execute Jackson!");
                 }
 
             }
-            result = pjp.proceed();
-            String responseValue =  JSON.toJSONString(result);
-            logger.info("response_body: {}", responseValue);
+            Object result = pjp.proceed();
+            String responseValue = JSONObject.toJSONString(result);
+            log.info("response_body: {}", responseValue);
             saveLog(name, method, request, requestParams, responseValue);
+            return result;
         } finally {
-            logger.info("请求执行耗时：: {}ms", System.currentTimeMillis() - startTime);
+            log.info("请求执行耗时：: {}ms", System.currentTimeMillis() - startTime);
         }
-        return result;
     }
 
     private void saveLog(String name, String method, HttpServletRequest request, String requestParams,
@@ -107,7 +116,7 @@ public class ApiLogInterceptor {
             requestLog.setResponseValue(responseValue);
             requestLog.setUserId("访问用户");
         } catch (Exception e) {
-            logger.warn("保存请求日志信息 异常", e);
+            log.warn("保存请求日志信息 异常", e);
         }
     }
 
