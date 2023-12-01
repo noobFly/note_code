@@ -37,8 +37,8 @@ import java.util.List;
  *
  * <p>
  * 与 GatewayLogFilter 的优缺点：
- * 1、 Filter的执行顺序会先于Servlet, 所以这里可以提前做对request的处理， 但无法知晓具体是路由到哪个Controller哪个方法
- * 2、Interceptor虽然可以知晓具体是路由到哪个Controller哪个方法，但如果在DispatcherServlet里解析参数时校验失败, 则不会再向后执行具体方法，此时将无法进入Interceptor切面逻辑！
+ * 1、 Filter的执行顺序会先于Servlet, 所以它可以提前做对request的处理， 但无法知晓具体是路由到哪个Controller哪个方法
+ * 2、Interceptor切面方式虽然可以知晓具体是路由到哪个Controller哪个方法，但如果在DispatcherServlet里解析参数时校验失败, 则不会再向后执行具体方法，此时将无法进入Interceptor切面逻辑！
  */
 @Slf4j
 @Aspect
