@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.noob.spring.beanDefinition.CustomizerClientImportBeanDefinitionRegistrar.BeanDefinitionRegistrarForImport;
+// import com.noob.spring.beanDefinition.CustomizerClientImportBeanDefinitionRegistrar.BeanDefinitionRegistrarForImport;
 @EnableAsync
 @SpringBootApplication(exclude = { DataSourceAutoConfiguration.class})
 @EnableConfigurationProperties

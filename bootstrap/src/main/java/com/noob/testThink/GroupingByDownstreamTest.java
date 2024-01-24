@@ -54,8 +54,16 @@ public class GroupingByDownstreamTest {
          at java.util.stream.Collectors.lambda$toMap$58(Collectors.java:1320)
          at java.util.stream.ReduceOps$3ReducingSink.accept(ReduceOps.java:169)
          **/
+        TreeMap<String, String> ex = list.stream().collect(Collectors.toMap(Person::getRealName, Person::getTaskType,(k1, k2) -> k1,  TreeMap::new));
+        System.out.println(JSON.toJSONString(ex));
+
         Map<String, Person> e = list.stream().collect(Collectors.toMap(Person::getRealName, Function.identity(), (k1, k2) -> k1));
         System.out.println(JSON.toJSONString(e));
+
+        TreeMap<String, Set<BigDecimal>> map2 = list.stream().collect(
+                Collectors.groupingBy(Person::getRealName, TreeMap::new,
+                        Collectors.mapping(Person::getDecimal, Collectors.toSet())));
+        System.out.println(JSON.toJSONString(map2));
 
         // 验证JSON动态屏蔽某个参数
         System.out.println(JSON.toJSON(list, Person.class, "realName"));
