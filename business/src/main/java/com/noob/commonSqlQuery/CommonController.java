@@ -85,7 +85,8 @@ public class CommonController {
 
         response.setContentType("application/vnd.ms-excel");
         response.setCharacterEncoding("utf-8");
-        response.setHeader("Content-disposition", "attachment; filename=" + URLEncoder.encode(fileName, "utf-8"));
+        fileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
+        response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
         ExcelUtil.getWriter().write(finalDataList).autoSizeColumnAll().flush(response.getOutputStream()).close(); // cn.hutool.poi.excel 直接写.
 
     }

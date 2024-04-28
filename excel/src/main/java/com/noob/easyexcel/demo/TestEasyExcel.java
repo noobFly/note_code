@@ -143,7 +143,8 @@ public class TestEasyExcel {
     public void downLoadExcel(String fileName, String temp, HttpServletResponse response, Consumer<ExcelWriter> executeConsumer) throws Exception {
         response.setContentType("application/vnd.ms-excel");
         response.setCharacterEncoding("utf-8");
-        response.setHeader("Content-disposition", "attachment; filename=" + URLEncoder.encode(fileName, "utf-8"));
+        fileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
+        response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
         try {
             downLoadExcel(temp, response.getOutputStream(), executeConsumer);
         } finally {

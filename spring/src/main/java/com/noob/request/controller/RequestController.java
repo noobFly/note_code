@@ -1,11 +1,9 @@
 package com.noob.request.controller;
 
-import com.ecc.emp.data.DataElement;
 import com.noob.json.JSON;
 import com.noob.util.ExceptionUtil;
 import com.noob.util.File.GZIPUtils;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -76,7 +74,6 @@ public static void main(String args[]){
         return pathname;
     }
 
-
     @PostMapping(value = "/file/upload")
     public void upload(@RequestParam String name, @RequestPart("file") MultipartFile file) throws IOException {
         byte[] data = file.getBytes();
@@ -120,7 +117,7 @@ public static void main(String args[]){
     }
 
     /**
-     *
+     * 额外参数也可以放在form-data里，在解析入参过程会非file二进制类型的数据会转为RequestParam
      * @param dto 用form-data传入值对：
      *            name:name
      *            topic:1
