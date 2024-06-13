@@ -32,7 +32,7 @@
                             )
                         </when>
                         <when test=" condition.type == 8"> is not null </when>
-                        <when test=" condition.type == 9"> is null 9 </when>
+                        <when test=" condition.type == 9"> is null  </when>
                         <otherwise> = #{condition.value} </otherwise>
                     </choose>
 

@@ -84,7 +84,7 @@ public class TestEasyExcel {
             int mergeRowIndex = 5;
 
             // 可以用sheetName或sheetIndex来约定写入的sheet
-            WriteSheet writeSheet = EasyExcel.writerSheet(0).head(CreditBank.class).registerWriteHandler(new EasyexcelMergeCellDataHandler(mergeRowIndex, mergeColumnIndex)).build();
+            WriteSheet writeSheet = EasyExcel.writerSheet(0).head(CreditBank.class).registerWriteHandler(new EasyexcelMergeCellDataHandler(mergeRowIndex, mergeColumnIndex)).registerWriteHandler(new CustomWidthStyleStrategy()).build();
             FillConfig fillConfig = FillConfig.builder().direction(WriteDirectionEnum.VERTICAL).forceNewRow(Boolean.TRUE).build(); // 确定集合数据的写入方向，并每个集合对象写入新一行
             excelWriter.fill(new FillWrapper("list", list), fillConfig, writeSheet);// 对象插入
             excelWriter.fill(new FillWrapper("list2", list), fillConfig, writeSheet); // 不同区域的数据分成不同的warpper插入。
