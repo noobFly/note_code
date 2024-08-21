@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * <p>
  *     在AbstractApplicationContext#refresh()之前的SpringApplication#prepareEnvironment阶段，
  *     由ConfigFileApplicationListener#onApplicationEvent装载EnvironmentPostProcessor集合来依次执行它们的#postProcessEnvironment;
- *     本类order优先级最低！这样可以在由ConfigFileApplicationListener（它也实现了EnvironmentPostProcessor）加载好配置文件后来封装PropertySource
+ *     本类order优先级最低！这样可以在由ConfigFileApplicationListener（它也实现了EnvironmentPostProcessor）加载好配置文件后来处理PropertySource
  *
  */
 @Order

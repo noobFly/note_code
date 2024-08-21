@@ -136,7 +136,7 @@ public class IOHandler {
 
 				sc.configureBlocking(false);// localAddress: /0.0.0.0:8080 ; remoteAddress: /127.0.0.1:51066
 				SelectionKey sk = sc.register(selector_new, SelectionKey.OP_READ);
-				new Thread(() -> this.exectue(selector_new)).start();
+				new Thread(() -> this.exectue(selector_new)).start(); // netty的连接和读写是在两个selector上！
 
 				System.out.println(sk);
 			}
